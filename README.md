@@ -1,4 +1,5 @@
 # PDCA System Base
+# BASEPROJECT
 
 Base system template extracted from the original PDCA workflow project. The repository now keeps only shared platform features: authentication, registration, users, roles, permissions, menus, system groups, audit logs, common layout, file upload/preview, API gateway, and Aspire orchestration.
 

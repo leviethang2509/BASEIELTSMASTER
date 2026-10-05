@@ -1,0 +1,686 @@
+{
+  "id": "van-hanh",
+  "title": "Vận hành kỹ thuật",
+  "pages": [
+    {
+      "id": "kien-truc",
+      "title": "Kiến trúc",
+      "summary": "Thành phần hệ thống, cơ sở dữ liệu, lưu trữ file và phân quyền ở tầng kỹ thuật.",
+      "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Tài liệu này không chứa mật khẩu, khoá hay địa chỉ máy chủ. Giá trị thật nằm trong file `.env` trên máy dev và VPS – không dán vào tài liệu, chat hay ticket."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Thành phần"
+        },
+        {
+          "type": "table",
+          "columns": ["Thành phần", "Công nghệ", "Vai trò"],
+          "rows": [
+            [
+              "`apps/lang-app`",
+              "Next.js 14 (App Router), React 18, Tailwind, Plate.js",
+              "Giao diện; gọi API cùng origin qua `/api` (rewrite sang lang-api)"
+            ],
+            [
+              "`apps/lang-api`",
+              "NestJS 10, TypeORM, PostgreSQL",
+              "REST API, xác thực, phân quyền, chấm bài, thời khoá biểu, cron chốt bài quá giờ và cron thông báo"
+            ],
+            [
+              "`packages/exam-core`",
+              "TypeScript thuần",
+              "Logic đề thi dùng chung: kiểm tra, tách câu hỏi, bỏ đáp án, xáo thứ tự, chấm"
+            ],
+            [
+              "`packages/shared`",
+              "TypeScript thuần",
+              "Enum vai trò/trạng thái, hằng số giới hạn, kiểu dữ liệu API"
+            ],
+            [
+              "`packages/tsconfig`, `packages/eslint-config`",
+              "—",
+              "Cấu hình dùng chung"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Monorepo pnpm + Turborepo, Node 24. Cổng local: app `3100`, api `3101`. Trên VPS một container chạy cả hai: app cổng 3000 (map ra host **3001**), api 3002 chỉ trong container."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Dữ liệu"
+        },
+        {
+          "type": "list",
+          "items": [
+            "PostgreSQL, schema `public`. Container trên VPS dùng database `lang-simulator` của Postgres trên VPS; **máy dev dùng database riêng trên Postgres local** nên dữ liệu thử của máy dev không còn hiện trên VPS. Chưa có môi trường production tách biệt.",
+            "Schema chỉ thay đổi bằng migration; container tự chạy migration khi khởi động. Migration phải tương thích ngược (thêm trước, xoá sau).",
+            "Dữ liệu các trung tâm nằm chung bảng, tách bằng cột `tenant_id`; mọi API trung tâm luôn lọc theo trung tâm của đường dẫn.",
+            "Tài khoản, trung tâm, thành viên, đề thi dùng xoá mềm (`deleted_at`)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lưu trữ file (Cloudflare R2)"
+        },
+        {
+          "type": "table",
+          "columns": ["Bucket", "Nội dung", "Truy cập"],
+          "rows": [
+            [
+              "Public",
+              "Media đề thi (`tenants/{tenantId}/exam-media/…`), logo trung tâm (`users/{userId}/branding/…`)",
+              "URL công khai"
+            ],
+            [
+              "Private",
+              "Ghi âm Speaking của lượt thi (`tenants/{tenantId}/attempts/{attemptId}/…`) và của lượt học bài học (`tenants/{tenantId}/lesson-attempts/{attemptId}/…`)",
+              "Link ký tạm thời, chỉ chủ lượt làm và người chấm"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Xác thực & phân quyền"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Access token JWT (mặc định 15 phút) trong bộ nhớ trình duyệt; refresh token trong cookie httpOnly `ls_rt` (mặc định 30 ngày), lưu băm trong DB, xoay vòng mỗi lần làm mới.",
+            "Mọi request kiểm tra lại tài khoản trong DB: bị khoá hay đổi mật khẩu thì token cũ hết hiệu lực ngay.",
+            "Route mặc định cần đăng nhập; vai trò hệ thống kiểm ở guard toàn cục; route trung tâm qua guard trung tâm (trung tâm đang hoạt động + membership đang hoạt động + vai trò).",
+            "Quy tắc chi tiết (đề của mình, không chấm bài của mình, bảo vệ Chủ sở hữu) kiểm trong service. Xem [Ma trận phân quyền](page:ma-tran-phan-quyen).",
+            "Tài liệu này phục vụ qua `GET /api/admin/user-manual` (System Owner/Admin), nội dung là file JSON trong `apps/lang-api/src/user-manual/content/`."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deploy-moi-truong",
+      "title": "Deploy & môi trường",
+      "summary": "Quy trình deploy, biến môi trường, migration, seed System Owner, rollback.",
+      "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"],
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hướng dẫn đầy đủ nằm trong repo: `docs/setup/deploy.md`. Trang này tóm tắt những điểm cần nhớ khi vận hành."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Quy trình deploy"
+        },
+        {
+          "type": "table",
+          "columns": ["Sự kiện", "GitHub Actions làm gì"],
+          "rows": [
+            [
+              "Pull request vào `main`",
+              "Chỉ build image để kiểm tra Dockerfile"
+            ],
+            [
+              "Push `main` hoặc chạy tay workflow",
+              "Build + push image lên GHCR → copy `docker-compose.yml` lên VPS → pull → `docker compose up -d --wait`"
+            ],
+            [
+              "Chạy tay workflow **Deploy Staging**",
+              "Deploy lên VPS staging (database riêng); không bao giờ tự chạy. Để trống `image_tag` = build nhánh đã chọn, nhập `sha-<commit>` = deploy lại image có sẵn (rollback)"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Staging dùng Postgres riêng trong cùng docker compose và phải seed System Owner riêng. Hướng dẫn: `docs/setup/deploy-staging.md`."
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Container khởi động",
+              "text": "Chạy migration; lỗi thì dừng container (không chạy với schema cũ)."
+            },
+            {
+              "title": "Chạy lang-api và lang-app",
+              "text": "Một tiến trình chết thì tắt cả container để Docker khởi động lại."
+            },
+            {
+              "title": "Healthcheck",
+              "text": "`/api/health` phải trả `database: up`; không đạt thì job deploy báo đỏ."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Biến môi trường"
+        },
+        {
+          "type": "table",
+          "columns": ["Nhóm", "Biến", "Ghi chú"],
+          "rows": [
+            [
+              "Database",
+              "`DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`, `DB_SCHEMA`, `DB_LOGGING`, `DB_NETWORK` (chỉ VPS)",
+              "Sai thì migration thất bại, container restart liên tục"
+            ],
+            [
+              "Xác thực",
+              "`JWT_SECRET` (≥ 32 ký tự, khác giữa dev và VPS), `JWT_ACCESS_EXPIRES_IN`, `REFRESH_EXPIRES_IN`, `COOKIE_SECURE`",
+              "`COOKIE_SECURE=true` chỉ khi truy cập qua HTTPS"
+            ],
+            [
+              "R2",
+              "`R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_PUBLIC_BUCKET`, `R2_PUBLIC_BASE_URL`, `R2_PRIVATE_BUCKET`",
+              "Thiếu thì API vẫn chạy nhưng upload media/ghi âm trả 501"
+            ],
+            [
+              "AI (Gemini)",
+              "`GEMINI_BACKEND`, `GEMINI_MODEL`, `GEMINI_MAX_OUTPUT_TOKENS`, `GEMINI_VERTEX_LOCATION`, `GCP_PROJECT_ID`, `GCP_SERVICE_ACCOUNT_JSON_BASE64` (VPS) hoặc `GOOGLE_APPLICATION_CREDENTIALS` (máy dev, đường dẫn file), `GEMINI_API_KEY` (chỉ khi `GEMINI_BACKEND=aistudio`)",
+              "Không bắt buộc. Thiếu thì API vẫn chạy, nút **Định dạng bằng AI** bị mờ và route AI trả 501. Service account cần role Vertex AI User, project bật API Vertex AI"
+            ],
+            [
+              "Image",
+              "`IMAGE_TAG`",
+              "Để trống = bản mới nhất; đặt `sha-<commit>` để rollback"
+            ],
+            [
+              "Seed (chỉ máy dev)",
+              "`SEED_OWNER_EMAIL`, `SEED_OWNER_PASSWORD`, `SEED_OWNER_NAME`, `SEED_OWNER_DOB`",
+              "Không đặt trên VPS"
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "Sửa `/opt/lang-simulator/.env` trên VPS xong phải tạo lại container: `docker compose up -d --force-recreate`."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tạo System Owner đầu tiên"
+        },
+        {
+          "type": "paragraph",
+          "text": "Chạy một lần cho mỗi database: đặt các biến `SEED_OWNER_*` trong `apps/lang-api/.env` (trỏ đúng database cần seed) rồi chạy lệnh dưới. Các Owner sau đó tạo qua giao diện ([System Owner](page:system-owner))."
+        },
+        {
+          "type": "code",
+          "text": "pnpm --filter lang-api seed:owner"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Rollback"
+        },
+        {
+          "type": "code",
+          "text": "cd /opt/lang-simulator\nsed -i 's/^IMAGE_TAG=.*/IMAGE_TAG=sha-<commit>/' .env\ndocker compose pull && docker compose up -d --wait"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Rollback image **không** hoàn tác migration.",
+            "Deploy từ workflow vẫn dùng `IMAGE_TAG` trong `.env` – nhớ đặt lại trống trước khi push bản mới."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Kiểm tra sau deploy"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            "`docker compose ps` trạng thái healthy; `curl -s http://127.0.0.1:3001/api/health` trả `database: up`.",
+            "Đăng nhập System Owner → `/admin` có số liệu; `/admin/exam-blueprints` có TOEIC/IELTS/JLPT N2.",
+            "Thư viện media của một trung tâm thử không báo thiếu R2, upload thử được ảnh.",
+            "Luồng soạn → publish → làm bài → chấm → xem kết quả chạy được.",
+            "Bài học: soạn → publish → học một phần → nộp thấy đáp án và giải thích.",
+            "Đào tạo: mở một khoá học thử, tạo giáo trình, tạo lớp, xếp thời khoá biểu và kiểm tab **Tiến độ & Chuyên cần**, **Bảng điểm**, nút **Xuất Excel**.",
+            "Chuông **Thông báo** có số và mở được trang `/me/notifications`.",
+            "Xoá dữ liệu thử sau khi kiểm tra."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gioi-han-he-thong",
+      "title": "Giới hạn hệ thống",
+      "summary": "Các con số giới hạn và quy tắc định dạng dùng trong toàn hệ thống.",
+      "roles": [],
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tài khoản & trung tâm"
+        },
+        {
+          "type": "table",
+          "columns": ["Mục", "Giới hạn"],
+          "rows": [
+            ["Mật khẩu", "8–72 ký tự"],
+            ["Họ tên", "Tối đa 150 ký tự"],
+            ["Ngày sinh", "Từ 1900-01-01 tới hôm nay"],
+            ["Tuổi đăng ký trung tâm", "≥ 18"],
+            [
+              "Đường dẫn trung tâm",
+              "3–40 ký tự, `a-z`, `0-9`, gạch nối ở giữa, không trùng từ dành riêng"
+            ],
+            ["Tên trung tâm", "Tối đa 150 ký tự"],
+            ["Logo", "Ảnh ≤ 5MB, chuyển WebP"],
+            ["Địa chỉ / Số điện thoại", "Tối đa 500 / 30 ký tự"],
+            ["Quan hệ phụ huynh", "Tối đa 50 ký tự"],
+            [
+              "Access token / refresh token",
+              "15 phút / 30 ngày (mặc định, đổi bằng biến môi trường)"
+            ],
+            ["Ghi “Lần vào gần nhất”", "Tối đa 1 lần/giờ mỗi thành viên"]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Danh mục, loại đề, mẫu bài học, đề thi, bài học"
+        },
+        {
+          "type": "table",
+          "columns": ["Mục", "Giới hạn"],
+          "rows": [
+            [
+              "Mã danh mục / loại đề / mẫu bài học",
+              "In hoa, số, `-`/`_`, tối đa 32 ký tự; duy nhất trong phạm vi"
+            ],
+            [
+              "Tên danh mục / loại đề / mẫu bài học",
+              "Tối đa 100 ký tự; mô tả tối đa 2000"
+            ],
+            ["Module mỗi loại đề, phần mỗi mẫu bài học", "1–20"],
+            ["Thời lượng module / section", "5–180 phút, bội số 5"],
+            ["Section mỗi đề", "1–20; tên section tối đa 100 ký tự"],
+            ["Tên đề / mô tả đề", "Tối đa 200 / 2000 ký tự"],
+            [
+              "Section mỗi bài học",
+              "1–20 (không có thời lượng); tên section tối đa 100 ký tự"
+            ],
+            ["Tên bài học / mô tả bài học", "Tối đa 200 / 2000 ký tự"],
+            ["Speaking: thời gian nói", "1–300 giây"],
+            ["Writing: giới hạn ký tự", "1–3000"],
+            ["Pick-n: số đáp án cần chọn", "1–20"],
+            ["Media đề", "Ảnh 5MB (→ WebP), audio 50MB, video 100MB"]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Đào tạo: khoá học, giáo trình, lớp, lịch"
+        },
+        {
+          "type": "table",
+          "columns": ["Mục", "Giới hạn"],
+          "rows": [
+            [
+              "Mã khoá học / mã lớp",
+              "In hoa, số, `-`/`_`, tối đa 32 ký tự; duy nhất trong trung tâm"
+            ],
+            [
+              "Tên khoá học / lớp / giáo trình",
+              "Tối đa 200 ký tự; mô tả tối đa 2000"
+            ],
+            ["Trình độ khoá học", "Tối đa 50 ký tự"],
+            ["Số buổi dự kiến của khoá học / tổng số buổi của lớp", "1–500"],
+            [
+              "Chương mỗi giáo trình (tham khảo và giáo trình lớp)",
+              "Tối đa 100; tên chương tối đa 200 ký tự"
+            ],
+            [
+              "Mục mỗi giáo trình",
+              "Tối đa 300; tên hiển thị 200 ký tự, ghi chú 1000 ký tự"
+            ],
+            ["Ngưỡng đậu của mục đề thi", "0–100 %, mặc định 50"],
+            ["Sĩ số tối đa của lớp", "1–1000; thêm tối đa 200 người mỗi lần"],
+            ["Phòng / link của lớp, buổi", "Tối đa 500 ký tự"],
+            ["Buổi trong tuần (lịch lặp)", "1–14 dòng; không lặp cách tuần"],
+            [
+              "Một buổi học",
+              "Tối đa 12 giờ; ghi chú 1000 ký tự, lý do huỷ 500 ký tự"
+            ],
+            ["Nội dung map vào một buổi", "Tối đa 50 mục/chương"],
+            [
+              "Ngày nghỉ của trung tâm",
+              "Tên tối đa 200 ký tự, một ngày nghỉ dài tối đa 366 ngày; không lặp hằng năm"
+            ],
+            ["Khoảng ngày mỗi lần đọc lịch", "Tối đa 93 ngày"],
+            [
+              "Hệ số nộp muộn (k) / ngưỡng cảnh báo",
+              "0–1 (2 chữ số thập phân), mặc định 0,5 / 0–100 %, mặc định 70"
+            ],
+            ["Nhận xét cuối khoá", "Tối đa 4000 ký tự mỗi học viên mỗi lớp"],
+            ["Bài làm ngoài lớp hiện cho phụ huynh", "20 lượt mới nhất mỗi con"]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Thi & chấm"
+        },
+        {
+          "type": "table",
+          "columns": ["Mục", "Giới hạn"],
+          "rows": [
+            ["Lượt đang làm mỗi đề / người", "1"],
+            ["Tổng số lượt làm", "Không giới hạn"],
+            [
+              "Tự lưu câu trả lời",
+              "~3 giây sau khi thay đổi, và khi chuyển tab Part"
+            ],
+            ["Trễ mạng chấp nhận sau hết giờ", "10 giây"],
+            ["Cron tự nộp section quá giờ", "Mỗi phút"],
+            ["File ghi âm", "≤ 10MB, `audio/webm` hoặc `audio/mp4`"],
+            ["Câu trả lời dạng chữ", "Tối đa 20.000 ký tự mỗi câu"],
+            ["Điểm chấm tay", "0–10, bước 0,5"],
+            ["Nhận xét", "Tối đa 5000 ký tự"],
+            ["Thông báo: giữ lại", "90 ngày, cron xoá hằng ngày"],
+            [
+              "Thông báo: cron mốc giáo trình",
+              "15 phút một lần, chỉ xét mốc trong 3 ngày gần đây"
+            ],
+            [
+              "Chuông: đếm lại",
+              "60 giây và mỗi khi quay lại tab; hiện 10 thông báo mới nhất"
+            ],
+            [
+              "Định dạng bằng AI",
+              "1 section mỗi lần bấm, tối đa 2.000 dòng / 150.000 ký tự; tối đa 3 lần gọi AI (2 phút/lần, 6 phút/lượt); hạn mức trung tâm 100 / 1.000 / không giới hạn lượt mỗi tháng; ghi chú cho AI tối đa 2000 ký tự"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "su-co-thuong-gap",
+      "title": "Sự cố thường gặp",
+      "summary": "Triệu chứng, nguyên nhân và cách xử lý cho người dùng và máy chủ.",
+      "roles": [],
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Người dùng báo lỗi"
+        },
+        {
+          "type": "table",
+          "columns": ["Triệu chứng", "Nguyên nhân / xử lý"],
+          "rows": [
+            [
+              "Quên mật khẩu",
+              "Chưa có tự phục vụ. System Owner/Admin **Reset mật khẩu** – [Người dùng](page:admin-nguoi-dung)"
+            ],
+            [
+              "Đăng nhập xong bị chuyển tới Tài khoản của tôi, không làm gì được",
+              "Đang dùng mật khẩu tạm – đổi mật khẩu trước"
+            ],
+            ["“Tài khoản đã bị khoá…”", "Kiểm tra lý do, mở khoá nếu phù hợp"],
+            [
+              "Đăng nhập xong lại về trang đăng nhập",
+              "Trình duyệt chặn cookie, hoặc `COOKIE_SECURE=true` khi đang truy cập HTTP"
+            ],
+            [
+              "“Phiên đăng nhập đã hết hạn…”",
+              "Refresh token hết hạn/bị thu hồi (đổi mật khẩu, reset, khoá) – đăng nhập lại"
+            ],
+            [
+              "Không thấy trung tâm / “Không tìm thấy trung tâm”",
+              "Sai đường dẫn, trung tâm chưa được duyệt/đang tạm khoá, hoặc chưa là thành viên / bị ngừng kích hoạt"
+            ],
+            [
+              "Không đăng ký được trung tâm",
+              "Chưa đủ 18 tuổi, đường dẫn trùng hoặc dành riêng, chưa chọn gói đang áp dụng"
+            ],
+            [
+              "Không thêm được thành viên",
+              "Trung tâm đã đạt giới hạn gói – nâng gói hoặc ngừng kích hoạt bớt; email chưa có tài khoản thì dùng **Tạo tài khoản**"
+            ],
+            [
+              "Giáo viên không sửa được đề",
+              "Đề không do giáo viên đó tạo (chế độ Chỉ xem) – nhờ Chủ sở hữu/Quản trị viên"
+            ],
+            [
+              "Không publish được đề",
+              "Còn lỗi nội dung (422) hoặc chưa lưu thay đổi – xem bảng Kiểm tra"
+            ],
+            [
+              "“Nội dung đề vừa được lưu ở nơi khác…”",
+              "Người khác/tab khác đã lưu – tải lại trang rồi sửa tiếp"
+            ],
+            [
+              "Không bắt đầu được lượt mới",
+              "Đang có lượt làm dở của đề đó – Làm tiếp hoặc nộp; hoặc đề đã lưu trữ"
+            ],
+            ["“Phải nộp section trước…”", "Section làm theo thứ tự"],
+            [
+              "“Đã hết giờ làm section này”",
+              "Quá hạn + 10 giây; section đã/sẽ tự nộp bằng câu trả lời đã lưu"
+            ],
+            [
+              "Học viên chưa thấy điểm Writing/Speaking",
+              "Chưa chấm đủ – kiểm tra trang Chấm bài"
+            ],
+            [
+              "Người chấm không chấm được bài",
+              "Bài của chính họ (403) hoặc lượt làm chưa nộp xong (409)"
+            ],
+            [
+              "Đổi giao diện xong, tải lại trang lại về Sáng",
+              "Trình duyệt đang chặn cookie/bộ nhớ cục bộ của trang – xem [Giao diện](page:giao-dien#lua-chon-duoc-nho-o-dau)"
+            ],
+            [
+              "“Màu chữ trong đề hiện không đúng màu tôi chọn”",
+              "Đang ở giao diện **Tối**: màu trong nội dung được làm sáng lên cho đọc được, nội dung lưu không đổi – đổi sang **Sáng**/**Giấy** để thấy màu gốc"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lớp học, lịch và theo dõi"
+        },
+        {
+          "type": "table",
+          "columns": ["Triệu chứng", "Nguyên nhân / xử lý"],
+          "rows": [
+            [
+              "Học viên không vào được mục của lớp",
+              "Lớp chưa **Đang học**, mục **Chưa tới ngày mở** (lấy mốc muộn hơn của chương và mục), hoặc đã quá hạn mà mục tắt **Nhận bài quá hạn**"
+            ],
+            [
+              "“Lớp học đã kết thúc…” khi nộp bài",
+              "Lớp đã chuyển **Đã kết thúc**/**Đã huỷ**; lượt đang làm đã bị chốt. Xem lại kết quả vẫn được"
+            ],
+            [
+              "Học viên muốn làm lại một bài kiểm tra",
+              "Mỗi mục chỉ làm một lần – giáo viên của lớp bấm **Cho làm lại**, hoặc thêm mục **Thi lại cho**"
+            ],
+            [
+              "Giáo viên không thấy lớp / không chấm được bài của lớp",
+              "Chưa được thêm làm giáo viên của lớp đó; nhờ Chủ sở hữu/Quản trị viên thêm, hoặc dùng **Chuyển giao chấm**"
+            ],
+            [
+              "“Giáo trình vừa được người khác lưu” / “Thời khoá biểu vừa đổi”",
+              "Hai người cùng sửa – tải lại trang rồi sửa lại"
+            ],
+            [
+              "Buổi học không sửa được ngày",
+              "Buổi thường chỉ đổi ngày qua **Sửa lịch lặp**; buổi đã bắt đầu chỉ sửa phòng, ghi chú, nội dung"
+            ],
+            [
+              "Buổi hiện **Đã dời – kiểm tra lại**",
+              "Buổi có giờ sửa tay hoặc giáo viên riêng vừa bị dời; kiểm rồi bấm **Đã kiểm tra**"
+            ],
+            [
+              "Nhãn **Trùng lịch** đỏ",
+              "Hai lớp chung giáo viên hoặc học viên trùng giờ – chỉ cảnh báo, không chặn"
+            ],
+            [
+              "Không xoá được lớp / khoá học / giáo trình / bài học / đề thi",
+              "Đã có bài làm, đã có lớp, đang gắn khoá học hoặc đang nằm trong giáo trình – dùng **Huỷ lớp** / **Lưu trữ** / **Bỏ gắn**"
+            ],
+            [
+              "Chuyên cần của cả lớp bằng 0 hoặc trống",
+              "Chưa mục đề thi nào đặt **hạn nộp** – chỉ mục có hạn mới vào bảng chuyên cần"
+            ],
+            [
+              "Phụ huynh không thấy con",
+              "Chưa gắn liên kết ở [Thành viên](page:thanh-vien#lien-ket-phu-huynh), hoặc membership thiếu vai trò Phụ huynh/Học viên"
+            ],
+            [
+              "Không nhận được thông báo mốc giáo trình",
+              "Cron chạy 15 phút một lần và chỉ xét mốc trong 3 ngày gần đây; lớp phải **Đang học** và học viên chưa nộp"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Ghi âm Speaking"
+        },
+        {
+          "type": "table",
+          "columns": ["Triệu chứng", "Xử lý"],
+          "rows": [
+            [
+              "“Trình duyệt không cho ghi âm trên trang này”",
+              "Đang truy cập qua HTTP. Chưa có domain + SSL; để thử trên Chrome: mở `chrome://flags/#unsafely-treat-insecure-origin-as-secure`, thêm địa chỉ trang, bật và khởi động lại Chrome"
+            ],
+            [
+              "“Không truy cập được micro”",
+              "Người dùng từ chối quyền micro – cho phép trong cài đặt trang của trình duyệt rồi thử lại"
+            ],
+            [
+              "“Tải bản ghi lên thất bại”",
+              "Mạng chập chờn hoặc thiếu cấu hình R2 – bấm **Tải lại lên**"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Máy chủ"
+        },
+        {
+          "type": "table",
+          "columns": ["Hiện tượng", "Nguyên nhân / xử lý"],
+          "rows": [
+            [
+              "Container restart liên tục, log “migration thất bại”",
+              "Sai `DB_*` hoặc user DB thiếu quyền – xem log ngay phía trên"
+            ],
+            [
+              "“Cấu hình môi trường không hợp lệ”",
+              "Thiếu/sai biến, vd. `JWT_SECRET` < 32 ký tự"
+            ],
+            [
+              "`getaddrinfo ENOTFOUND` / `network … not found`",
+              "Sai `DB_HOST` hoặc `DB_NETWORK`, container không cùng network với Postgres"
+            ],
+            [
+              "`denied` khi pull image",
+              "`GHCR_TOKEN` hết hạn hoặc thiếu quyền `read:packages`"
+            ],
+            ["`/api/health` 503", "API không kết nối được database"],
+            [
+              "Upload media / ghi âm trả 501, trang media báo “Chưa cấu hình Cloudflare R2”",
+              "Thiếu biến `R2_*` – thêm vào `.env` rồi `--force-recreate`"
+            ],
+            [
+              "Nút **Định dạng bằng AI** mờ, chú thích “Chưa cấu hình AI”",
+              "Thiếu/sai biến Gemini/GCP – log API lúc khởi động có dòng `Gemini chưa dùng được – …`; sửa `.env` rồi `--force-recreate`"
+            ],
+            [
+              "Định dạng bằng AI báo “Dịch vụ AI chưa được bật…” / “Tài khoản AI thiếu quyền…” / “Thông tin xác thực AI không hợp lệ…”",
+              "Project GCP chưa bật API Vertex AI / service account thiếu role / JSON base64 sai. Chi tiết lỗi của Google chỉ có trong log API (`Gemini lỗi …`)"
+            ],
+            [
+              "Lỗi 500 “Đã có lỗi xảy ra”",
+              "Xem `docker logs lang-simulator-app --tail 100`; API không trả chi tiết lỗi 500 cho client"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ngoai-pham-vi",
+      "title": "Ngoài phạm vi hiện tại",
+      "summary": "Các chức năng chưa có, để trả lời người dùng và lên kế hoạch req sau.",
+      "roles": [],
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Các mục dưới đây **chưa có** trong hệ thống (ghi nhận từ req-1 tới req-3). Khi người dùng hỏi, trả lời là chưa hỗ trợ."
+        },
+        {
+          "type": "table",
+          "columns": ["Nhóm", "Chưa có"],
+          "rows": [
+            [
+              "Tài khoản",
+              "Xác thực email, quên mật khẩu tự phục vụ, gửi mail, đăng nhập Google/Facebook, đăng nhập bằng username, xoá tài khoản"
+            ],
+            ["Trung tâm", "Chuyển quyền Chủ sở hữu, tự xin tham gia trung tâm"],
+            [
+              "Khoá học & lớp",
+              "Học phí, ghi danh, học viên tự đăng ký lớp, trang giới thiệu khoá học công khai; nhân bản lớp/khoá học; nhập học viên từ file; phân quyền theo khoá học; điểm danh buổi học"
+            ],
+            [
+              "Giáo trình & bài tập",
+              "Gia hạn deadline riêng cho từng học viên; deadline/ngày mở gắn theo buổi học; flashcard; nhúng YouTube; đếm tham chiếu media khi nhân bản"
+            ],
+            [
+              "Thời khoá biểu",
+              "Ngày nghỉ của hệ thống hoặc lặp hằng năm; lịch lặp cách tuần; kiểm trùng phòng; lịch gộp mọi trung tâm ở `/me`"
+            ],
+            [
+              "Điểm & theo dõi",
+              "Trọng số và điểm tổng kết toàn khoá, tham số điểm theo hình thức thi, điểm liệt theo section; quy đổi thang điểm (TOEIC 990, IELTS band); thống kê tỉ lệ đúng theo câu; so sánh version; đánh số câu liên tục qua các section"
+            ],
+            [
+              "Thông báo",
+              "Email và thông báo đẩy ngoài ứng dụng; tắt từng loại thông báo"
+            ],
+            [
+              "Phụ huynh",
+              "Nhắn tin/liên hệ giáo viên; xem nội dung bài học, đề thi và đáp án của con"
+            ],
+            [
+              "Gói dịch vụ",
+              "Thanh toán, thời hạn gói, hạ gói vào cuối kỳ, quota dung lượng upload"
+            ],
+            [
+              "Thi",
+              "Giới hạn nghe audio 1 lần, thời gian chuẩn bị Speaking, giới hạn khung giờ làm bài, xem đáp án đề thi sau khi thi (bài học thì có)"
+            ],
+            [
+              "Hạ tầng",
+              "Domain + SSL (ghi âm cần HTTPS), môi trường production tách biệt, i18n đa ngôn ngữ"
+            ],
+            [
+              "Giao diện",
+              "Lưu giao diện theo tài khoản (hiện chỉ nhớ trên trình duyệt đang dùng), bảng màu riêng theo trung tâm, chế độ tương phản cao, đổi cỡ chữ, lọc sáng ảnh tải lên ở giao diện Tối"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

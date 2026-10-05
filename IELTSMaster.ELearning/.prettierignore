@@ -1,0 +1,10 @@
+node_modules
+dist
+.next
+.turbo
+coverage
+pnpm-lock.yaml
+# Tài liệu yêu cầu do người viết tự trình bày, không format tự động
+docs
+# Đề mẫu chép nguyên từ lightc-general
+packages/exam-core/src/__fixtures__

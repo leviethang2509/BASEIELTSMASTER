@@ -1,0 +1,617 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- Bảng màu (req-4) ------------------------------------------------------
+   3 theme, chọn qua `data-theme` trên <html>:
+
+   - `light`            trắng, **mặc định** (cũng là giá trị của `:root` trần,
+                        để trang tự dựng <html> riêng như `global-error` vẫn
+                        có màu đúng).
+   - `solarized-light`  tông giấy kem của bộ design lightc-general. Giá trị ở
+                        đây **giữ y nguyên** bản trước req-4 – đây là mốc để
+                        đối chiếu "giao diện không đổi".
+   - `dark`             Solarized Dark.
+
+   Tên biến giữ nguyên như trước req-4 nên 1.673 lượt dùng `var(--…)` trong
+   253 file không phải sửa gì. Giá trị chữ chọn theo tỉ số tương phản đo được
+   trên nền tương ứng (mục tiêu ≥ 4.5 cho chữ thường); ghi kèm sau mỗi dòng.
+
+   Quy ước tên cho 4 màu trạng thái (`ok` lục · `warn` vàng · `info` lam ·
+   `danger` đỏ) – mọi chỗ dùng màu phải qua một trong số này, không viết
+   `rgba()`/hex thẳng (ESLint chặn, xem `eslint.config.mjs`):
+
+   - `--x`          màu đặc: làm **nền** (chữ trên đó là `--on-status`) hoặc
+                    viền/biểu tượng. Theme tối sáng hơn để nổi trên nền tối.
+   - `--x-text`     chữ trên nền trang / nền nhạt (đủ tương phản 4.5).
+   - `--x-soft`     nền nhạt bán trong suốt (badge, banner, callout).
+   - `--x-border`   viền/ring của các khối nền nhạt đó.
+   - `--danger-bg`  nền **đặc** của thông báo lỗi (2 theme sáng dùng màu hồng
+                    nhạt của bộ design, theme tối dùng bản bán trong suốt).
+
+   Màu nhấn magenta cũng tách đôi theo đúng quy ước đó: `--accent-bg` là **nền**
+   nút nhấn (giữ #d33682 ở cả 3 theme, chữ `text-white`), `--accent` là **chữ và
+   viền** (theme tối sáng lên). Đừng dùng `--accent` làm nền có chữ. */
+
+:root,
+:root[data-theme='light'] {
+  /* Cho trình duyệt biết tông nền: checkbox/radio, mũi lên-xuống của ô số, ô
+     ngày/giờ và bảng chọn ngày của chúng là do trình duyệt vẽ, không theo CSS
+     của mình. Thiếu dòng này thì theme tối có mảng trắng lọt ở mọi ô đó. */
+  color-scheme: light;
+
+  --bg: #ffffff; /* nền trang */
+  --sidebar: #f5f7f7; /* nền sidebar & ô input */
+  --card: #ffffff; /* panel – phân biệt với nền bằng viền, không bằng sắc */
+  --raised: #ffffff; /* mặt nổi trên --sidebar/--card: popover, tab đang chọn */
+  --panel: #ffffff; /* mặt của dialog & tab đang chọn của khối 2 nút */
+  --border: rgba(88, 110, 117, 0.18); /* đậm hơn tông kem để bù tương phản */
+  --border-strong: rgba(88, 110, 117, 0.3);
+  --fg: #586e75; /* base00 – chữ chính · 5.4 */
+  --heading: #002b36; /* base03 – tiêu đề · 15.0 */
+  --body: #5f747b; /* chữ phụ · 4.9 */
+  --muted: #66787b; /* chữ mờ · 4.6 (base1 #93a1a1 chỉ 2.7, không dùng) */
+  --muted-2: #647a7d; /* 4.5 */
+  --accent: #d33682; /* magenta – điểm nhấn · 4.6 */
+  --accent-soft: rgba(211, 54, 130, 0.1);
+  --danger: #dc322f; /* 4.6 */
+  --hover: rgba(88, 110, 117, 0.07);
+  --sidebar-hover: #e9eeee; /* hover trên nền --sidebar */
+  --scroll-thumb: rgba(88, 110, 117, 0.24);
+  --scroll-thumb-hover: rgba(88, 110, 117, 0.42);
+
+  --bg-blur: rgba(255, 255, 255, 0.88); /* header dính, có backdrop-blur */
+  --overlay: rgba(0, 0, 0, 0.4); /* nền mờ sau modal & sidebar mobile */
+  --shadow-1: rgba(0, 43, 54, 0.07); /* bóng nhẹ */
+  --shadow-2: rgba(0, 43, 54, 0.13); /* bóng popover/dialog */
+  --shadow-3: rgba(0, 43, 54, 0.28); /* bóng sâu */
+  --accent-shadow: rgba(211, 54, 130, 0.22); /* bóng dưới nút chính */
+
+  --ok: #859900; /* lục – nền/viền trạng thái tốt */
+  --ok-text: #5f6d00; /* lục làm chữ · 4.8 */
+  --ok-soft: rgba(133, 153, 0, 0.12);
+  --ok-border: rgba(133, 153, 0, 0.3);
+  --warn: #b58900; /* vàng */
+  --warn-text: #8a6900; /* 4.7 */
+  --warn-soft: rgba(181, 137, 0, 0.12);
+  --warn-border: rgba(181, 137, 0, 0.35);
+  --info: #268bd2; /* lam */
+  --info-text: #1b6f9e; /* 4.6 */
+  --info-soft: rgba(38, 139, 210, 0.1);
+  --info-border: rgba(38, 139, 210, 0.3);
+  --danger-soft: rgba(220, 50, 47, 0.1);
+  --danger-border: rgba(220, 50, 47, 0.3);
+  --danger-bg: #fdf1ef; /* nền đặc của thông báo lỗi */
+  --cyan: #1d7b74; /* xanh mòng – nhãn phụ · 5.1 */
+  --cyan-soft: rgba(42, 161, 152, 0.14);
+  --violet: #5c61bd; /* tím & cam Solarized: khối minh hoạ trang chủ · 4.6 */
+  --violet-soft: rgba(108, 113, 196, 0.13);
+  --orange: #c04710; /* 4.6 */
+  --orange-soft: rgba(203, 75, 22, 0.13);
+  --on-status: #ffffff; /* chữ nằm trên nền màu trạng thái */
+
+  --link: #1b6f9e; /* link trong nội dung đề · 4.6 */
+  --blank-bg: rgba(88, 110, 117, 0.08); /* nền ô điền chỗ trống */
+  --img-mat: rgba(
+    88,
+    110,
+    117,
+    0.07
+  ); /* nền lót ảnh (logo) có nền trong suốt */
+  --footer-bg: #002b36; /* footer tối kết trang (design lightc-general) */
+  --footer-fg: #93a1a1;
+  --footer-heading: #eee8d5;
+  --footer-muted: #657b83;
+  --footer-border: transparent;
+  --code-bg: #002b36; /* khối mã trong tài liệu */
+  --code-fg: #eee8d5;
+  --select-caret: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%236b7280' stroke-width='1.6'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+}
+
+/* Tông giấy kem ấm với điểm nhấn hồng magenta, viền mảnh bán trong suốt.
+   Copy từ lightc-general; **không đổi giá trị** ở đây. */
+:root[data-theme='solarized-light'] {
+  color-scheme: light;
+
+  --bg: #fdf6e3; /* base3 - nền trang */
+  --sidebar: #eee8d5; /* base2 - nền sidebar & ô input */
+  --card: #fffdf5; /* panel sáng hơn nền một chút */
+  --raised: #fdf6e3; /* đúng --bg cũ: 2 theme sáng thì nổi = sáng hơn sidebar */
+  --panel: #fffdf5; /* đúng --card cũ: 2 theme sáng không đổi gì */
+  --border: rgba(88, 110, 117, 0.14); /* viền mảnh chuẩn */
+  --border-strong: rgba(88, 110, 117, 0.22); /* viền đậm hơn cho input */
+  --fg: #586e75; /* base00 - chữ chính */
+  --heading: #002b36; /* base03 - tiêu đề đậm */
+  --body: #657b83; /* base0 - chữ phụ */
+  --muted: #93a1a1; /* base1 - chữ mờ */
+  --muted-2: #839496; /* base0 nhạt */
+  --accent: #d33682; /* magenta - điểm nhấn */
+  --accent-soft: rgba(211, 54, 130, 0.13);
+  --danger: #dc322f;
+  --hover: rgba(88, 110, 117, 0.07);
+  --sidebar-hover: #e4dcc4;
+  --scroll-thumb: rgba(88, 110, 117, 0.24);
+  --scroll-thumb-hover: rgba(88, 110, 117, 0.42);
+
+  --bg-blur: rgba(253, 246, 227, 0.92);
+  --overlay: rgba(0, 0, 0, 0.4);
+  --shadow-1: rgba(0, 43, 54, 0.08);
+  --shadow-2: rgba(0, 43, 54, 0.14);
+  --shadow-3: rgba(0, 43, 54, 0.28);
+  --accent-shadow: rgba(211, 54, 130, 0.28);
+
+  --ok: #859900;
+  --ok-text: #5f6d00;
+  --ok-soft: rgba(133, 153, 0, 0.12);
+  --ok-border: rgba(133, 153, 0, 0.32);
+  --warn: #b58900;
+  --warn-text: #8a6900;
+  --warn-soft: rgba(181, 137, 0, 0.12);
+  --warn-border: rgba(181, 137, 0, 0.35);
+  --info: #268bd2;
+  --info-text: #1f6fa8;
+  --info-soft: rgba(38, 139, 210, 0.1);
+  --info-border: rgba(38, 139, 210, 0.3);
+  --danger-soft: rgba(220, 50, 47, 0.1);
+  --danger-border: rgba(220, 50, 47, 0.3);
+  --danger-bg: #fdf1ef;
+  --cyan: #2aa198;
+  --cyan-soft: rgba(42, 161, 152, 0.14);
+  --violet: #6c71c4;
+  --violet-soft: rgba(108, 113, 196, 0.13);
+  --orange: #cb4b16;
+  --orange-soft: rgba(203, 75, 22, 0.13);
+  --on-status: #ffffff;
+
+  --link: #268bd2;
+  --blank-bg: rgba(15, 23, 42, 0.07);
+  --img-mat: rgba(88, 110, 117, 0.07);
+  --footer-bg: #002b36;
+  --footer-fg: #93a1a1;
+  --footer-heading: #eee8d5;
+  --footer-muted: #657b83;
+  --footer-border: transparent;
+  --code-bg: #002b36;
+  --code-fg: #eee8d5;
+  --select-caret: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%236b7280' stroke-width='1.6'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+}
+
+/* Solarized Dark. Chữ mờ phải sáng hơn base01 (#586e75 chỉ 3.4 trên nền này);
+   bóng đổ dùng đen đậm vì bóng xanh mờ không nhìn ra trên nền tối. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #002b36; /* base03 - nền trang */
+  --sidebar: #05323d; /* nền sidebar & ô input, nhấc nhẹ khỏi nền */
+  --card: #073642; /* base02 - panel nhấc rõ khỏi nền */
+  /* Ở 2 theme sáng, "nổi lên" = sáng hơn nền nên `--bg` (trắng/kem) làm được
+     việc đó; nền tối thì `--bg` là mặt **tối nhất**, dùng nó cho popover hay
+     tab đang chọn sẽ thành lõm xuống. Token riêng, sáng hơn cả `--card`. */
+  --raised: #0a404e;
+  /* Panel của dialog và tab đang chọn: ở 2 theme sáng bằng đúng `--card` cũ
+     (không đổi gì), ở theme tối phải nhấc lên vì bóng đổ đen không nhìn ra
+     trên nền tối – panel `--card` chỉ chênh nền mờ 1.52 (2 theme sáng 2.85). */
+  --panel: #0a404e;
+  --border: rgba(147, 161, 161, 0.18);
+  --border-strong: rgba(147, 161, 161, 0.3);
+  --fg: #a5b2b2; /* chữ chính · 6.7 */
+  --heading: #eee8d5; /* base2 - tiêu đề · 12.3 */
+  --body: #93a1a1; /* base1 - chữ phụ · 5.6 */
+  --muted: #8ba0a4; /* chữ mờ · 4.7 ngay trên --card (nền sáng nhất) */
+  --muted-2: #8ba0a4;
+  /* Sáng thêm một nấc so với Step 3: `--panel`/`--raised` (mặt của dialog,
+     popover) sáng hơn `--card` nên chữ trên đó tụt ~0.6 điểm – ba màu này phải
+     đủ 4.3 ngay trên mặt sáng nhất mới bằng mốc 2 theme sáng. */
+  --accent: #f177ae; /* magenta sáng hơn – chỉ làm chữ/viền · 4.95 trên --card */
+  --accent-soft: rgba(241, 119, 174, 0.14);
+  --danger: #f2837f; /* 5.2 trên --card */
+  --hover: rgba(147, 161, 161, 0.1);
+  --sidebar-hover: #0a4150;
+  --scroll-thumb: rgba(147, 161, 161, 0.28);
+  --scroll-thumb-hover: rgba(147, 161, 161, 0.45);
+
+  --bg-blur: rgba(0, 43, 54, 0.9);
+  /* Đậm hơn 2 theme sáng: bóng đổ đen không nhìn ra trên nền tối nên panel
+     `--card` phải tự nổi lên bằng chênh lệch với nền đã tối đi. */
+  --overlay: rgba(0, 0, 0, 0.72);
+  --shadow-1: rgba(0, 0, 0, 0.35);
+  --shadow-2: rgba(0, 0, 0, 0.5);
+  --shadow-3: rgba(0, 0, 0, 0.65);
+  --accent-shadow: rgba(234, 92, 158, 0.3);
+
+  /* `--x` làm nền (chữ trên đó là `--on-status` tối) hoặc viền/biểu tượng;
+     `--x-text` sáng hơn một bậc để đọc được ngay trên nền `--x-soft`. Alpha
+     của `--x-soft` để .12 như 2 theme sáng: .16 làm chìm chữ ~0.3 điểm. */
+  --ok: #9fb300; /* lục sáng · 6.4 */
+  --ok-text: #a8bd00; /* 5.1 trên --ok-soft */
+  --ok-soft: rgba(159, 179, 0, 0.12);
+  --ok-border: rgba(159, 179, 0, 0.35);
+  --warn: #cfa000; /* vàng sáng · 6.2 */
+  --warn-text: #d8a800; /* 5.0 trên --warn-soft */
+  --warn-soft: rgba(207, 160, 0, 0.12);
+  --warn-border: rgba(207, 160, 0, 0.35);
+  --info: #4aa3dd; /* lam sáng · 5.4 */
+  --info-text: #63b4e8; /* 4.7 trên --info-soft */
+  --info-soft: rgba(74, 163, 221, 0.12);
+  --info-border: rgba(74, 163, 221, 0.35);
+  --danger-soft: rgba(242, 131, 127, 0.12);
+  --danger-border: rgba(242, 131, 127, 0.35);
+  --danger-bg: rgba(242, 131, 127, 0.12);
+  --cyan: #46bdb2; /* 6.6 */
+  --cyan-soft: rgba(42, 161, 152, 0.2);
+  --violet: #9ba0e4; /* tím & cam phải sáng lên nhiều nhất trên nền base03 · 5.8 */
+  --violet-soft: rgba(155, 160, 228, 0.16);
+  --orange: #eb8a58; /* 5.9 */
+  --orange-soft: rgba(235, 138, 88, 0.16);
+  /* Nền trạng thái ở theme tối là màu sáng → chữ trên đó phải tối. */
+  --on-status: #002b36;
+
+  --link: #4aa3dd;
+  --blank-bg: rgba(147, 161, 161, 0.14);
+  /* Logo PNG nền trong suốt thường vẽ bằng mực đậm → lót trắng, không lọc sáng
+     ảnh (quyết định D1/D2 của plan). Ảnh đặc thì `object-cover` che hết nền. */
+  --img-mat: #ffffff;
+  --footer-bg: #00212b; /* tối hơn nền trang một bậc để vẫn ra "kết trang" */
+  --footer-fg: #93a1a1;
+  --footer-heading: #eee8d5;
+  --footer-muted: #7f9296;
+  /* Nền footer chỉ tối hơn nền trang 1.1:1 nên đường kẻ trên phải rõ bằng
+     `--border` (1.36) mới thấy được chỗ kết trang. */
+  --footer-border: rgba(147, 161, 161, 0.2);
+  --code-bg: #001820; /* tối hơn nền trang một bậc (1.2:1) */
+  --code-fg: #eee8d5;
+  --select-caret: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2393a1a1' stroke-width='1.6'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+}
+
+/* Màu không phụ thuộc theme: luôn đặt trên nền màu nhấn (thẻ gói dịch vụ nổi,
+   nút CTA) hoặc là màu bút highlight của trình soạn đề – nền giữ nguyên ở cả 3
+   theme nên chữ trên nền đó cũng giữ nguyên. Khai báo một lần, không khối theme
+   nào ghi đè. */
+:root {
+  /* Nền đặc của nút nhấn: giữ đúng magenta #d33682 ở cả 3 theme (chữ `text-white`
+     đạt 4.55 trên nó). `--accent` ở theme tối phải sáng lên để làm **chữ**, nên
+     dùng nó làm nền sẽ chỉ còn ~3.2 – tách hẳn hai token. */
+  --accent-bg: #d33682;
+  --accent-hover: #b32c6d; /* nền nút nhấn khi hover */
+  --on-accent: #fdf6e3; /* chữ/nền sáng nằm trên --accent-bg */
+  --on-accent-muted: rgba(253, 246, 227, 0.85);
+  --on-accent-line: rgba(253, 246, 227, 0.3);
+  --on-accent-fg: #002b36; /* chữ tối trên nền --on-accent */
+  --highlight-bg: #fff3bf; /* bút dạ quang trong nội dung đề */
+  --highlight-fg: #1f2328;
+  /* Footer tối ở cả 3 theme nên đường kẻ bên trong nó cũng không đổi. */
+  --footer-divider: rgba(147, 161, 161, 0.2);
+}
+
+/* Đổi theme không chạy transition màu trên toàn trang: vài nghìn phần tử cùng
+   transition một lúc làm giật, và các panel có transition riêng sẽ lệch pha. */
+:root[data-theme-switching] * {
+  transition: none !important;
+}
+
+/* --- Thanh cuộn -----------------------------------------------------------
+   Mảnh và không có rãnh riêng: track để trong suốt nên luôn ăn theo nền của
+   container đang cuộn (trang, sidebar, popup, bảng…), chỉ còn thấy con trượt. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-thumb);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scroll-thumb-hover);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* Nền chung = tông solarized, tránh mảng trắng lọt ra ở khe layout. */
+body {
+  background: var(--bg);
+}
+
+.ls-surface {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* --- Animations -----------------------------------------------------------
+   Popup: nền mờ dần, panel trồi lên + phóng nhẹ. Accordion sidebar: chiều cao
+   trượt mượt bằng thủ thuật grid-template-rows 0fr -> 1fr. */
+@keyframes ls-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ls-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Thêm class này vào lớp overlay (nền mờ) của popup. Nền tự fade, còn panel
+   con trực tiếp thì trồi lên. */
+.ls-modal-overlay {
+  animation: ls-fade-in 0.15s ease-out;
+}
+.ls-modal-overlay > * {
+  animation: ls-pop-in 0.18s ease-out;
+}
+
+/* Accordion: bọc phần children trong .ls-accordion, đặt data-open để mở/đóng. */
+.ls-accordion {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.22s ease;
+}
+.ls-accordion[data-open='true'] {
+  grid-template-rows: 1fr;
+}
+.ls-accordion > .ls-accordion-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ls-modal-overlay,
+  .ls-modal-overlay > *,
+  .ls-accordion {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Thanh loading toàn cục: một dải sáng chạy qua lại kiểu indeterminate. */
+@keyframes ls-loading-slide {
+  0% {
+    transform: translateX(-100%) scaleX(0.4);
+  }
+  50% {
+    transform: translateX(0%) scaleX(0.6);
+  }
+  100% {
+    transform: translateX(100%) scaleX(0.4);
+  }
+}
+.ls-loading-bar {
+  transform-origin: left center;
+  animation: ls-loading-slide 1.1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ls-loading-bar {
+    animation: none;
+  }
+}
+
+/* PlateJS editor: plugin list bọc mỗi node trong <ul/ol> với margin/padding=0
+   nên marker (bullet/số) mặc định "outside" bị đẩy sát mép trái editor / bị cắt.
+   Đặt list-style-position: inside để marker nằm ở mép trái nội dung list —
+   trùng vị trí bắt đầu của text paragraph, cho thẳng hàng. */
+[data-slate-editor] ul,
+[data-slate-editor] ol {
+  list-style-position: inside;
+}
+
+/* Native <select>: thay caret mặc định bằng caret riêng cách mép phải một
+   khoảng, áp dụng đồng nhất cho mọi dropdown. Data-URI không nhận được biến
+   màu nên mỗi theme khai báo `--select-caret` riêng. */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: var(--select-caret);
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 1rem 1rem;
+  /* Chừa chỗ để chữ của option không chạy dưới caret. */
+  padding-right: 2rem !important;
+}
+
+/* --- Màu "nướng" cho nền sáng (req-4 Step 4) -------------------------------
+   Một số màu **không** đến từ bảng token mà từ dữ liệu hoặc từ bảng màu cố định
+   của trình soạn đề: màu của từng loại indicator / dạng câu hỏi và của callout
+   (`@lang/exam-core`), màu chữ & màu nền người soạn tự chọn trong nội dung đề.
+   Chúng được chọn cho nền sáng nên trên nền tối có cái chìm hẳn (chữ #1f2328
+   chỉ 1.05:1). Không đổi được dữ liệu đã lưu, nên đổi **cách hiển thị**: ở theme
+   tối trộn thêm màu chữ của theme để sáng lên mà vẫn giữ sắc.
+
+   Cách dùng: đặt biến bằng inline style (giá trị lấy từ dữ liệu, không phải mã
+   màu viết thẳng trong component) rồi gắn class tương ứng. */
+
+/* Màu cố định một sắc cho cả khối: chữ, viền, chấm, nền nhạt. */
+.ls-tint {
+  --tint: var(--tint-raw);
+}
+:root[data-theme='dark'] .ls-tint {
+  /* 35% màu gốc + 65% màu chữ. Chọn theo màu tối nhất phải đỡ: #1f2328 (ô
+     "đen" của bảng màu chữ) đạt 4.48 trên cả 3 mặt nền tối, 15 màu của bảng
+     indicator đạt 5.11–7.15 – trước khi trộn có màu chỉ 1.05. Trộn nhiều hơn
+     (55%) giữ sắc đậm hơn nhưng màu tối nhất chỉ còn 3.09. */
+  --tint: color-mix(in srgb, var(--tint-raw) 35%, var(--heading));
+}
+.ls-tint-fg {
+  color: var(--tint);
+}
+.ls-tint-line {
+  border-color: var(--tint);
+}
+.ls-tint-dot {
+  background-color: var(--tint);
+}
+.ls-tint-soft {
+  background-color: color-mix(in srgb, var(--tint) 12%, transparent);
+}
+.ls-tint-faint {
+  background-color: color-mix(in srgb, var(--tint) 8%, transparent);
+}
+
+/* Màu chữ / màu nền người soạn chọn trong nội dung đề. Chữ sáng lên như trên;
+   nền **đặc** (bảng màu dạ quang, toàn màu rất nhạt) đổi thành mảng mờ cùng sắc
+   – để nguyên thì chữ sáng thừa hưởng của theme tối nằm trên nền trắng ngà,
+   chỉ còn 1.10:1. */
+.ls-leaf-fg {
+  color: var(--leaf-fg);
+}
+.ls-leaf-bg {
+  background-color: var(--leaf-bg);
+}
+:root[data-theme='dark'] .ls-leaf-fg {
+  color: color-mix(in srgb, var(--leaf-fg) 35%, var(--heading));
+}
+:root[data-theme='dark'] .ls-leaf-bg {
+  background-color: color-mix(in srgb, var(--leaf-bg) 22%, transparent);
+}
+
+/* Ô buổi học trong lịch: màu lấy theo lớp từ bảng 8 token Solarized
+   (`calendar-model.ts`) nên đã tự đổi theo theme – chỉ cần pha loãng. Hover
+   tăng độ đậm của chính màu đó, không dùng `brightness` (trên nền tối thì
+   "tối đi" là sai chiều). */
+.ls-event {
+  background-color: color-mix(in srgb, var(--event-color) 12%, transparent);
+  border-left: 3px solid var(--event-color);
+}
+.ls-event:hover {
+  background-color: color-mix(in srgb, var(--event-color) 22%, transparent);
+}
+
+/* --- Trình soạn đề (Step 12) ----------------------------------------------
+   Editor có vài node tự viết (blank, indicator) nên style nằm ở đây thay vì
+   rải trong class Tailwind của từng component. */
+.exam-editor {
+  counter-reset: exam-blank;
+}
+.exam-editor h1 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 18px 0 6px;
+}
+.exam-editor h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 16px 0 6px;
+}
+.exam-editor h3 {
+  font-size: 19px;
+  font-weight: 600;
+  margin: 14px 0 5px;
+}
+.exam-editor h4 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 12px 0 4px;
+}
+.exam-editor h5 {
+  font-size: 15.5px;
+  font-weight: 600;
+  margin: 10px 0 4px;
+}
+.exam-editor h6 {
+  font-size: 14.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 10px 0 4px;
+}
+.exam-editor blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 12px;
+  color: var(--body);
+  margin: 10px 0;
+}
+.exam-editor hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 18px 0;
+}
+.exam-editor pre {
+  background: var(--sidebar);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  overflow-x: auto;
+  margin: 12px 0;
+}
+.exam-editor a {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+/* Bút dạ quang: `HighlightPlugin` render thẻ <mark> trần nên trong editor nó ăn
+   màu mặc định của trình duyệt (vàng gắt, và đổi theo `color-scheme`), lệch hẳn
+   với bản giả lập vốn dùng `--highlight-*`. Khai báo cả cặp chữ/nền để 3 theme
+   và mọi trình duyệt ra cùng một màu. */
+.exam-editor mark {
+  background: var(--highlight-bg);
+  color: var(--highlight-fg);
+}
+
+/* Ảnh trong nội dung đề hay là hình vẽ nền trong suốt mực đậm → trên nền tối
+   mất hút. Lót nền sáng như logo trung tâm (quyết định D2: không lọc sáng ảnh
+   người dùng); ảnh đặc thì che kín nền lót nên 2 theme sáng không cần. */
+:root[data-theme='dark'] .exam-media {
+  background: var(--img-mat);
+}
+
+/* Blank: nền xám mờ + gạch chân, kèm số thứ tự tự đánh bằng CSS counter nên
+   chèn/xoá ô ở giữa là số tự chạy lại, không phải cập nhật dữ liệu. */
+.exam-blank {
+  counter-increment: exam-blank;
+  background: var(--blank-bg);
+  border-bottom: 1px solid var(--border-strong);
+  border-radius: 3px;
+  padding: 1px 3px;
+}
+.exam-blank::before {
+  content: counter(exam-blank);
+  font-size: 0.68em;
+  vertical-align: super;
+  color: var(--muted);
+  margin-right: 2px;
+  user-select: none;
+}
+
+/* Cặp ghép (matching / true-false): phần hiển thị bên trái co giãn, ô đáp án
+   bên phải rộng cố định. */
+.exam-pair {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 3px 0;
+}
+
+/* Ô nhập ở bản giả lập: bề rộng cố định cho giống đề thi in ra. */
+.exam-preview-input {
+  width: 128px;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid var(--border-strong);
+  padding: 0 4px;
+  outline: none;
+}
+.exam-preview-input:focus {
+  border-bottom-color: var(--accent);
+}

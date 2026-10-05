@@ -1,0 +1,85 @@
+{
+  "name": "lang-api",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Lang Simulator – REST API (NestJS)",
+  "scripts": {
+    "build": "npx nest build",
+    "dev": "npx nest start --watch",
+    "start": "node dist/main.js",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "migrate": "ts-node src/database/migrate.ts",
+    "migrate:prod": "node dist/database/migrate.js",
+    "migration:generate": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:generate",
+    "migration:create": "typeorm-ts-node-commonjs migration:create",
+    "migration:revert": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:revert",
+    "seed:owner": "ts-node src/database/seed-owner.ts",
+    "clean": "rm -rf dist .turbo coverage"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "tsconfig": {
+            "module": "CommonJS",
+            "moduleResolution": "Node10"
+          }
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1132.0",
+    "@aws-sdk/s3-request-presigner": "^3.1132.0",
+    "@google/genai": "^2.24.0",
+    "@lang/exam-core": "workspace:*",
+    "@lang/shared": "workspace:*",
+    "@nestjs/common": "^10.4.22",
+    "@nestjs/config": "^3.3.0",
+    "@nestjs/core": "^10.4.22",
+    "@nestjs/jwt": "^11.0.2",
+    "@nestjs/platform-express": "^10.4.22",
+    "@nestjs/schedule": "^4.1.2",
+    "@nestjs/typeorm": "^10.0.2",
+    "bcryptjs": "^3.0.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.4",
+    "cookie-parser": "^1.4.7",
+    "exceljs": "^4.4.0",
+    "pg": "^8.23.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "sharp": "^0.35.4",
+    "typeorm": "^0.3.31"
+  },
+  "devDependencies": {
+    "@lang/eslint-config": "workspace:*",
+    "@lang/tsconfig": "workspace:*",
+    "@nestjs/cli": "^10.4.9",
+    "@nestjs/schematics": "^10.2.3",
+    "@nestjs/testing": "^10.4.22",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/express": "^4.17.25",
+    "@types/jest": "catalog:",
+    "@types/multer": "^2.2.0",
+    "@types/node": "catalog:",
+    "@types/supertest": "^7.2.1",
+    "eslint": "catalog:",
+    "jest": "catalog:",
+    "supertest": "^7.2.2",
+    "ts-jest": "catalog:",
+    "ts-node": "^10.9.2",
+    "typescript": "catalog:"
+  }
+}

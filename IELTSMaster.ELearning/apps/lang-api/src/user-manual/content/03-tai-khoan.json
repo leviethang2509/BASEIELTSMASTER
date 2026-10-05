@@ -1,0 +1,436 @@
+{
+  "id": "tai-khoan",
+  "title": "Tài khoản",
+  "pages": [
+    {
+      "id": "dang-ky-dang-nhap",
+      "title": "Đăng ký & đăng nhập",
+      "summary": "Tạo tài khoản, đăng nhập, phiên đăng nhập và trang đích sau đăng nhập.",
+      "roles": [
+        "REGISTERED_USER",
+        "SYSTEM_OWNER",
+        "SYSTEM_ADMIN",
+        "TENANT_OWNER",
+        "TENANT_ADMIN",
+        "TEACHER",
+        "STUDENT",
+        "PARENT"
+      ],
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Đăng ký tài khoản"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Mở trang Đăng ký",
+              "text": "Nút **Đăng ký** trên header hoặc `/register`."
+            },
+            {
+              "title": "Nhập thông tin",
+              "text": "**Email**, **Mật khẩu** (8–72 ký tự; thanh độ mạnh chỉ là gợi ý), **Họ và tên**, **Ngày sinh** (không ở tương lai, từ 1900)."
+            },
+            {
+              "title": "Bấm Tạo tài khoản",
+              "text": "Tài khoản là Người dùng, đăng nhập luôn và được chuyển tới trang đích (xem bên dưới)."
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Email không phân biệt hoa thường và phải chưa có tài khoản khác dùng (“Email đã được sử dụng”).",
+            "Không giới hạn tuổi khi đăng ký tài khoản; chỉ đăng ký **trung tâm** mới cần đủ 18 tuổi.",
+            "Chưa có xác thực email, quên mật khẩu hay đăng nhập Google/Facebook."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Đăng nhập"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tại `/login` nhập email và mật khẩu. Sai email hoặc mật khẩu đều báo chung “Email hoặc mật khẩu không đúng”. Tài khoản bị khoá báo “Tài khoản đã bị khoá, vui lòng liên hệ quản trị viên”."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Trang đích sau đăng nhập"
+        },
+        {
+          "type": "table",
+          "columns": ["Điều kiện (xét theo thứ tự)", "Chuyển tới"],
+          "rows": [
+            [
+              "Tài khoản đang dùng mật khẩu tạm",
+              "`/me/account` (bắt buộc đổi mật khẩu)"
+            ],
+            [
+              "Đăng nhập từ link có `?next=` (bị chặn khi chưa đăng nhập)",
+              "Trang ban đầu"
+            ],
+            ["System Owner/Admin không thuộc trung tâm nào", "`/admin`"],
+            [
+              "Người dùng chỉ thuộc 1 trung tâm đang hoạt động, có vai trò Chủ sở hữu/Quản trị viên/Giáo viên",
+              "`/t/{slug}/dashboard`"
+            ],
+            [
+              "Người dùng chỉ thuộc 1 trung tâm đang hoạt động, chỉ là Học viên/Phụ huynh",
+              "`/t/{slug}`"
+            ],
+            [
+              "Còn lại (nhiều ngữ cảnh, chưa có trung tâm, trung tâm chưa hoạt động)",
+              "`/me`"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Phiên đăng nhập"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Access token sống 15 phút, tự làm mới bằng refresh token (cookie httpOnly, mặc định 30 ngày). Người dùng không phải đăng nhập lại khi còn dùng thường xuyên.",
+            "Mở nhiều tab cùng lúc vẫn giữ phiên bình thường.",
+            "**Đăng xuất** thu hồi phiên của thiết bị hiện tại.",
+            "Đổi mật khẩu, bị reset mật khẩu hoặc bị khoá tài khoản làm các phiên khác hết hiệu lực ngay."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Nếu người dùng báo “đăng nhập xong lại bị đẩy về trang đăng nhập”: kiểm tra trình duyệt có chặn cookie không, và biến `COOKIE_SECURE` phải là `false` khi truy cập qua HTTP. Xem [Sự cố thường gặp](page:su-co-thuong-gap)."
+        }
+      ]
+    },
+    {
+      "id": "ho-so-mat-khau",
+      "title": "Hồ sơ & mật khẩu",
+      "summary": "Trang Tài khoản của tôi: sửa hồ sơ, đổi mật khẩu, mật khẩu tạm.",
+      "roles": [
+        "REGISTERED_USER",
+        "SYSTEM_OWNER",
+        "SYSTEM_ADMIN",
+        "TENANT_OWNER",
+        "TENANT_ADMIN",
+        "TEACHER",
+        "STUDENT",
+        "PARENT"
+      ],
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mở **Tài khoản của tôi** (`/me/account`) bằng cách bấm tên/avatar trên header khu vực chính, hoặc từ thẻ tài khoản ở `/me`."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Hồ sơ"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Sửa được: **Họ và tên**, **Ngày sinh**, **Giới tính**, **Số điện thoại** (chữ số và + ( ) . -), **Địa chỉ**. Bấm **Lưu thay đổi**.",
+            "Người dùng **không tự đổi email**. Cần đổi email thì System Owner/Admin sửa trong [Người dùng](page:admin-nguoi-dung)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Đổi mật khẩu"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Nhập Mật khẩu hiện tại"
+            },
+            {
+              "title": "Nhập Mật khẩu mới và Nhập lại mật khẩu mới",
+              "text": "8–72 ký tự, phải khác mật khẩu hiện tại."
+            },
+            {
+              "title": "Bấm Đổi mật khẩu",
+              "text": "Các thiết bị khác đang đăng nhập bị đăng xuất; thiết bị hiện tại giữ phiên."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Mật khẩu tạm"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tài khoản do System Admin tạo/reset mật khẩu, hoặc do trung tâm tạo, có cờ **phải đổi mật khẩu**. Khi đăng nhập, người dùng bị đưa tới `/me/account` với thông báo “Tài khoản đang dùng mật khẩu tạm…” và không dùng được chức năng nào khác cho tới khi đổi xong."
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "text": "Trong danh sách người dùng của `/admin`, tài khoản còn mật khẩu tạm có nhãn **Chờ đổi mật khẩu**."
+        }
+      ]
+    },
+    {
+      "id": "khong-gian-cua-toi",
+      "title": "Không gian của tôi",
+      "summary": "Trang /me: chọn ngữ cảnh làm việc, theo dõi trạng thái trung tâm đã đăng ký.",
+      "roles": [
+        "REGISTERED_USER",
+        "SYSTEM_OWNER",
+        "SYSTEM_ADMIN",
+        "TENANT_OWNER",
+        "TENANT_ADMIN",
+        "TEACHER",
+        "STUDENT",
+        "PARENT"
+      ],
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "`/me` (nút **Không gian của tôi** trên header) liệt kê mọi nơi người dùng làm việc được:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Thẻ **Quản trị hệ thống** – chỉ System Owner/Admin, dẫn tới `/admin`.",
+            "Thẻ **Tài khoản của tôi** – dẫn tới hồ sơ, đổi mật khẩu.",
+            "**Trung tâm của tôi** – mỗi trung tâm là thành viên đang hoạt động: logo, tên, trạng thái, vai trò, gói; nút **Vào dashboard** (có vai trò quản trị/Giáo viên) và **Trang trung tâm**.",
+            "Nút **Đăng ký trung tâm**."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trạng thái trung tâm hiển thị"
+        },
+        {
+          "type": "table",
+          "columns": ["Trạng thái", "Người dùng thấy", "Việc cần làm"],
+          "rows": [
+            [
+              "Chờ duyệt",
+              "“Đăng ký đang chờ System Admin duyệt…”",
+              "Chờ System Admin duyệt"
+            ],
+            [
+              "Bị từ chối",
+              "Lý do từ chối + nút **Sửa và gửi lại**",
+              "Chủ sở hữu sửa theo lý do rồi gửi lại"
+            ],
+            [
+              "Tạm khoá",
+              "“Trung tâm đang bị tạm khoá…” (Chủ sở hữu thấy lý do)",
+              "Liên hệ System Admin"
+            ],
+            ["Đang hoạt động", "Nút vào trung tâm", "—"]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Chuyển không gian trong dashboard"
+        },
+        {
+          "type": "paragraph",
+          "text": "Sidebar dashboard (`/admin` hoặc dashboard trung tâm) có switcher **Chuyển không gian làm việc** ở đầu: chọn Quản trị hệ thống hoặc trung tâm khác, hoặc **Tất cả trong Không gian của tôi** để về `/me`."
+        }
+      ]
+    },
+    {
+      "id": "thong-bao",
+      "title": "Thông báo",
+      "summary": "Chuông trên header, trang Tất cả thông báo, các sự kiện sinh thông báo.",
+      "roles": [
+        "REGISTERED_USER",
+        "SYSTEM_OWNER",
+        "SYSTEM_ADMIN",
+        "TENANT_OWNER",
+        "TENANT_ADMIN",
+        "TEACHER",
+        "STUDENT",
+        "PARENT"
+      ],
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Chuông **Thông báo** nằm trên header của khu vực chính và của dashboard, gộp thông báo của **mọi trung tâm** mà người dùng tham gia (mỗi dòng ghi tên trung tâm). Số trên chuông là số thông báo chưa đọc; hệ thống đếm lại mỗi 60 giây và mỗi khi quay lại tab."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Bấm chuông: 10 thông báo mới nhất, nút **Đánh dấu đã đọc tất cả**, liên kết **Tất cả thông báo**.",
+            "Bấm một thông báo: đánh dấu đã đọc rồi mở trang liên quan (trang lớp, màn hình học, kết quả bài thi, trang chấm bài, chi tiết buổi học).",
+            "Trang **Tất cả thông báo** (`/me/notifications`): lọc **Tất cả** / **Chưa đọc**, phân trang, đánh dấu đã đọc tất cả."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "Thông báo chỉ hiển thị trong ứng dụng – hệ thống **không** gửi email hay thông báo đẩy. Không tắt được từng loại; thông báo quá **90 ngày** tự xoá."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Sự kiện sinh thông báo"
+        },
+        {
+          "type": "table",
+          "columns": ["Sự kiện", "Ai nhận"],
+          "rows": [
+            ["Được thêm vào lớp", "Học viên vừa được thêm"],
+            ["Được phân công dạy lớp", "Giáo viên vừa được thêm vào lớp"],
+            [
+              "Giáo trình lớp có mục mới",
+              "Học viên của lớp (gộp một thông báo cho cả lần lưu)"
+            ],
+            ["Có lần thi lại mới", "Học viên của lớp"],
+            ["Mục tới ngày mở", "Học viên của lớp"],
+            ["Sắp hết hạn (còn dưới 24 giờ)", "Học viên **chưa nộp** mục đó"],
+            ["Quá hạn chưa nộp", "Học viên **chưa nộp** mục đó"],
+            ["Bài đã chấm xong", "Học viên có bài"],
+            [
+              "Buổi học bị huỷ, buổi đổi giờ, dời lịch",
+              "Học viên và giáo viên của lớp (dời lịch: một thông báo gộp mỗi lớp)"
+            ],
+            ["Có buổi học bù", "Học viên và giáo viên của lớp"],
+            ["Được xếp dạy một buổi (dạy thế, buổi bù)", "Giáo viên của buổi"],
+            [
+              "Có bài mới cần chấm",
+              "Giáo viên của lớp (bài trong lớp) hoặc người soạn đề/bài học (bài tự do)"
+            ],
+            ["Được chuyển giao chấm", "Giáo viên được chuyển giao"],
+            [
+              "Giáo trình lớp được cập nhật",
+              "Giáo viên của lớp (trừ người vừa sửa)"
+            ],
+            [
+              "Nhận xét cuối khoá đã công bố",
+              "Học viên có nhận xét, khi lớp chuyển **Đã kết thúc**"
+            ],
+            ["Con quá hạn chưa nộp", "Phụ huynh đã liên kết với học viên đó"],
+            [
+              "Bài của con đã có kết quả",
+              "Phụ huynh đã liên kết (kể cả đề tự chấm hết, có kết quả ngay khi nộp)"
+            ],
+            [
+              "Chuyên cần của con dưới ngưỡng",
+              "Phụ huynh đã liên kết, khi lớp chuyển **Đã kết thúc**"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Ba dòng cuối gửi cho **Phụ huynh** và mở trang [Con của tôi](page:con-cua-toi); mỗi con một thông báo riêng."
+        },
+        {
+          "type": "paragraph",
+          "text": "Người gây ra sự kiện không nhận thông báo của chính mình (ví dụ giáo viên tự sửa giáo trình lớp)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Mốc thời gian do hệ thống quét"
+        },
+        {
+          "type": "paragraph",
+          "text": "Thông báo **mục tới ngày mở**, **sắp hết hạn** và **quá hạn** không sinh ngay lúc lưu giáo trình mà do hệ thống quét **15 phút một lần**, chỉ với lớp đang **Đang học**. Mỗi mốc chỉ báo một lần cho mỗi học viên, nên hệ thống quét lại không tạo thông báo trùng. Học viên đã nộp (đề thi: đã có lượt chưa bị “Cho làm lại”; bài học: đã nộp ít nhất một lần) không nhận nhắc hạn."
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Nếu API dừng quá 3 ngày, các mốc rơi đúng khoảng dừng sẽ không được báo lại; xem [Sự cố thường gặp](page:su-co-thuong-gap)."
+        }
+      ]
+    },
+    {
+      "id": "giao-dien",
+      "title": "Giao diện",
+      "summary": "Ba bảng màu Sáng / Giấy / Tối, nút đổi giao diện nằm ở đâu và lựa chọn được nhớ thế nào.",
+      "roles": [
+        "REGISTERED_USER",
+        "SYSTEM_OWNER",
+        "SYSTEM_ADMIN",
+        "TENANT_OWNER",
+        "TENANT_ADMIN",
+        "TEACHER",
+        "STUDENT",
+        "PARENT"
+      ],
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Nút **Giao diện** nằm ở góc trên bên phải, cạnh chuông **Thông báo**. Bấm để mở menu 4 mục; mục đang dùng có dấu tích."
+        },
+        {
+          "type": "table",
+          "columns": ["Mục", "Nền", "Dùng khi"],
+          "rows": [
+            ["**Sáng**", "Trắng", "Mặc định khi chưa chọn gì"],
+            [
+              "**Giấy**",
+              "Kem (Solarized Light)",
+              "Giao diện của hệ thống trước đây"
+            ],
+            [
+              "**Tối**",
+              "Tối (Solarized Dark)",
+              "Phòng thiếu sáng, làm việc buổi tối"
+            ],
+            [
+              "**Theo hệ thống**",
+              "Theo cài đặt sáng/tối của máy",
+              "Máy đang tự đổi sáng/tối theo giờ"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Theo hệ thống** khi máy đang ở chế độ sáng ra **Sáng** (nền trắng), không ra **Giấy**.",
+            "Nút có ở header khu vực chính, header dashboard (`/admin` và dashboard trung tâm) và trang tài liệu này.",
+            "Trang thi toàn màn hình chỉ có nút ở **màn hình giới thiệu section** (trước khi bấm Bắt đầu); khi đồng hồ đang chạy thì không đổi giao diện được."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lựa chọn được nhớ ở đâu"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Nhớ theo **trình duyệt đang dùng** (cookie `ls_theme` + một bản sao trong bộ nhớ trình duyệt), **không** lưu theo tài khoản: máy khác hoặc trình duyệt khác phải chọn lại.",
+            "Cookie sống 1 năm và không liên quan tới đăng nhập – xoá nó chỉ làm giao diện quay về **Sáng**.",
+            "Giao diện được áp ngay từ HTML đầu tiên nên mở trang không bị loé sáng rồi mới tối."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "Người dùng báo “đổi giao diện xong, tải lại trang lại về Sáng”: trình duyệt đang chặn cookie hoặc bộ nhớ cục bộ của trang (cửa sổ ẩn danh, thiết lập chặn cookie quá chặt, tiện ích tự dọn cookie)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Màu trong nội dung đề thi và bài học"
+        },
+        {
+          "type": "paragraph",
+          "text": "Màu chữ và màu nền do người soạn chọn trong [Trình soạn đề](page:trinh-soan-de) được **làm sáng lên** khi đang ở giao diện **Tối** – nếu giữ nguyên thì chữ tô màu đậm sẽ chìm hẳn vào nền tối. Vì vậy ở giao diện Tối, màu hiện ra nhạt hơn mã màu đã chọn và hai màu gần nhau khó phân biệt hơn. Nội dung đã lưu **không đổi**: chuyển về **Sáng** hoặc **Giấy** là thấy đúng màu gốc."
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "text": "Khi soạn đề mà muốn kiểm tra màu học viên sẽ thấy, đổi giao diện rồi bấm **Xem trước** – cửa sổ xem trước dùng đúng cách hiển thị của màn hình thi."
+        }
+      ]
+    }
+  ]
+}

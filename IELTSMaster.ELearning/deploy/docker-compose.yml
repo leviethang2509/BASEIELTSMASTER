@@ -1,0 +1,26 @@
+# Workflow deploy tự copy file này lên VPS: /opt/lang-simulator/docker-compose.yml.
+# File .env đặt cùng thư mục (mẫu: deploy/.env.example), không đưa lên git.
+services:
+  app:
+    # IMAGE_TAG mặc định latest; rollback: IMAGE_TAG=sha-<commit> (xem docs/setup/deploy.md)
+    image: ghcr.io/vunguyenquangit/lang-simulator:${IMAGE_TAG:-latest}
+    container_name: lang-simulator-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      # host 3001 -> Next.js 3000 trong container (LC đang dùng host 3000)
+      - '3001:3000'
+    networks:
+      - dbnet
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+networks:
+  # Network sẵn có của container PostgreSQL (khai báo DB_NETWORK trong .env).
+  dbnet:
+    external: true
+    name: ${DB_NETWORK:?Thiếu DB_NETWORK trong .env}

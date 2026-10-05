@@ -1,0 +1,435 @@
+{
+  "id": "trung-tam",
+  "title": "Trung tâm",
+  "pages": [
+    {
+      "id": "dang-ky-trung-tam",
+      "title": "Đăng ký trung tâm",
+      "summary": "Gửi đăng ký, chờ duyệt, sửa và gửi lại khi bị từ chối.",
+      "roles": ["REGISTERED_USER", "TENANT_OWNER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["REGISTERED_USER", "TENANT_OWNER"]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Chỉ người **đủ 18 tuổi** (tính theo ngày sinh và múi giờ của tài khoản) mới đăng ký được trung tâm. Không giới hạn số trung tâm mỗi người."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Các bước"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Mở form",
+              "text": "Nút **Đăng ký trung tâm** ở `/me` hoặc trang chủ (`/me/tenants/new`)."
+            },
+            {
+              "title": "Thông tin trung tâm",
+              "text": "**Tên trung tâm** (bắt buộc, tối đa 150 ký tự), **Logo** (ảnh, tối đa 5MB, chuyển WebP; trống thì dùng chữ cái đầu), **Đường dẫn**, **Giới thiệu**, **Email liên hệ**, **Số điện thoại**, **Địa chỉ**."
+            },
+            {
+              "title": "Chọn Gói dịch vụ",
+              "text": "Chỉ hiện gói đang áp dụng. System Admin có thể đổi gói sau khi duyệt."
+            },
+            {
+              "title": "Bấm Gửi đăng ký",
+              "text": "Trung tâm ở trạng thái **Chờ duyệt**; người gửi trở thành **Chủ sở hữu**."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Đường dẫn trung tâm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Là URL của trung tâm: `/t/{slug}`.",
+            "3–40 ký tự: chữ thường không dấu, số, gạch nối ở giữa. Để trống thì hệ thống tự tạo từ tên (thêm hậu tố nếu trùng).",
+            "Không dùng được từ hệ thống dành riêng (`admin`, `api`, `login`, `dashboard`…) hay đường dẫn trung tâm khác đang dùng."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Sau khi gửi"
+        },
+        {
+          "type": "table",
+          "columns": ["Kết quả", "Chủ sở hữu làm gì"],
+          "rows": [
+            [
+              "Chờ duyệt",
+              "Chờ; `/me` hiện trạng thái. Chưa vào được trung tâm"
+            ],
+            ["Được duyệt", "Vào dashboard, thêm thành viên"],
+            [
+              "Bị từ chối",
+              "Ở `/me` bấm **Sửa và gửi lại**, sửa theo lý do rồi **Gửi lại** → quay về Chờ duyệt"
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "Membership Chủ sở hữu được tạo ngay khi gửi đăng ký và tính vào giới hạn gói."
+        }
+      ]
+    },
+    {
+      "id": "dashboard-trung-tam",
+      "title": "Dashboard trung tâm",
+      "summary": "Trang tổng quan /t/{slug}/dashboard và các thông báo truy cập.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Số liệu"
+        },
+        {
+          "type": "table",
+          "columns": ["Thẻ", "Chủ sở hữu / Quản trị viên", "Giáo viên"],
+          "rows": [
+            ["Học viên", "✔", "✔"],
+            ["Giáo viên, Phụ huynh", "✔", "✘"],
+            ["Thành viên / giới hạn gói", "✔", "✘"],
+            ["Đề nháp, Đề đã công bố, Đề lưu trữ", "✔", "✔"],
+            ["Lượt làm bài", "✔", "✔"],
+            ["Bài chờ chấm", "✔", "✔"]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Thẻ **Bài chờ chấm** đếm đúng những bài **bạn** chấm được (lượt thi và lượt học còn câu Writing/Speaking chưa chấm), nên khớp số dòng **Chờ chấm** ở [Chấm bài](page:cham-bai): Chủ sở hữu/Quản trị viên thấy cả trung tâm, Giáo viên chỉ thấy phạm vi của mình. Không tính bài của chính bạn và lượt thi đã **Cho làm lại**."
+        },
+        {
+          "type": "paragraph",
+          "text": "Khi trung tâm vượt giới hạn gói (sau khi bị hạ gói), Chủ sở hữu/Quản trị viên thấy banner cảnh báo kèm nút **Quản lý thành viên** và **Xem gợi ý**."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Thông báo khi không vào được"
+        },
+        {
+          "type": "table",
+          "columns": ["Thông báo", "Nguyên nhân"],
+          "rows": [
+            [
+              "Không tìm thấy trung tâm",
+              "Sai đường dẫn, trung tâm chưa hoạt động với người ngoài, hoặc không phải thành viên"
+            ],
+            ["Trung tâm đang chờ duyệt", "Chưa được System Admin duyệt"],
+            ["Đăng ký trung tâm bị từ chối", "Chủ sở hữu cần sửa và gửi lại"],
+            ["Trung tâm đang tạm khoá", "System Admin đã tạm khoá"],
+            [
+              "Bạn không có quyền vào dashboard",
+              "Chỉ là Học viên/Phụ huynh – dùng trang trung tâm `/t/{slug}`"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Mỗi lần thành viên truy cập trung tâm, hệ thống ghi **Lần vào gần nhất** (tối đa 1 lần/giờ), hiển thị ở danh sách thành viên và dùng cho gợi ý ngừng kích hoạt."
+        }
+      ]
+    },
+    {
+      "id": "thanh-vien",
+      "title": "Thành viên",
+      "summary": "Thêm thành viên, phân vai trò, ngừng kích hoạt, xoá, gắn phụ huynh, giới hạn gói.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Menu **Quản lý → Thành viên** (`/t/{slug}/dashboard/members`). Đầu trang hiện số thành viên đang hoạt động / giới hạn gói. Danh sách tìm theo họ tên/email, lọc vai trò, trạng thái; nhãn **< 18 tuổi** cho thành viên chưa thành niên."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Thêm thành viên"
+        },
+        {
+          "type": "table",
+          "columns": ["Cách", "Khi nào", "Nhập"],
+          "rows": [
+            [
+              "**Thêm theo email**",
+              "Người đó đã có tài khoản",
+              "Email + vai trò. Không có tài khoản → 404; đã là thành viên → 409"
+            ],
+            [
+              "**Tạo tài khoản**",
+              "Người đó chưa có tài khoản",
+              "Email, họ tên, ngày sinh, giới tính, số điện thoại, mật khẩu (trống = hệ thống sinh), vai trò. Email đã có tài khoản → dùng Thêm theo email"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Vai trò cấp được: **Quản trị viên, Giáo viên, Học viên, Phụ huynh** (chọn ít nhất một). Không cấp được Chủ sở hữu.",
+            "Tạo tài khoản: mật khẩu tạm hiện **một lần** (nút Sao chép); thành viên phải đổi mật khẩu ở lần đăng nhập đầu.",
+            "Đã đạt giới hạn gói thì không thêm được (“Trung tâm đã đạt giới hạn … thành viên của gói …”)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Chi tiết thành viên"
+        },
+        {
+          "type": "table",
+          "columns": ["Thao tác", "Tác dụng"],
+          "rows": [
+            [
+              "**Lưu vai trò**",
+              "Đổi vai trò (còn ít nhất một). Bỏ vai trò Học viên/Phụ huynh thì liên kết phụ huynh tương ứng bị gỡ"
+            ],
+            [
+              "**Ngừng kích hoạt**",
+              "Thành viên không vào được trung tâm và không tính vào giới hạn gói; dữ liệu giữ nguyên"
+            ],
+            [
+              "**Kích hoạt lại**",
+              "Tính lại vào giới hạn gói; bị chặn khi gói đã đầy"
+            ],
+            [
+              "**Xoá khỏi trung tâm**",
+              "Gỡ membership và các liên kết phụ huynh; **tài khoản vẫn giữ nguyên**"
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Không ai xoá hay ngừng kích hoạt được **Chủ sở hữu**. Quản trị viên không đổi được vai trò/trạng thái của Chủ sở hữu; Chủ sở hữu chỉ tự thêm/bỏ các vai trò khác cho mình."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Liên kết phụ huynh"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Mở chi tiết một thành viên có vai trò Học viên"
+            },
+            {
+              "title": "Bấm Gắn phụ huynh",
+              "text": "Tìm và chọn thành viên có vai trò **Phụ huynh** (khác người đó), nhập **Quan hệ** (tuỳ chọn, tối đa 50 ký tự, vd. Mẹ, Bố)."
+            },
+            {
+              "title": "Gỡ khi cần",
+              "text": "Bấm **Gỡ liên kết** trên dòng phụ huynh."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Một học viên có nhiều phụ huynh và ngược lại. Chi tiết của Phụ huynh hiện mục **Học viên được giám hộ**. Gắn xong, phụ huynh thấy ngay khối **Con của tôi** ở trang trung tâm và nhận thông báo về con – xem [Con của tôi](page:con-cua-toi)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Vượt giới hạn gói"
+        },
+        {
+          "type": "paragraph",
+          "text": "Xảy ra khi System Admin hạ gói hoặc giảm số thành viên tối đa. Không ai bị ngừng kích hoạt tự động; trung tâm chỉ bị chặn thêm và kích hoạt lại thành viên cho tới khi số thành viên đang hoạt động ≤ giới hạn."
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Bấm Xem gợi ý trên banner cảnh báo",
+              "text": "Mở **Gợi ý ngừng kích hoạt**: tối đa số người cần giảm, chỉ gồm thành viên **chỉ có** vai trò Học viên/Phụ huynh, người **chưa từng vào** xếp trước, rồi tới lần vào cũ nhất."
+            },
+            {
+              "title": "Tự quyết định và ngừng kích hoạt",
+              "text": "Gợi ý không tự áp dụng. Nếu không còn Học viên/Phụ huynh để gợi ý, xem lại các thành viên khác trong danh sách."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "danh-muc-loai-de-trung-tam",
+      "title": "Danh mục, loại đề & mẫu bài học của trung tâm",
+      "summary": "Dùng mục hệ thống hoặc tạo danh mục, loại đề, mẫu bài học riêng cho trung tâm.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Menu **Đề thi & Bài học → Danh mục**, **Loại đề** và **Mẫu bài học** trong dashboard trung tâm. Danh sách gồm mục **Hệ thống** (xếp trước) và mục **Trung tâm** của riêng trung tâm; lọc được theo phạm vi và trạng thái. Trung tâm không thấy mục của trung tâm khác."
+        },
+        {
+          "type": "table",
+          "columns": ["Thao tác", "Chủ sở hữu / Quản trị viên", "Giáo viên"],
+          "rows": [
+            ["Xem mục hệ thống và trung tâm", "✔", "✔"],
+            [
+              "Tạo, sửa, xoá mục của trung tâm",
+              "✔",
+              "✘ (“Bạn chỉ có quyền xem.”)"
+            ],
+            [
+              "Sửa, xoá mục hệ thống",
+              "✘ (“Mục của hệ thống chỉ xem được”)",
+              "✘"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Quy tắc trường, module/phần, ngừng dùng và xoá giống bản hệ thống – xem [Danh mục, loại đề & mẫu bài học hệ thống](page:admin-danh-muc-loai-de).",
+            "Mã chỉ cần không trùng trong phạm vi trung tâm (được trùng mã hệ thống hay trung tâm khác).",
+            "Loại đề và mẫu bài học của trung tâm được đặt trong **danh mục hệ thống** hoặc danh mục của trung tâm.",
+            "Cột **Số đề** ở trung tâm chỉ đếm đề của trung tâm mình; cột **Khoá học** của danh mục đếm [khoá học](page:khoa-hoc) của trung tâm.",
+            "Danh mục đang có khoá học không xoá được (chỉ ngừng dùng)."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "text": "Chỉ cần tạo loại đề riêng khi cấu trúc kỳ thi khác loại đề hệ thống (vd. đề kiểm tra giữa khoá). Sau khi tạo đề, section vẫn thêm/xoá/đổi tên/đổi thời lượng tự do."
+        }
+      ]
+    },
+    {
+      "id": "thu-vien-media",
+      "title": "Thư viện media",
+      "summary": "Upload ảnh, audio, video dùng trong đề thi.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Menu **Đề thi & Bài học → Thư viện media** (`/t/{slug}/dashboard/media`) liệt kê mọi file media của trung tâm. File cũng được tải lên trực tiếp từ trình soạn đề khi chèn Hình ảnh/Audio/Video."
+        },
+        {
+          "type": "table",
+          "columns": ["Loại", "Giới hạn", "Xử lý"],
+          "rows": [
+            ["Ảnh", "5MB", "Tự chuyển sang WebP"],
+            ["Audio", "50MB (≈ đề nghe 30 phút mp3)", "Giữ nguyên file"],
+            ["Video", "100MB", "Giữ nguyên file"]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Tải lên**: chọn file từ máy.",
+            "**Chép URL**: sao chép đường dẫn công khai để dán vào trình soạn đề.",
+            "**Mở trong tab mới**: xem file.",
+            "**Xoá file**: xoá khỏi kho lưu trữ. Đề nào đang dùng file sẽ **không hiển thị được** nữa – kiểm tra trước khi xoá."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "Media đề nằm ở bucket R2 **công khai**: ai có URL đều xem được. Không tải lên tài liệu nhạy cảm. Nếu trang báo “Chưa cấu hình Cloudflare R2” thì server thiếu biến `R2_*` – xem [Sự cố thường gặp](page:su-co-thuong-gap)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ảnh dán thẳng vào trình soạn đề (dạng dữ liệu nhúng `data:`) được tự tải lên thư viện media khi bấm **Lưu**; server không lưu nội dung còn dữ liệu nhúng."
+        }
+      ]
+    },
+    {
+      "id": "cai-dat-trung-tam",
+      "title": "Cài đặt trung tâm",
+      "summary": "Ngày nghỉ của trung tâm và tham số chuyên cần.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Menu **Cài đặt** (`/t/{slug}/dashboard/settings`), chỉ Chủ sở hữu và Quản trị viên."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tham số chuyên cần"
+        },
+        {
+          "type": "table",
+          "columns": ["Tham số", "Quy tắc"],
+          "rows": [
+            [
+              "Hệ số nộp muộn (k)",
+              "0–1, tối đa 2 chữ số thập phân, mặc định 0,5. Nộp đúng hạn tính 1, nộp muộn tính k, quá hạn chưa làm tính 0"
+            ],
+            [
+              "Ngưỡng cảnh báo (%)",
+              "0–100, mặc định 70. Học viên có tỉ lệ chuyên cần dưới ngưỡng hiện cảnh báo"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bấm **Lưu tham số**. Đây là giá trị mặc định cho mọi lớp; từng lớp ghi đè được ở tab **Tiến độ & Chuyên cần** – xem [Chuyên cần & bảng điểm](page:chuyen-can-bang-diem#tham-so-chuyen-can-cua-lop)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Ngày nghỉ"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mỗi ngày nghỉ: **Tên** (vd. Tết Nguyên đán), **Từ ngày** – **Đến ngày** (bỏ trống đến ngày = 1 ngày; tối đa 366 ngày). Không lặp hằng năm: mỗi năm nhập lại. Các ngày nghỉ được phép chồng nhau.",
+            "Buổi học (chưa diễn ra) rơi vào ngày nghỉ tự **dời** sang ô lịch kế tiếp, các buổi sau lùi theo, ngày kết thúc lớp lùi – xem [Ngày nghỉ dời buổi](page:thoi-khoa-bieu#ngay-nghi-doi-buoi).",
+            "Lớp tắt **Áp dụng ngày nghỉ của trung tâm**, lớp đã kết thúc/huỷ, buổi đã diễn ra, buổi bù: không bị ảnh hưởng.",
+            "Ngày nghỉ hiện màu xám trên mọi lịch."
+          ]
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Bấm Thêm ngày nghỉ (hoặc biểu tượng sửa / xoá)",
+              "text": "Nhập tên và khoảng ngày rồi bấm **Tiếp tục**."
+            },
+            {
+              "title": "Xem lớp bị ảnh hưởng",
+              "text": "Hộp xác nhận liệt kê từng lớp bị dời: số buổi dời, ngày kết thúc cũ → mới (hoặc “Không lớp nào bị dời buổi”)."
+            },
+            {
+              "title": "Bấm Lưu và dời lịch (hoặc Xoá ngày nghỉ)",
+              "text": "Lịch các lớp được tính lại ngay; nhật ký mỗi lớp bị dời ghi “Lịch tự tính lại vì … ngày nghỉ”."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

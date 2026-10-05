@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.5.0" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>c0d0288a-8b02-4075-90ff-9ef6823ba4fc</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.5.0" />
+    <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IELTSMaster.ApiGateway\IELTSMaster.ApiGateway.csproj" />
+    <ProjectReference Include="..\IELTSMaster.AuthService\IELTSMaster.AuthService.csproj" />
+    <ProjectReference Include="..\IELTSMaster.BusinessService\IELTSMaster.BusinessService.csproj" />
+    <ProjectReference Include="..\IELTSMaster.FileService\IELTSMaster.FileService.csproj" />
+  </ItemGroup>
+
+</Project>

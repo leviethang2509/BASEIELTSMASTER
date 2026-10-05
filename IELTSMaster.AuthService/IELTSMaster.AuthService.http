@@ -1,0 +1,6 @@
+@IELTSMaster.AuthService_HostAddress = http://localhost:5175
+
+GET {{IELTSMaster.AuthService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

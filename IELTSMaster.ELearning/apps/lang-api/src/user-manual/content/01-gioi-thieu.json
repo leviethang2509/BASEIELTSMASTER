@@ -1,0 +1,866 @@
+{
+  "id": "gioi-thieu",
+  "title": "Giới thiệu",
+  "pages": [
+    {
+      "id": "tong-quan",
+      "title": "Tổng quan hệ thống",
+      "summary": "Lang Simulator là gì, gồm những khu vực nào và cách đọc tài liệu này.",
+      "roles": [],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "info",
+          "title": "Tài liệu nội bộ",
+          "text": "Trang này chỉ dành cho **System Owner** và **System Admin**. Nội dung mô tả thao tác của mọi vai trò để đội quản trị hỗ trợ người dùng; không gửi đường dẫn cho người dùng ngoài."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Lang Simulator** là nền tảng multi-tenant cho trung tâm ngoại ngữ: mỗi trung tâm (tenant) có không gian riêng để quản lý thành viên, soạn đề theo cấu trúc kỳ thi (TOEIC, IELTS, JLPT…) và soạn bài học, cho học viên thi thử có tính giờ, chấm tự động phần trắc nghiệm và để giáo viên chấm Writing/Speaking. Trung tâm còn mở khoá học và lớp học có giáo trình, thời khoá biểu, theo dõi chuyên cần – bảng điểm, và cho phụ huynh xem kết quả của con."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Các khu vực của hệ thống"
+        },
+        {
+          "type": "table",
+          "columns": ["Khu vực", "Đường dẫn", "Ai dùng"],
+          "rows": [
+            [
+              "Trang chủ, đăng ký, đăng nhập",
+              "`/`, `/register`, `/login`",
+              "Mọi người"
+            ],
+            [
+              "Không gian của tôi, tài khoản",
+              "`/me`, `/me/account`",
+              "Mọi người dùng đã đăng nhập"
+            ],
+            ["Dashboard hệ thống", "`/admin/*`", "System Owner, System Admin"],
+            [
+              "Trang trung tâm (danh sách đề, lịch sử, kết quả)",
+              "`/t/{slug}`, `/t/{slug}/exams/{id}`",
+              "Mọi thành viên của trung tâm"
+            ],
+            [
+              "Dashboard trung tâm",
+              "`/t/{slug}/dashboard/*`",
+              "Chủ sở hữu, Quản trị viên, Giáo viên"
+            ],
+            [
+              "Màn hình thi (toàn màn hình)",
+              "`/t/{slug}/attempts/{id}`",
+              "Thành viên đang làm bài"
+            ],
+            [
+              "Màn hình học bài học",
+              "`/t/{slug}/lesson-attempts/{id}`",
+              "Thành viên đang học bài"
+            ],
+            [
+              "Lớp của tôi, lịch học của tôi",
+              "`/t/{slug}/classes/{id}`, `/t/{slug}/schedule`",
+              "Học viên của lớp"
+            ],
+            [
+              "Con của tôi",
+              "`/t/{slug}/children`",
+              "Phụ huynh đã liên kết với học viên"
+            ],
+            [
+              "Tất cả thông báo",
+              "`/me/notifications`",
+              "Mọi người dùng đã đăng nhập"
+            ],
+            ["Tài liệu nội bộ", "`/user-manual`", "System Owner, System Admin"]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Luồng nghiệp vụ chính"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Người dùng tạo tài khoản",
+              "text": "Tự đăng ký tại `/register`, hoặc được System Admin / trung tâm tạo sẵn. Xem [Đăng ký & đăng nhập](page:dang-ky-dang-nhap)."
+            },
+            {
+              "title": "Đăng ký trung tâm",
+              "text": "Người dùng từ 18 tuổi gửi đăng ký, chọn gói dịch vụ. Xem [Đăng ký trung tâm](page:dang-ky-trung-tam)."
+            },
+            {
+              "title": "System Admin duyệt",
+              "text": "Trung tâm chuyển từ **Chờ duyệt** sang **Đang hoạt động** (hoặc bị từ chối kèm lý do). Xem [Quản lý trung tâm](page:admin-trung-tam)."
+            },
+            {
+              "title": "Trung tâm thêm thành viên",
+              "text": "Chủ sở hữu/Quản trị viên thêm giáo viên, học viên, phụ huynh. Xem [Thành viên](page:thanh-vien)."
+            },
+            {
+              "title": "Giáo viên soạn và publish đề, bài học",
+              "text": "Tạo đề từ loại đề, bài học từ mẫu bài học, soạn nội dung từng section rồi publish. Xem [Vòng đời đề thi](page:vong-doi-de-thi) và [Bài học](page:bai-hoc)."
+            },
+            {
+              "title": "Trung tâm mở khoá học và lớp học",
+              "text": "Gom bài học + đề thi thành giáo trình, gắn vào khoá học, mở lớp rồi xếp thời khoá biểu. Xem [Khoá học](page:khoa-hoc), [Lớp học](page:lop-hoc) và [Thời khoá biểu & buổi học](page:thoi-khoa-bieu)."
+            },
+            {
+              "title": "Học viên làm bài",
+              "text": "Làm từng section có đồng hồ, hết giờ tự nộp. Xem [Làm bài thi](page:lam-bai-thi)."
+            },
+            {
+              "title": "Chấm và xem kết quả",
+              "text": "Phần trắc nghiệm chấm ngay khi nộp; Writing/Speaking do giáo viên chấm. Xem [Chấm bài](page:cham-bai) và [Kết quả & lịch sử](page:ket-qua-lich-su)."
+            },
+            {
+              "title": "Theo dõi lớp và báo cho phụ huynh",
+              "text": "Giáo viên theo dõi chuyên cần, bảng điểm, viết nhận xét cuối khoá; học viên và phụ huynh nhận thông báo. Xem [Chuyên cần & bảng điểm](page:chuyen-can-bang-diem), [Con của tôi](page:con-cua-toi) và [Thông báo](page:thong-bao)."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Cách dùng tài liệu"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Menu bên trái chia theo nhóm; bấm một mục để mở trang tương ứng (mỗi trang có đường dẫn riêng để chia sẻ nội bộ).",
+            "Ô **Tìm kiếm** tìm trong tiêu đề và toàn bộ nội dung, không phân biệt dấu.",
+            "Bộ lọc **Vai trò** chỉ giữ các trang liên quan tới vai trò đó (trang chung luôn hiện).",
+            "Màn hình rộng có **Mục lục** bên phải; cuối trang có nút **Trước / Sau**.",
+            "Tên menu và nút trong tài liệu được ghi **đậm** đúng như trên giao diện."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thuat-ngu",
+      "title": "Thuật ngữ",
+      "summary": "Giải thích các khái niệm dùng trong hệ thống và tài liệu.",
+      "roles": [],
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tài khoản & trung tâm"
+        },
+        {
+          "type": "table",
+          "columns": ["Thuật ngữ", "Ý nghĩa"],
+          "rows": [
+            [
+              "Tài khoản (user)",
+              "Duy nhất theo email (không phân biệt hoa thường). Bắt buộc email, mật khẩu, họ tên, ngày sinh; tuỳ chọn giới tính, số điện thoại, địa chỉ."
+            ],
+            [
+              "Vai trò hệ thống",
+              "Mỗi tài khoản có đúng 1: **System Owner**, **System Admin** hoặc **Người dùng** (Registered User). Xem [Vai trò](page:vai-tro)."
+            ],
+            [
+              "Trung tâm (tenant)",
+              "Không gian riêng của một trung tâm ngoại ngữ, truy cập theo đường dẫn `/t/{slug}`. Dữ liệu các trung tâm tách biệt hoàn toàn."
+            ],
+            [
+              "Đường dẫn (slug)",
+              "Phần `{slug}` trong URL trung tâm: 3–40 ký tự, chữ thường không dấu, số và gạch nối; không trùng và không dùng từ hệ thống dành riêng."
+            ],
+            [
+              "Gói dịch vụ",
+              "Giới hạn số thành viên **đang hoạt động** của trung tâm (seed sẵn Basic 100, Standard 500, Pro 1000). Chưa có thanh toán hay thời hạn."
+            ],
+            [
+              "Thành viên (membership)",
+              "Liên kết tài khoản ↔ trung tâm. Mỗi tài khoản tối đa 1 membership mỗi trung tâm, mang **nhiều** vai trò trung tâm cùng lúc."
+            ],
+            [
+              "Vai trò trung tâm",
+              "Chủ sở hữu (Tenant Owner), Quản trị viên (Tenant Admin), Giáo viên (Teacher), Học viên (Student), Phụ huynh (Parent)."
+            ],
+            [
+              "Liên kết phụ huynh",
+              "Gắn thành viên có vai trò Phụ huynh với thành viên có vai trò Học viên (nhiều–nhiều, tuỳ chọn)."
+            ],
+            [
+              "Ngữ cảnh / không gian làm việc",
+              "Quản trị hệ thống hoặc một trung tâm mà user là thành viên; chuyển qua switcher trong sidebar dashboard hoặc trang `/me`."
+            ],
+            [
+              "Thông báo",
+              "Tin nhắn trong ứng dụng gửi tới **tài khoản** (không phải email): chuông trên header gộp mọi trung tâm, giữ 90 ngày. Xem [Thông báo](page:thong-bao)."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Đề thi"
+        },
+        {
+          "type": "table",
+          "columns": ["Thuật ngữ", "Ý nghĩa"],
+          "rows": [
+            [
+              "Danh mục (category)",
+              "Nhóm loại đề và mẫu bài học theo ngôn ngữ/chương trình, vd. Tiếng Anh, Tiếng Nhật. Có phạm vi **Hệ thống** hoặc **Trung tâm**."
+            ],
+            [
+              "Loại đề (exam blueprint)",
+              "Khuôn đề như TOEIC, IELTS, JLPT N2, thuộc một danh mục, gồm các module."
+            ],
+            [
+              "Module",
+              "Thành phần của loại đề (Listening, Reading…) với **thời lượng tham khảo** (bội số 5, tối đa 180 phút)."
+            ],
+            [
+              "Mẫu bài học (lesson blueprint)",
+              "Khuôn bài học như Minna no Nihongo – 1 bài, thuộc một danh mục, gồm các **phần** (module không có thời lượng)."
+            ],
+            [
+              "Bài học (lesson)",
+              "Bài học cụ thể của trung tâm, tạo từ một mẫu bài học; mỗi phần sinh một section (tab, không có thời lượng). Trạng thái và version như đề thi, mặc định **Chỉ qua lớp**."
+            ],
+            [
+              "Lượt học",
+              "Một lần học một phiên bản bài học của một người: mỗi phần lưu bài làm, **lần nộp gần nhất** và số lần nộp; **Đã học xong** khi đã mở mọi phần và nộp mọi phần có câu hỏi."
+            ],
+            [
+              "Đề thi (exam)",
+              "Đề cụ thể của trung tâm, tạo từ một loại đề. Trạng thái **Nháp → Đã publish → Lưu trữ**."
+            ],
+            [
+              "Section",
+              "Phần thi có đồng hồ riêng, ban đầu sinh từ module (sửa được). Mỗi section là một tab soạn thảo."
+            ],
+            [
+              "Part / Subpart",
+              "Phần lớn và phần con trong một section, đánh dấu bằng indicator. Part hiện thành tab trong màn hình thi."
+            ],
+            [
+              "Indicator",
+              "Khối đánh dấu ranh giới Part / Subpart / Question / Explanation (giải thích) trong trình soạn đề."
+            ],
+            [
+              "Câu hỏi & dạng câu hỏi",
+              "11 dạng: trắc nghiệm, pick-n, matching, T/F/NG, Y/N/NG, điền chỗ trống, sắp xếp, polytomous, Speaking, Writing. Xem [Dạng câu hỏi & cách chấm](page:dang-cau-hoi)."
+            ],
+            [
+              "Version",
+              "Phiên bản nội dung đề. Lưu đề khi version hiện tại **đã có bài làm** sẽ tạo version mới. Xem [Version đề thi](page:version-de-thi)."
+            ],
+            [
+              "Publish",
+              "Mở đề cho thành viên trung tâm làm bài; chỉ publish được khi nội dung không còn lỗi."
+            ],
+            [
+              "Hiển thị",
+              "**Công khai trong trung tâm** (hiện ở trang trung tâm, làm tự do) hoặc **Chỉ qua lớp**."
+            ],
+            [
+              "Giải thích (Explanation)",
+              "Lời giải thích đặt sau câu hỏi; học viên không thấy khi thi, người chấm thấy."
+            ],
+            [
+              "Nhân bản",
+              "Chép đề đã publish (hoặc đề mình sửa được) thành đề nháp mới của mình."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Đào tạo"
+        },
+        {
+          "type": "table",
+          "columns": ["Thuật ngữ", "Ý nghĩa"],
+          "rows": [
+            [
+              "Khoá học",
+              "Chương trình của trung tâm (vd. Tiếng Nhật N5): mã, tên, danh mục, trình độ, số buổi dự kiến. Xem [Khoá học](page:khoa-hoc)."
+            ],
+            [
+              "Giáo trình (tham khảo)",
+              "Danh sách chương + mục (bài học, đề thi đã publish) trong thư viện của trung tâm, gắn được vào nhiều khoá học. Xem [Giáo trình](page:giao-trinh)."
+            ],
+            [
+              "Chương",
+              "Nhóm 1 cấp các mục trong giáo trình; mục không thuộc chương nào nằm ở “Chưa xếp chương”."
+            ],
+            [
+              "Lớp học",
+              "Lớp mở từ một khoá học: mã, tên, ngày bắt đầu, số buổi, ngày kết thúc (tự tính từ thời khoá biểu), sĩ số tối đa; trạng thái **Sắp mở → Đang học → Đã kết thúc** hoặc **Đã huỷ**. Xem [Lớp học](page:lop-hoc)."
+            ],
+            [
+              "Giáo viên của lớp",
+              "Thành viên vai trò Giáo viên được thêm vào lớp; mọi giáo viên của lớp có quyền như nhau (xem lớp, sửa giáo trình lớp)."
+            ],
+            [
+              "Giáo trình lớp",
+              "Bản giáo trình riêng của lớp, chép từ giáo trình tham khảo rồi sửa độc lập; mục có thêm ngày mở, deadline. Xem [Giáo trình lớp](page:giao-trinh-lop)."
+            ],
+            [
+              "Ngày mở",
+              "Thời điểm mục (hoặc chương) của giáo trình lớp mở cho học viên; trước đó học viên thấy nhưng chưa vào được. Đặt cả chương lẫn mục thì mốc muộn hơn có hiệu lực."
+            ],
+            [
+              "Deadline",
+              "Hạn của mục giáo trình lớp: bài học chỉ để nhắc; đề thi là hạn bắt đầu làm (tuỳ chọn **Nhận bài quá hạn**)."
+            ],
+            [
+              "Lần thi lại / Nhóm thi",
+              "Mục đề thi đánh dấu **Thi lại cho** một mục đề thi đứng trước; nhóm thi = mục gốc + các lần thi lại. Kết quả nhóm = điểm cao nhất, đậu khi có ít nhất một lượt đạt ngưỡng."
+            ],
+            [
+              "Nhãn mục",
+              "**Bài học**/**Bài tập** (mục bài học), **Bài kiểm tra**/**Bài thi** (mục đề thi); chỉ để hiển thị và lọc."
+            ],
+            [
+              "Thời khoá biểu",
+              "Ngày bắt đầu + tổng số buổi + các buổi trong tuần (thứ, giờ) của lớp; buổi thứ N rơi vào ô lịch thứ N, bỏ qua ngày nghỉ. Xem [Thời khoá biểu & buổi học](page:thoi-khoa-bieu)."
+            ],
+            [
+              "Buổi học (Buổi N)",
+              "Buổi thường của lớp theo số thứ tự; ngày giờ tự dời khi đổi lịch lặp hoặc ngày nghỉ, nội dung/ghi chú/phòng/giáo viên đi theo buổi."
+            ],
+            [
+              "Buổi bù",
+              "Buổi thêm tay có ngày cố định (vd. bù cho buổi đã huỷ), không đánh số, không bị dời."
+            ],
+            [
+              "Ngày nghỉ",
+              "Khoảng ngày trung tâm nghỉ (Cài đặt); buổi rơi vào ngày nghỉ dời sang ô kế tiếp."
+            ],
+            [
+              "Dạy thế",
+              "Giáo viên riêng của một buổi (thay/thêm giáo viên của lớp); người dạy thế xem được chi tiết buổi đó."
+            ],
+            [
+              "Trùng lịch",
+              "Hai buổi của hai lớp chồng giờ và có chung giáo viên hoặc học viên; cảnh báo đỏ, không chặn."
+            ],
+            [
+              "Điểm %",
+              "Điểm của một lượt thi: (số câu tự chấm đúng + tổng điểm chấm tay) / (số câu tự chấm + số câu chấm tay × 10) × 100."
+            ],
+            [
+              "Ngưỡng đậu",
+              "Điểm % tối thiểu để đậu một mục đề thi của lớp (mặc định 50)."
+            ],
+            [
+              "Chuyên cần",
+              "Tỉ lệ đo việc nộp bài đúng hạn của học viên trong một lớp: chỉ tính mục **đề thi có hạn nộp**, đúng hạn 1 điểm, muộn tính theo hệ số **k**, quá hạn chưa nộp 0 điểm. Xem [Chuyên cần & bảng điểm](page:chuyen-can-bang-diem)"
+            ],
+            [
+              "Nhận xét cuối khoá",
+              "Một nhận xét của giáo viên cho mỗi học viên trong một lớp; học viên thấy khi lớp **Đã kết thúc**"
+            ],
+            [
+              "Cho làm lại",
+              "Giáo viên của lớp huỷ một lượt thi khi học viên gặp sự cố: lượt cũ giữ lịch sử nhưng không tính điểm, học viên làm lượt mới."
+            ],
+            [
+              "Chuyển giao chấm",
+              "Cho một Giáo viên khác quyền chấm đúng một phạm vi (một bài làm, một mục của lớp, hoặc mọi bài làm tự do của một đề/bài học); người giao vẫn chấm được."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Thi & chấm"
+        },
+        {
+          "type": "table",
+          "columns": ["Thuật ngữ", "Ý nghĩa"],
+          "rows": [
+            [
+              "Lượt làm (attempt)",
+              "Một lần làm đề của một thành viên. Trạng thái **Đang làm → Chờ chấm → Đã có kết quả**."
+            ],
+            [
+              "Chấm tự động",
+              "Mọi dạng trừ Speaking/Writing, chấm ở server ngay khi nộp section; kết quả là số câu đúng."
+            ],
+            [
+              "Chấm tay",
+              "Speaking/Writing: người chấm cho điểm 0–10 (bước 0,5) kèm nhận xét."
+            ],
+            [
+              "Tự nộp",
+              "Hết giờ section, hệ thống tự nộp bằng câu trả lời đã lưu."
+            ],
+            [
+              "Xem trước",
+              "Giả lập bài làm trong trình soạn đề, chấm ngay trên trình duyệt, không tạo lượt làm."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vai-tro",
+      "title": "Vai trò",
+      "summary": "Hai lớp vai trò: vai trò hệ thống và vai trò trong trung tâm.",
+      "roles": [],
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hệ thống có **hai lớp vai trò độc lập**. Vai trò hệ thống quyết định quyền trên dashboard `/admin`; vai trò trung tâm quyết định quyền trong từng trung tâm. System Owner/Admin **không** tự động có quyền trong trung tâm nào – muốn vào phải được thêm làm thành viên."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Vai trò hệ thống"
+        },
+        {
+          "type": "table",
+          "columns": ["Vai trò", "Tên trên giao diện", "Tóm tắt"],
+          "rows": [
+            [
+              "System Owner",
+              "System Owner",
+              "Quyền cao nhất. Quản lý mọi tài khoản kể cả System Admin/Owner, đổi vai trò hệ thống. Có thể có nhiều Owner; Owner đầu tiên tạo bằng seed. Xem [hướng dẫn](page:system-owner)."
+            ],
+            [
+              "System Admin",
+              "System Admin",
+              "Quản lý Người dùng, trung tâm, gói dịch vụ, danh mục/loại đề/mẫu bài học hệ thống. Chỉ xem, không sửa được tài khoản System Owner/Admin. Xem [hướng dẫn](page:system-admin)."
+            ],
+            [
+              "Registered User",
+              "Người dùng",
+              "Người dùng thông thường: quản lý tài khoản của mình, đăng ký trung tâm, tham gia trung tâm. Xem [hướng dẫn](page:registered-user)."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Vai trò trong trung tâm"
+        },
+        {
+          "type": "table",
+          "columns": ["Vai trò", "Tên trên giao diện", "Tóm tắt"],
+          "rows": [
+            [
+              "Tenant Owner",
+              "Chủ sở hữu",
+              "Người đăng ký trung tâm; đúng 1 người mỗi trung tâm, không cấp hay gỡ qua quản lý thành viên. Toàn quyền trong trung tâm. Xem [hướng dẫn](page:tenant-owner)."
+            ],
+            [
+              "Tenant Admin",
+              "Quản trị viên",
+              "Như Chủ sở hữu nhưng không thao tác được trên thành viên Chủ sở hữu. Xem [hướng dẫn](page:tenant-admin)."
+            ],
+            [
+              "Teacher",
+              "Giáo viên",
+              "Tạo đề và bài học, sửa/publish nội dung mình tạo, upload media, dạy lớp được phân công (giáo trình lớp, buổi học), chấm bài trong phạm vi của mình. Xem [hướng dẫn](page:teacher)."
+            ],
+            [
+              "Student",
+              "Học viên",
+              "Học bài học, làm đề đã publish, học trong lớp được xếp và xem kết quả của mình. Không vào dashboard. Xem [hướng dẫn](page:student)."
+            ],
+            [
+              "Parent",
+              "Phụ huynh",
+              "Được gắn với học viên; xem lớp, lịch học và kết quả của con ở **Con của tôi**. Vẫn học bài/làm đề như thành viên thường. Xem [hướng dẫn](page:parent)."
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Kết hợp nhiều vai trò"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Một tài khoản có thể là thành viên của nhiều trung tâm, mỗi nơi vai trò khác nhau.",
+            "Trong một trung tâm, một thành viên mang được nhiều vai trò, vd. Chủ sở hữu kiêm Giáo viên, hoặc Giáo viên kiêm Học viên. Quyền là **hợp** của các vai trò.",
+            "Người có cả vai trò hệ thống và trung tâm thấy nhiều ngữ cảnh; sau đăng nhập sẽ vào `/me` để chọn. Xem [Không gian của tôi](page:khong-gian-cua-toi)."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "text": "Bảng quyền chi tiết theo từng chức năng nằm ở [Ma trận phân quyền](page:ma-tran-phan-quyen)."
+        }
+      ]
+    },
+    {
+      "id": "ma-tran-phan-quyen",
+      "title": "Ma trận phân quyền",
+      "summary": "Bảng tổng hợp vai trò × chức năng cho hệ thống và trung tâm.",
+      "roles": [],
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Quyền được kiểm tra ở API (guard toàn cục + guard trung tâm + quy tắc trong service). Ẩn menu trên giao diện chỉ là lớp hiển thị. Ký hiệu: ✔ được phép, ✘ không, “xem” chỉ đọc."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Dashboard hệ thống"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Chức năng",
+            "System Owner",
+            "System Admin",
+            "Người dùng"
+          ],
+          "rows": [
+            ["Vào `/admin`, xem thống kê", "✔", "✔", "✘"],
+            ["Xem danh sách, chi tiết người dùng", "✔", "✔", "✘"],
+            ["Tạo người dùng (luôn là Người dùng)", "✔", "✔", "✘"],
+            ["Sửa / khoá / mở khoá / reset mật khẩu Người dùng", "✔", "✔", "✘"],
+            [
+              "Sửa / khoá / reset mật khẩu System Admin, System Owner",
+              "✔",
+              "xem",
+              "✘"
+            ],
+            ["Đổi vai trò hệ thống", "✔", "✘", "✘"],
+            [
+              "Duyệt / từ chối / tạm khoá / mở khoá trung tâm, đổi gói",
+              "✔",
+              "✔",
+              "✘"
+            ],
+            ["Bật Trợ lý AI và đặt hạn mức AI cho trung tâm", "✔", "✔", "✘"],
+            ["Quản lý gói dịch vụ", "✔", "✔", "✘"],
+            ["Quản lý danh mục, loại đề & mẫu bài học hệ thống", "✔", "✔", "✘"],
+            ["Đọc tài liệu nội bộ `/user-manual`", "✔", "✔", "✘"],
+            [
+              "Vào nội dung một trung tâm",
+              "chỉ khi là thành viên",
+              "chỉ khi là thành viên",
+              "chỉ khi là thành viên"
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Không ai tự khoá/mở khoá được tài khoản của chính mình, và hệ thống luôn phải còn ít nhất một System Owner đang hoạt động."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trong trung tâm"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Chức năng",
+            "Chủ sở hữu",
+            "Quản trị viên",
+            "Giáo viên",
+            "Học viên",
+            "Phụ huynh"
+          ],
+          "rows": [
+            ["Dashboard trung tâm", "✔", "✔", "✔ (rút gọn)", "✘", "✘"],
+            [
+              "Quản lý thành viên, vai trò, trạng thái",
+              "✔",
+              "✔ (không đụng Chủ sở hữu)",
+              "✘",
+              "✘",
+              "✘"
+            ],
+            ["Gắn phụ huynh ↔ học viên", "✔", "✔", "✘", "✘", "✘"],
+            [
+              "Danh mục, loại đề & mẫu bài học riêng của trung tâm",
+              "✔",
+              "✔",
+              "xem",
+              "✘",
+              "✘"
+            ],
+            ["Tạo đề", "✔", "✔", "✔", "✘", "✘"],
+            [
+              "Nhân bản đề đã publish (và đề mình sửa được)",
+              "✔",
+              "✔",
+              "✔",
+              "✘",
+              "✘"
+            ],
+            ["Xem mọi đề trong dashboard", "✔", "✔", "✔", "✘", "✘"],
+            [
+              "Sửa nội dung, hiển thị, publish, lưu trữ, xoá, khôi phục version",
+              "mọi đề",
+              "mọi đề",
+              "đề mình tạo",
+              "✘",
+              "✘"
+            ],
+            [
+              "Định dạng bằng AI trong trình soạn đề (trung tâm đã bật Trợ lý AI)",
+              "mọi đề",
+              "mọi đề",
+              "đề mình tạo",
+              "✘",
+              "✘"
+            ],
+            [
+              "Tạo bài học, nhân bản bài học đã publish (và bài mình sửa được), xem mọi bài học",
+              "✔",
+              "✔",
+              "✔",
+              "✘",
+              "✘"
+            ],
+            [
+              "Sửa nội dung, hiển thị, publish, lưu trữ, xoá, khôi phục version bài học",
+              "mọi bài",
+              "mọi bài",
+              "bài mình tạo",
+              "✘",
+              "✘"
+            ],
+            ["Thư viện media (upload, xoá)", "✔", "✔", "✔", "✘", "✘"],
+            ["Xem khoá học", "✔", "✔", "✔", "✘", "✘"],
+            [
+              "Tạo, sửa, lưu trữ, xoá khoá học; gắn/bỏ gắn giáo trình",
+              "✔",
+              "✔",
+              "✘",
+              "✘",
+              "✘"
+            ],
+            ["Xem, tạo, nhân bản giáo trình", "✔", "✔", "✔", "✘", "✘"],
+            [
+              "Sửa chương + mục, thông tin, xoá giáo trình",
+              "mọi giáo trình",
+              "mọi giáo trình",
+              "giáo trình mình tạo",
+              "✘",
+              "✘"
+            ],
+            [
+              "Xem lớp học, danh sách giáo viên/học viên, nhật ký thay đổi",
+              "mọi lớp",
+              "mọi lớp",
+              "lớp mình phụ trách",
+              "✘",
+              "✘"
+            ],
+            [
+              "Tạo lớp, sửa thông tin, đổi trạng thái, xoá lớp; thêm/bỏ giáo viên, học viên",
+              "✔",
+              "✔",
+              "✘",
+              "✘",
+              "✘"
+            ],
+            [
+              "Sửa giáo trình lớp",
+              "mọi lớp",
+              "mọi lớp",
+              "lớp mình phụ trách",
+              "✘",
+              "✘"
+            ],
+            [
+              "Sửa lịch lặp của lớp (ngày bắt đầu, số buổi, buổi trong tuần, áp dụng ngày nghỉ)",
+              "✔",
+              "✔",
+              "✘",
+              "✘",
+              "✘"
+            ],
+            [
+              "Huỷ/khôi phục buổi, buổi bù, sửa buổi (phòng, giờ, giáo viên dạy thế), nội dung buổi",
+              "mọi lớp",
+              "mọi lớp",
+              "lớp mình phụ trách",
+              "✘",
+              "✘"
+            ],
+            [
+              "Xem chi tiết buổi học",
+              "mọi buổi",
+              "mọi buổi",
+              "lớp mình phụ trách + buổi mình dạy thế",
+              "✘",
+              "✘"
+            ],
+            [
+              "Lịch dạy của tôi, lịch của khoá học",
+              "✔",
+              "✔",
+              "lớp mình phụ trách + buổi mình dạy thế",
+              "✘",
+              "✘"
+            ],
+            ["Lịch trung tâm", "✔", "✔", "✘", "✘", "✘"],
+            [
+              "Cài đặt trung tâm (ngày nghỉ, tham số chuyên cần)",
+              "✔",
+              "✔",
+              "✘",
+              "✘",
+              "✘"
+            ],
+            ["Học bài học công khai trong trung tâm", "✔", "✔", "✔", "✔", "✔"],
+            [
+              "Chấm bài Writing/Speaking – đề thi và bài học (trừ bài của mình)",
+              "✔",
+              "✔",
+              "bài trong lớp mình phụ trách, bài tự do của đề/bài mình soạn, bài được chuyển giao",
+              "✘",
+              "✘"
+            ],
+            [
+              "Xem đề đã publish (công khai trong trung tâm) và làm bài",
+              "✔",
+              "✔",
+              "✔",
+              "✔",
+              "✔"
+            ],
+            [
+              "Xem lịch sử & kết quả lượt làm của mình",
+              "✔",
+              "✔",
+              "✔",
+              "✔",
+              "✔"
+            ],
+            [
+              "Xem lớp mình học, giáo trình lớp, lịch học của tôi",
+              "nếu là học viên lớp",
+              "←",
+              "←",
+              "✔",
+              "✘"
+            ],
+            [
+              "Học bài học / làm bài kiểm tra, bài thi trong lớp",
+              "nếu là học viên lớp",
+              "←",
+              "←",
+              "✔",
+              "✘"
+            ],
+            [
+              "Cho làm lại một lượt thi trong lớp",
+              "mọi lớp",
+              "mọi lớp",
+              "lớp mình phụ trách",
+              "✘",
+              "✘"
+            ],
+            [
+              "Chuyển giao chấm cho giáo viên khác",
+              "✔",
+              "✔",
+              "phạm vi mình chấm được sẵn (không giao tiếp bài được giao)",
+              "✘",
+              "✘"
+            ],
+            [
+              "Xem bài làm chi tiết của học viên trong lớp (đáp án, đúng/sai từng câu)",
+              "mọi lớp",
+              "mọi lớp",
+              "lớp mình phụ trách",
+              "✘",
+              "✘"
+            ],
+            [
+              "Xem chuyên cần & bảng điểm của lớp, xuất Excel",
+              "mọi lớp",
+              "mọi lớp",
+              "lớp mình phụ trách",
+              "của mình, khi lớp đã kết thúc",
+              "✘"
+            ],
+            [
+              "Viết nhận xét cuối khoá cho học viên",
+              "mọi lớp",
+              "mọi lớp",
+              "lớp mình phụ trách",
+              "✘",
+              "✘"
+            ],
+            [
+              "Sửa tham số chuyên cần của một lớp (hệ số k, ngưỡng cảnh báo)",
+              "✔",
+              "✔",
+              "✘ (chỉ xem)",
+              "✘",
+              "✘"
+            ],
+            [
+              "Xem lớp, lịch học, kết quả, chuyên cần của con (\"Con của tôi\")",
+              "✘",
+              "✘",
+              "✘",
+              "✘",
+              "con đã liên kết"
+            ],
+            [
+              "Nhận thông báo của mình (chuông, trang Tất cả thông báo)",
+              "✔",
+              "✔",
+              "✔",
+              "✔",
+              "✔"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Menu dashboard theo vai trò"
+        },
+        {
+          "type": "table",
+          "columns": ["Menu", "Hiện cho"],
+          "rows": [
+            ["Tổng quan", "Chủ sở hữu, Quản trị viên, Giáo viên"],
+            ["Quản lý → Thành viên", "Chủ sở hữu, Quản trị viên"],
+            [
+              "Đề thi & Bài học → Danh mục, Loại đề, Mẫu bài học, Đề thi, Bài học, Thư viện media",
+              "Chủ sở hữu, Quản trị viên, Giáo viên"
+            ],
+            [
+              "Đề thi & Bài học → Chấm bài",
+              "Chủ sở hữu, Quản trị viên, Giáo viên"
+            ],
+            [
+              "Đào tạo → Khoá học, Giáo trình, Lớp học, Lịch",
+              "Chủ sở hữu, Quản trị viên, Giáo viên (khoá học chỉ xem; lớp học chỉ thấy lớp mình phụ trách; Lịch của Giáo viên chỉ có Lịch dạy của tôi)"
+            ],
+            ["Cài đặt", "Chủ sở hữu, Quản trị viên"]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Điều kiện chung để vào trung tâm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Trung tâm phải ở trạng thái **Đang hoạt động**. Chờ duyệt / Bị từ chối / Tạm khoá thì mọi thành viên (kể cả Chủ sở hữu) bị chặn và thấy thông báo tương ứng.",
+            "Membership phải **Đang hoạt động**; thành viên bị ngừng kích hoạt coi như không phải thành viên.",
+            "Người không phải thành viên mở `/t/{slug}` chỉ thấy phần giới thiệu công khai của trung tâm.",
+            "Tài khoản đang phải đổi mật khẩu tạm bị chặn mọi thao tác cho tới khi đổi xong."
+          ]
+        }
+      ]
+    }
+  ]
+}

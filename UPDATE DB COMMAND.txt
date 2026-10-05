@@ -1,0 +1,13 @@
+========================================================================================
+             IELTS MASTER : LỆNH CẬP NHẬT DATABASE (AN TOÀN - BUILD TRƯỚC)
+========================================================================================
+
+TRONG VISUAL STUDIO (Package Manager Console):
+1. Tại ô "Default project" trên thanh công cụ, chọn project bạn muốn cập nhật:
+   * Chọn: IELTSMaster.AuthService      (để cập nhật bảng auth)
+   * Chọn: IELTSMaster.BusinessService  (để cập nhật bảng business)
+
+2. Dán lệnh sau và bấm Enter:
+(Lệnh TỰ ĐỘNG kiểm tra build trước: Nếu phát hiện lỗi code hoặc có Service/Controller đang gọi Entity bị xoá thì LẬP TỨC DỪNG LẠI để bảo vệ an toàn cho Database):
+
+$p = (Get-Project).Name; Write-Host "Dang kiem tra build project $p..." -ForegroundColor Cyan; dotnet build (Get-Project).FullName; if ($?) { Write-Host "Build thanh cong! Tien hanh tao Migration va cap nhat Database..." -ForegroundColor Green; Add-Migration ("Update_" + (Get-Date -Format "yyyyMMdd_HHmmss")) -StartupProject $p; Update-Database -StartupProject $p; Write-Host "Hoan tat cap nhat Database!" -ForegroundColor Green } else { Write-Host "BUILD THAT BAI! Dang co loi code hoac co Service/Controller dang goi Entity da bi xoa. DA DUNG CAP NHAT DATABASE DE BAO VE DU LIEU!" -ForegroundColor Red }

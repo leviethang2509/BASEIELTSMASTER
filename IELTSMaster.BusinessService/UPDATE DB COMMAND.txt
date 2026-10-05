@@ -1,0 +1,9 @@
+========================================================================================
+LỆNH CẬP NHẬT DATABASE CHO BUSINESS SERVICE (SCHEMA: business)
+========================================================================================
+
+TRONG VISUAL STUDIO (Package Manager Console):
+1. Tại ô "Default project" trên thanh công cụ, chọn: IELTSMaster.BusinessService
+2. Dán lệnh sau và bấm Enter:
+
+Add-Migration ("Update_" + (Get-Date -Format "yyyyMMdd_HHmmss")) -StartupProject IELTSMaster.BusinessService; Update-Database -StartupProject IELTSMaster.BusinessService

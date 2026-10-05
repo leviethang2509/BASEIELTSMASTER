@@ -1,0 +1,121 @@
+name: Deploy Staging
+
+# Chỉ chạy tay (Actions → Deploy Staging → Run workflow), không tự deploy.
+# Workflow "Build & Deploy" (VPS 1) giữ nguyên. Xem docs/setup/deploy-staging.md.
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Để trống = build nhánh đã chọn. Rollback: sha-<commit đầy đủ> đã có trên GHCR'
+        required: false
+        default: ''
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build image
+    if: inputs.image_tag == ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Không gắn tag latest: tag đó là của VPS 1.
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=staging
+            type=sha,format=long
+
+      - name: Build & push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Staging
+    needs: build
+    # Chạy cả khi build bị bỏ qua (rollback theo image_tag), không chạy khi build lỗi.
+    if: ${{ !failure() && !cancelled() }}
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: deploy/staging
+
+      - name: Copy docker-compose.yml
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: ${{ secrets.STAGING_VPS_HOST }}
+          username: ${{ secrets.STAGING_VPS_USER }}
+          key: ${{ secrets.STAGING_VPS_SSH_KEY }}
+          port: ${{ secrets.STAGING_VPS_PORT || 22 }}
+          source: deploy/staging/docker-compose.yml
+          target: /opt/lang-simulator
+          strip_components: 2
+
+      - name: Pull & restart containers
+        uses: appleboy/ssh-action@v1.2.5
+        env:
+          # Không ghép thẳng input vào script: kiểm định dạng ở phía VPS.
+          IMAGE_TAG: ${{ inputs.image_tag || format('sha-{0}', github.sha) }}
+          GHCR_USER: ${{ github.repository_owner }}
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+        with:
+          host: ${{ secrets.STAGING_VPS_HOST }}
+          username: ${{ secrets.STAGING_VPS_USER }}
+          key: ${{ secrets.STAGING_VPS_SSH_KEY }}
+          port: ${{ secrets.STAGING_VPS_PORT || 22 }}
+          envs: IMAGE_TAG,GHCR_USER,GHCR_TOKEN
+          script: |
+            set -e
+            cd /opt/lang-simulator
+            if [ ! -f .env ]; then
+              echo "Thiếu /opt/lang-simulator/.env (xem docs/setup/deploy-staging.md)"
+              exit 1
+            fi
+            if ! echo "$IMAGE_TAG" | grep -Eq '^(sha-[0-9a-f]{40}|staging)$'; then
+              echo "image_tag không hợp lệ: $IMAGE_TAG (dạng sha-<commit đầy đủ>)"
+              exit 1
+            fi
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            # Ghi tag vào .env để docker compose chạy tay sau này vẫn đúng bản đang deploy.
+            if grep -q '^IMAGE_TAG=' .env; then
+              sed -i "s/^IMAGE_TAG=.*/IMAGE_TAG=$IMAGE_TAG/" .env
+            else
+              echo "IMAGE_TAG=$IMAGE_TAG" >> .env
+            fi
+            docker compose pull
+            # Chờ cả db lẫn app healthy: migration lỗi hoặc /api/health không đạt thì job báo lỗi.
+            docker compose up -d --wait
+            docker image prune -f
+            echo "Đã deploy $IMAGE_TAG"

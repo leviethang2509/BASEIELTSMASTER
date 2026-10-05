@@ -1,0 +1,189 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "lastUpdated": "2026-10-05",
+  "description": "Single Source of Truth (SSOT) cho he thong phan quyen AuthService va ELearning",
+  "systemRoles": [
+    {
+      "key": "SYSTEM_OWNER",
+      "name": "Chu he thong",
+      "description": "Toan quyen quan tri cao nhat toan he thong va bypass moi authorization"
+    },
+    {
+      "key": "SYSTEM_ADMIN",
+      "name": "Quan tri vien he thong",
+      "description": "Quan ly user, tenant, audit log va catalog chung"
+    },
+    {
+      "key": "REGISTERED_USER",
+      "name": "Nguoi dung dang ky",
+      "description": "Nguoi dung ca nhan co tai khoan nhung chua thuoc tenant hoac dang ky tu do"
+    }
+  ],
+  "tenantRoles": [
+    {
+      "key": "TENANT_OWNER",
+      "name": "Chu trung tam (Tenant Owner)",
+      "description": "Toan quyen trong pham vi trung tam / tenant"
+    },
+    {
+      "key": "TENANT_ADMIN",
+      "name": "Quan tri vien trung tam (Tenant Admin)",
+      "description": "Quan ly thanh vien, lop hoc, cau hinh va noi dung hoc tap trong tenant"
+    },
+    {
+      "key": "TEACHER",
+      "name": "Giao vien (Teacher)",
+      "description": "Quan ly lop duoc giao, bien soan de thi/bai hoc, cham bai"
+    },
+    {
+      "key": "STUDENT",
+      "name": "Hoc vien (Student)",
+      "description": "Tham gia hoc tap, lam de thi, xem tien do"
+    },
+    {
+      "key": "PARENT",
+      "name": "Phu huynh (Parent)",
+      "description": "Xem tien do va ket qua hoc tap cua con em"
+    }
+  ],
+  "permissions": [
+    {
+      "key": "system:users:manage",
+      "scope": "SYSTEM",
+      "description": "Xem danh sach, tao, khoa, mo khoa, reset password user he thong"
+    },
+    {
+      "key": "system:roles:assign",
+      "scope": "SYSTEM",
+      "description": "Chi dinh system role (chi danh cho SYSTEM_OWNER)"
+    },
+    {
+      "key": "system:tenants:manage",
+      "scope": "SYSTEM",
+      "description": "Phe duyet, tu choi, suspend, mo lai tenant, quan ly goi dich vu"
+    },
+    {
+      "key": "system:audit:view",
+      "scope": "SYSTEM",
+      "description": "Xem audit log va thong ke he thong"
+    },
+    {
+      "key": "catalog:ethnic-groups:manage",
+      "scope": "SYSTEM",
+      "description": "Quan ly danh muc dan toc va danh muc chung he thong"
+    },
+    {
+      "key": "tenant:members:manage",
+      "scope": "TENANT",
+      "description": "Them, sua, xoa thanh vien, gan role tenant va lien ket phu huynh"
+    },
+    {
+      "key": "tenant:classes:manage",
+      "scope": "TENANT",
+      "description": "Quan ly lop hoc, khoa hoc, lich hoc, diem danh va tien do"
+    },
+    {
+      "key": "tenant:settings:edit",
+      "scope": "TENANT",
+      "description": "Chinh sua thong tin trung tam, cau hinh ngay nghi, branding"
+    },
+    {
+      "key": "exams:create",
+      "scope": "TENANT",
+      "description": "Tao, sua, nhan ban, upload media, AI format de thi va giao trinh"
+    },
+    {
+      "key": "exams:grade",
+      "scope": "TENANT",
+      "description": "Cham bai thi Writing/Speaking, phan cong cham bai"
+    },
+    {
+      "key": "exams:take",
+      "scope": "TENANT_OR_SYSTEM",
+      "description": "Lam bai thi, nop bai lam"
+    },
+    {
+      "key": "elearning:portal:access",
+      "scope": "TENANT_OR_SYSTEM",
+      "description": "Quyen vao portal hoc tap ELearning"
+    },
+    {
+      "key": "elearning:bypass:auth",
+      "scope": "SYSTEM",
+      "description": "Bo qua toan bo authorization kiem tra de cuu ho hoac debug he thong"
+    }
+  ],
+  "rolePermissionMatrix": {
+    "systemRolePermissions": {
+      "SYSTEM_OWNER": [
+        "system:users:manage",
+        "system:roles:assign",
+        "system:tenants:manage",
+        "system:audit:view",
+        "catalog:ethnic-groups:manage",
+        "tenant:members:manage",
+        "tenant:classes:manage",
+        "tenant:settings:edit",
+        "exams:create",
+        "exams:grade",
+        "exams:take",
+        "elearning:portal:access",
+        "elearning:bypass:auth"
+      ],
+      "SYSTEM_ADMIN": [
+        "system:users:manage",
+        "system:tenants:manage",
+        "system:audit:view",
+        "catalog:ethnic-groups:manage",
+        "elearning:portal:access"
+      ],
+      "REGISTERED_USER": [
+        "exams:take"
+      ]
+    },
+    "tenantRolePermissions": {
+      "TENANT_OWNER": [
+        "tenant:members:manage",
+        "tenant:classes:manage",
+        "tenant:settings:edit",
+        "exams:create",
+        "exams:grade",
+        "exams:take",
+        "elearning:portal:access"
+      ],
+      "TENANT_ADMIN": [
+        "tenant:members:manage",
+        "tenant:classes:manage",
+        "tenant:settings:edit",
+        "exams:create",
+        "exams:grade",
+        "exams:take",
+        "elearning:portal:access"
+      ],
+      "TEACHER": [
+        "tenant:classes:manage",
+        "exams:create",
+        "exams:grade",
+        "elearning:portal:access"
+      ],
+      "STUDENT": [
+        "exams:take",
+        "elearning:portal:access"
+      ],
+      "PARENT": [
+        "elearning:portal:access"
+      ]
+    }
+  },
+  "roleGroups": {
+    "SystemManagerRoles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"],
+    "TenantManagerRoles": ["TENANT_OWNER", "TENANT_ADMIN"],
+    "ExamAuthorRoles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+    "GraderRoles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+    "TenantDashboardRoles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+    "AssignableTenantRoles": ["TENANT_ADMIN", "TEACHER", "STUDENT", "PARENT"],
+    "ElearningAllowedRoles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER", "STUDENT", "PARENT"],
+    "DeactivationSuggestionRoles": ["STUDENT", "PARENT"]
+  }
+}

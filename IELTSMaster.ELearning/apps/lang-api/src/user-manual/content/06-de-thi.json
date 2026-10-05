@@ -1,0 +1,802 @@
+{
+  "id": "de-thi",
+  "title": "Đề thi & Bài học",
+  "pages": [
+    {
+      "id": "vong-doi-de-thi",
+      "title": "Vòng đời đề thi",
+      "summary": "Tạo đề, soạn, publish, hiển thị, nhân bản, lưu trữ, xoá và quyền trên từng đề.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Menu **Đề thi & Bài học → Đề thi** (`/t/{slug}/dashboard/exams`). Danh sách tìm theo tên đề, lọc trạng thái, danh mục, loại đề, người tạo. Mỗi dòng hiện số section, tổng phút, số câu, version hiện tại, người tạo; đề **Chỉ qua lớp** có thêm nhãn cạnh trạng thái, bản nhân bản ghi “Bản sao của …”."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trạng thái"
+        },
+        {
+          "type": "table",
+          "columns": ["Trạng thái", "Học viên thấy?", "Chuyển tiếp"],
+          "rows": [
+            ["**Nháp**", "Không", "Publish (khi nội dung hết lỗi)"],
+            ["**Đã publish**", "Có, làm bài được", "Lưu trữ"],
+            [
+              "**Lưu trữ**",
+              "Không làm bài mới; vẫn xem lịch sử lượt làm cũ",
+              "Publish lại (kiểm tra lỗi lại)"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Không có đường quay về Nháp. Sửa đề đang publish vẫn được, nhưng nội dung lưu phải không còn lỗi."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tạo đề"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Bấm Tạo đề"
+            },
+            {
+              "title": "Chọn Loại đề",
+              "text": "Chỉ loại đề đang dùng (hệ thống hoặc trung tâm). Form cho biết đề sẽ có những section nào."
+            },
+            {
+              "title": "Nhập Tên đề (tối đa 200 ký tự) và Mô tả"
+            },
+            {
+              "title": "Chọn Hiển thị",
+              "text": "**Công khai trong trung tâm** (mặc định) hoặc **Chỉ qua lớp**. Xem mục Hiển thị bên dưới."
+            },
+            {
+              "title": "Bấm Tạo và soạn đề",
+              "text": "Đề ở trạng thái Nháp, version 1; mỗi module sinh một section trống với thời lượng tham khảo. Mở ngay trình soạn đề."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Soạn, xem trước, publish"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Soạn nội dung từng section – xem [Trình soạn đề](page:trinh-soan-de) và [Dạng câu hỏi & cách chấm](page:dang-cau-hoi).",
+            "**Xem trước** để làm thử và chấm ngay trên trình duyệt (không lưu, không tạo lượt làm).",
+            "**Publish** từ trình soạn hoặc danh sách. Phải lưu hết thay đổi trước; còn lỗi thì API trả 422 và bảng **Kiểm tra** liệt kê lỗi theo section."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Sửa thông tin đề"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nút **Thông tin đề** trong trình soạn: đổi tên, mô tả, loại đề, **Hiển thị**. Không tạo version mới. Đổi loại đề **không** đổi các section đang có; dùng **Thêm section → Từ module của loại đề** để thêm section của loại đề mới."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Hiển thị"
+        },
+        {
+          "type": "table",
+          "columns": ["Hiển thị", "Ý nghĩa"],
+          "rows": [
+            [
+              "**Công khai trong trung tâm**",
+              "Đề đã publish hiện ở trang trung tâm `/t/{slug}`, mọi thành viên làm tự do"
+            ],
+            [
+              "**Chỉ qua lớp**",
+              "Không hiện ở trang trung tâm; mở đề hoặc bắt đầu lượt làm tự do đều báo không tìm thấy. Dùng cho đề giao qua [giáo trình lớp](page:giao-trinh-lop): học viên vào làm từ trang lớp – xem [Lớp học của tôi](page:lop-cua-toi)"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Đổi lúc nào cũng được, kể cả khi đã có bài làm; người đã làm vẫn xem lại lượt làm và kết quả cũ, lượt đang làm dở vẫn làm tiếp và nộp được.",
+            "Ai sửa được đề thì đổi được hiển thị (form **Thông tin đề** hoặc khi **Tạo đề**)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Nhân bản"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nút **Nhân bản** ở danh sách đề tạo một đề **Nháp** mới của bạn rồi mở trình soạn:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Nhân bản được đề **đã publish** của bất kỳ ai, và đề nháp/lưu trữ mà bạn có quyền sửa.",
+            "Bản sao tên “… (bản sao)”, cùng loại đề và hiển thị với đề gốc, version 1 chép nội dung **version hiện tại** (kể cả giải thích); không chép bài làm và lịch sử version.",
+            "Ảnh/audio/video **dùng chung URL** với đề gốc: xoá file trong Thư viện media sẽ làm hỏng cả hai đề."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lưu trữ và xoá"
+        },
+        {
+          "type": "table",
+          "columns": ["Thao tác", "Kết quả"],
+          "rows": [
+            [
+              "**Lưu trữ**",
+              "Học viên không thấy đề nữa; vẫn sửa và publish lại được"
+            ],
+            [
+              "**Xoá đề** (đang nằm trong giáo trình)",
+              "Không xoá được, chỉ lưu trữ được – áp dụng cho [giáo trình tham khảo](page:giao-trinh) và [giáo trình lớp](page:giao-trinh-lop) (kể cả mục đã xoá khỏi lớp nhưng còn giữ vì có bài làm)"
+            ],
+            ["**Xoá đề** (chưa có bài làm)", "Xoá hẳn"],
+            [
+              "**Xoá đề** (đã có bài làm)",
+              "Ẩn đề (xoá mềm) để giữ lịch sử và kết quả bài làm"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Quyền trên đề"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chủ sở hữu, Quản trị viên: sửa, đổi hiển thị, publish, lưu trữ, xoá, khôi phục version **mọi đề**.",
+            "Giáo viên: làm các việc trên với **đề do mình tạo**; đề người khác mở ở chế độ **Chỉ xem** (vẫn Xem trước và xem Version).",
+            "Chủ sở hữu, Quản trị viên, Giáo viên: **nhân bản** đề đã publish và đề mình sửa được.",
+            "Học viên, Phụ huynh: không vào được trang quản lý đề."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trinh-soan-de",
+      "title": "Trình soạn đề",
+      "summary": "Tab section, thanh công cụ, indicator, giải thích, khối trình bày, định dạng bằng AI, lưu, bản nháp trình duyệt, kiểm tra lỗi.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Mở bằng **Soạn đề** trong danh sách (`/t/{slug}/dashboard/exams/{id}/edit`). Thanh trên cùng: về danh sách, version hiện tại, tổng section/phút, trạng thái lưu, **Xem trước**, **Version**, **Thông tin đề**, **Lưu**, Publish/Lưu trữ."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Section"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mỗi section là một **tab**, mỗi tab một trình soạn thảo riêng. Tab hiện thời lượng và số lỗi soạn thảo.",
+            "Menu của tab: **Thời lượng section** (5–180 phút, bội số 5), **Đổi tên section** (tối đa 100 ký tự), **Xoá section** (đề phải còn ít nhất 1).",
+            "**Thêm section**: **Section trống** hoặc **Từ module của loại đề**. Tối đa 20 section.",
+            "Kéo thả tab để sắp xếp thứ tự section (cũng là thứ tự làm bài).",
+            "Mọi thay đổi section (nội dung, thời lượng, thêm/xoá/sắp xếp) chỉ ghi lên server khi bấm **Lưu**."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Cấu trúc nội dung một section"
+        },
+        {
+          "type": "table",
+          "columns": ["Phần", "Cách tạo", "Hiển thị khi thi"],
+          "rows": [
+            [
+              "Hướng dẫn section",
+              "Nội dung đặt **trước indicator đầu tiên**",
+              "Màn hình hướng dẫn trước khi bấm Bắt đầu section"
+            ],
+            [
+              "Part",
+              "Indicator **Part**; nội dung ngay sau nó là passage (bài đọc, audio…)",
+              "Một tab Part; passage ở cột trái"
+            ],
+            [
+              "Subpart",
+              "Indicator **Subpart** trong Part; hướng dẫn áp dụng cho các câu sau nó tới Subpart kế",
+              "Cột phải, trên nhóm câu"
+            ],
+            [
+              "Question",
+              "Indicator **Question** + chọn dạng câu hỏi; nội dung sau nó là đề bài và đáp án",
+              "Cột phải"
+            ],
+            [
+              "Explanation (giải thích)",
+              "Indicator **Explanation** đặt ngay sau nội dung câu hỏi; nội dung sau nó (tới indicator kế) là lời giải thích",
+              "Học viên **không** thấy khi thi; người chấm thấy; Xem trước hiện sau khi bấm Nộp"
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "Số câu **đánh lại từ 1 ở mỗi section**, tự tính theo dạng câu hỏi (vd. mỗi ô trống là 1 câu). Không cần gõ số câu bằng tay."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Giải thích (Explanation)"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chèn bằng **Chèn indicator → Explanation** hoặc gõ `/`. Hộp hướng dẫn hiện câu mà giải thích sẽ gắn tại vị trí con trỏ; bấm **Chèn**.",
+            "Gắn với **Question ngay phía trên** (bỏ qua các Explanation khác). Nếu giữa chúng có Part/Subpart hoặc phía trên không có Question thì không gắn câu nào – mini map ghi “không gắn câu hỏi nào”.",
+            "Nội dung giải thích kéo tới indicator kế tiếp: muốn viết tiếp nội dung khác, chèn indicator mới.",
+            "Một câu có nhiều Explanation được. Giải thích không tính vào số câu, không chấm điểm.",
+            "Nội dung giải thích **không gửi cho học viên** (server bỏ khỏi đề phát cho học viên, chỉ giữ chỗ trống). Đề thi: học viên không bao giờ thấy, người chấm thấy ở trang chấm. Bài học: hiện cho học viên **sau khi nộp** phần đó."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Thanh công cụ"
+        },
+        {
+          "type": "table",
+          "columns": ["Nhóm", "Công cụ"],
+          "rows": [
+            [
+              "Văn bản",
+              "Kiểu đoạn (Văn bản, Tiêu đề 1–6, Trích dẫn, Khối mã), cỡ chữ, đậm, nghiêng, gạch chân, gạch ngang, mã inline, đánh dấu, chỉ số trên/dưới, màu chữ, màu nền, xoá định dạng"
+            ],
+            [
+              "Danh sách",
+              "Danh sách chấm, danh sách số, **Danh sách checkbox** (đáp án trắc nghiệm), **Danh sách đánh số tay** (Ordering/Polytomous), thụt vào/ra, canh lề"
+            ],
+            [
+              "Khối trình bày",
+              "**Callout** (Lưu ý / Ví dụ / Mẹo; đổi loại ngay trên khối), **Khối gập/mở** (tiêu đề; các dòng thụt vào bên dưới là nội dung, học viên bấm để mở), **Furigana** (bôi đen chữ rồi nhập cách đọc; đặt con trỏ trong chữ có furigana rồi bấm lại để sửa, để trống để gỡ)"
+            ],
+            [
+              "Câu hỏi",
+              "**Cặp ghép** (Matching/True-False/Yes-No), **Blank** – ô trống (Ctrl+Shift+B), **Chèn indicator**"
+            ],
+            [
+              "Chèn",
+              "Liên kết, đường kẻ ngang, Hình ảnh, Audio, Video (tải lên hoặc dán URL), Bảng (thêm/xoá dòng, cột)"
+            ],
+            [
+              "Khác",
+              "Hoàn tác, Làm lại, **Xuất JSON của section**, **Nhập JSON vào section** (thay nội dung hiện tại)"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Gõ `/` để mở menu chèn nhanh (indicator, tiêu đề 1–3, callout, khối gập/mở, danh sách, cặp ghép, bảng, media).",
+            "Bấm **badge** của indicator Question để đổi dạng câu hỏi hoặc tham số (số giây, số ký tự, số đáp án, danh sách option).",
+            "**Mini map** liệt kê indicator để cuộn nhanh; chân editor đếm số từ/ký tự."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "**Màu chữ** và **màu nền** chọn ở đây được làm sáng lên khi người xem đang dùng giao diện **Tối**, nên màu hiện ra sẽ nhạt hơn mã màu đã chọn (nội dung lưu không đổi). Xem [Giao diện](page:giao-dien)."
+        },
+        { "type": "heading", "level": 2, "text": "Định dạng bằng AI" },
+        {
+          "type": "paragraph",
+          "text": "Nút **Định dạng bằng AI** ở cuối thanh công cụ dựng sẵn Part, Subpart, câu hỏi và đáp án cho **section đang mở** từ đề dán vào dạng chữ thường (vd. copy từ Word/PDF). Chỉ có trong trình soạn **đề thi** (không có ở bài học), chỉ hiện khi trung tâm đã được bật **Trợ lý AI** ([Quản lý trung tâm](page:admin-trung-tam#tro-ly-ai)), và dùng được trên đề bạn sửa được."
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Dán đề vào section",
+              "text": "Mỗi section một phần của đề (vd. Reading, Listening, Writing). Chia nhỏ section nếu đề quá dài."
+            },
+            {
+              "title": "Bấm Định dạng bằng AI",
+              "text": "Hộp thoại hiện số lượt trung tâm đã dùng trong tháng. Ô **Ghi chú cho AI** (không bắt buộc) dùng để nhắc AI điều đặc biệt, vd. \"đáp án nằm ở bảng cuối đề\", \"câu 1–5 là True/False/Not Given\"."
+            },
+            {
+              "title": "Bấm Định dạng",
+              "text": "Hộp thoại hiện **Lần thử n/3…**; thường mất 5–20 giây. Bấm **Hủy** (hoặc đóng hộp thoại) để dừng, nội dung không đổi."
+            },
+            {
+              "title": "Kiểm tra kết quả rồi Lưu",
+              "text": "Nội dung section được thay bằng kết quả nhưng **chưa lưu**. Đọc lại, sửa đáp án/tham số trên badge nếu cần rồi bấm **Lưu**. **Ctrl+Z** một lần quay về đúng bản trước khi định dạng."
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "columns": ["Thông báo sau khi chạy", "Ý nghĩa"],
+          "rows": [
+            [
+              "Đã định dạng bằng AI…",
+              "Không còn lỗi cấu trúc. Lỗi kiểu “Chưa tick đáp án nào”, “n cặp chưa có đáp án” chỉ vì đề không có đáp án – điền tay"
+            ],
+            [
+              "AI đã định dạng nhưng còn n lỗi cấu trúc…",
+              "Sau 3 lần thử vẫn còn lỗi: AI đưa vào bản ít lỗi nhất, bảng **Kiểm tra** được làm nổi – sửa tay theo bảng rồi mới Lưu"
+            ],
+            [
+              "AI không định dạng được section này…",
+              "Nội dung giữ nguyên. Thử thêm ghi chú cho AI hoặc chia nhỏ section"
+            ],
+            [
+              "Section đã được định dạng, AI không thay đổi gì…",
+              "Section đã có câu hỏi đầy đủ, AI không cần sửa"
+            ],
+            [
+              "Phiên định dạng đã bị gián đoạn…",
+              "Máy chủ khởi động lại khi đang chạy – bấm lại (lần đó không tính lượt)"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "AI **không viết lại chữ** của đề: chỉ chèn indicator, tách dòng bị dính (thường gặp khi copy từ PDF, vd. “A … B …” trên một dòng), đổi dòng thành lựa chọn/cặp ghép/dòng đánh số, biến chỗ chấm/gạch dưới (“…….”, “____”) thành ô trống, xoá đáp án in sẵn sau khi đã dùng và phiếu trả lời trống/ô dành cho giám khảo.",
+            "Đáp án chỉ được điền khi **đề có sẵn** (answer key cuối đề, “Answer: B”…). AI **không tự giải đề**: đề không có đáp án thì để trống cho giáo viên điền.",
+            "Ảnh, audio, video giữ nguyên vị trí, AI không đọc được. Câu hỏi chỉ có ô trống trong hình (vd. “Label the diagram”) bị bỏ qua – tự thêm sau khi chèn ảnh.",
+            "Writing/Speaking không ghi rõ giới hạn thì AI đặt sẵn: Writing Task 1 1500 ký tự, Task 2 2500 ký tự; Speaking Part 1/3 60 giây, Part 2 120 giây – đổi trên badge nếu cần.",
+            "Bấm lại trên section đã định dạng không làm mất đáp án đã điền; AI chỉ thêm phần còn thiếu."
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mỗi lần bấm **Định dạng** tính **1 lượt** vào hạn mức tháng của trung tâm (theo giờ Việt Nam), kể cả khi kết quả còn lỗi; mỗi lượt AI được thử tối đa 3 lần. Huỷ trước khi AI trả lời lần đầu hoặc lỗi máy chủ thì không tính.",
+            "Hết lượt: nút vẫn bấm được nhưng hộp thoại báo “Trung tâm đã dùng hết … lượt AI của tháng này”. Liên hệ quản trị hệ thống để nâng hạn mức.",
+            "Section tối đa 2.000 dòng / 150.000 ký tự; một lần gọi AI tối đa 2 phút, cả lượt tối đa 6 phút.",
+            "Nút bị mờ với chú thích “Chưa cấu hình AI”: máy chủ chưa được cấu hình kết nối AI – báo quản trị hệ thống."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Nội dung section được gửi tới dịch vụ AI của Google (Gemini trên Vertex AI) để xử lý. Không dán thông tin cá nhân của học viên vào section trước khi bấm."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lưu"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Lưu** (Ctrl+S) gửi **mọi section trong một lần**. Trạng thái: “Có thay đổi chưa lưu”, “Đang lưu…”, “Đã lưu lúc …”.",
+            "Version hiện tại đã có bài làm → hỏi xác nhận **Tạo version mới** trước khi lưu. Xem [Version đề thi](page:version-de-thi).",
+            "Đề **Nháp** lưu được cả khi còn lỗi; đề **Đã publish/Lưu trữ** phải hết lỗi mới lưu được.",
+            "Hai người (hoặc hai tab) cùng sửa: người lưu sau nhận “Nội dung đề vừa được lưu ở nơi khác…” – tải lại trang để lấy bản mới, tránh ghi đè."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Bản nháp trong trình duyệt"
+        },
+        {
+          "type": "paragraph",
+          "text": "Thay đổi chưa lưu được giữ tự động trong trình duyệt đang dùng. Mở lại đề sẽ thấy hộp **Khôi phục bản chưa lưu**: **Khôi phục** hoặc **Dùng bản trên server**. Nếu đề đã được lưu ở nơi khác sau đó, hộp thoại cảnh báo khôi phục rồi lưu sẽ ghi đè lần lưu kia. Bản nháp không đồng bộ giữa các máy."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Kiểm tra lỗi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Bảng **Kiểm tra · n lỗi** liệt kê lỗi theo section; bấm để nhảy tới vị trí. Lỗi thường gặp:"
+        },
+        {
+          "type": "table",
+          "columns": ["Thông báo", "Cách sửa"],
+          "rows": [
+            ["Chưa chọn dạng câu hỏi.", "Bấm badge Question, chọn dạng"],
+            [
+              "Câu hỏi rỗng — chưa có nội dung nào.",
+              "Thêm đề bài sau indicator"
+            ],
+            [
+              "Chưa có danh sách lựa chọn (danh sách checkbox).",
+              "Dùng Danh sách checkbox cho các lựa chọn"
+            ],
+            [
+              "Chưa tick đáp án nào.",
+              "Tick ô của đáp án đúng (MC 1 đáp án chỉ tick đúng 1)"
+            ],
+            [
+              "Chưa đặt số đáp án cần chọn — bấm badge để nhập.",
+              "Pick-n: nhập số đáp án"
+            ],
+            [
+              "Chưa khai báo danh sách option — bấm badge để nhập.",
+              "Matching: nhập ≥ 2 option"
+            ],
+            [
+              "Chưa có cặp ghép nào — dùng nút “Cặp ghép” trên thanh công cụ.",
+              "Thêm cặp ghép và chọn đáp án"
+            ],
+            [
+              "Chưa đánh dấu ô trống nào (bôi đen rồi Ctrl+Shift+B).",
+              "Bôi đen đáp án rồi bấm Blank"
+            ],
+            [
+              "Chưa có danh sách đánh số — dùng nút “Danh sách đánh số tay”.",
+              "Ordering/Polytomous: tạo danh sách và nhập số"
+            ],
+            [
+              "Có số thứ tự bị trùng trong cùng danh sách.",
+              "Ordering: mỗi dòng một số khác nhau"
+            ],
+            [
+              "Chưa đặt thời gian nói. / Chưa đặt giới hạn số ký tự.",
+              "Speaking/Writing: bấm badge nhập tham số"
+            ],
+            [
+              "Giải thích rỗng — chưa có nội dung nào. (cảnh báo)",
+              "Viết nội dung sau indicator Explanation hoặc xoá indicator"
+            ],
+            [
+              "Section chưa có câu hỏi nào. (cảnh báo)",
+              "Không chặn publish; kiểm tra lại nếu không cố ý"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dang-cau-hoi",
+      "title": "Dạng câu hỏi & cách chấm",
+      "summary": "11 dạng câu hỏi: cách soạn, cách đếm số câu và quy tắc chấm.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Chèn indicator **Question** rồi chọn dạng. Phần trắc nghiệm được **chấm tự động ở server** khi nộp section (học viên không bao giờ nhận đáp án); Speaking/Writing **chấm tay**. Xem trước trong trình soạn dùng cùng logic chấm."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Bảng tổng hợp"
+        },
+        {
+          "type": "table",
+          "columns": ["Dạng", "Cách soạn đáp án", "Số câu tính", "Đúng khi"],
+          "rows": [
+            [
+              "Multiple choice · 1 đáp án",
+              "Danh sách checkbox, tick **đúng 1** ô",
+              "1",
+              "Chọn đúng ô đó"
+            ],
+            [
+              "Multiple choice · nhiều đáp án",
+              "Danh sách checkbox, tick mọi ô đúng",
+              "1",
+              "Chọn **đủ và chỉ** các ô đúng"
+            ],
+            [
+              "Pick n trong m",
+              "Danh sách checkbox, tick ô đúng; đặt **số đáp án cần chọn** n (1–20)",
+              "n",
+              "Mỗi đáp án đúng đã chọn tính 1 câu; chọn quá n thì cả n câu sai"
+            ],
+            [
+              "Matching",
+              "Khai báo danh sách option (≥ 2, gồm cả đáp án nhiễu); mỗi **cặp ghép** chọn một option",
+              "1 mỗi cặp",
+              "Chọn đúng option của cặp"
+            ],
+            [
+              "True / False / Not Given",
+              "Mỗi cặp ghép chọn 1 trong 3",
+              "1 mỗi cặp",
+              "Chọn đúng"
+            ],
+            [
+              "Yes / No / Not Given",
+              "Mỗi cặp ghép chọn 1 trong 3",
+              "1 mỗi cặp",
+              "Chọn đúng"
+            ],
+            [
+              "Điền vào chỗ trống",
+              "Bôi đen đáp án trong câu → **Blank**; nhiều đáp án chấp nhận ngăn bằng `|`",
+              "1 mỗi ô",
+              "Khớp một đáp án chấp nhận (không phân biệt hoa thường, bỏ khoảng trắng thừa)"
+            ],
+            [
+              "Sắp xếp thứ tự (Ordering)",
+              "Danh sách đánh số tay, nhập vị trí đúng 1..n, không trùng",
+              "1",
+              "Xếp **đúng toàn bộ** thứ tự"
+            ],
+            [
+              "Polytomous · trọng số",
+              "Danh sách đánh số tay, nhập trọng số ≥ 0 (được trùng)",
+              "1",
+              "Chọn một dòng có trọng số **cao nhất**"
+            ],
+            [
+              "Speaking",
+              "Đặt **thời gian nói** (1–300 giây)",
+              "1",
+              "Chấm tay 0–10"
+            ],
+            [
+              "Writing",
+              "Đặt **giới hạn số ký tự** (1–3000)",
+              "1",
+              "Chấm tay 0–10"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Mẹo soạn"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Điền chỗ trống: ô trống giữ đúng vị trí trong câu, học viên thấy ô rỗng. Ví dụ đáp án `colour|color` chấp nhận cả hai cách viết.",
+            "Ordering/Polytomous: thứ tự dòng khi soạn không lộ ra – mỗi lượt làm được xáo lại và không bao giờ trùng đáp án.",
+            "Matching dùng chung một danh sách option cho mọi cặp trong câu; thêm option nhiễu để tránh loại trừ.",
+            "Speaking: thời gian nói là thời lượng ghi âm tối đa; học viên được ghi lại trong thời gian section.",
+            "Kết quả học viên chỉ là **số câu đúng**; chưa có quy đổi thang điểm (TOEIC 990, IELTS band)."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Đổi đáp án của đề đã có bài làm **không chấm lại** bài cũ: lần lưu tạo version mới, bài cũ giữ nội dung và kết quả của version cũ."
+        }
+      ]
+    },
+    {
+      "id": "version-de-thi",
+      "title": "Version đề thi",
+      "summary": "Khi nào tạo version mới, xem và khôi phục version cũ.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Quy tắc lưu"
+        },
+        {
+          "type": "table",
+          "columns": ["Version hiện tại", "Khi bấm Lưu"],
+          "rows": [
+            [
+              "Chưa có bài làm nào",
+              "**Ghi đè** nội dung version hiện tại (số version giữ nguyên)"
+            ],
+            [
+              "Đã có bài làm (kể cả lượt đang làm dở)",
+              "Tạo **version mới**; version cũ chuyển ngừng hoạt động, bài làm cũ giữ nguyên nội dung version cũ"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chỉ sửa **thông tin đề** (tên, mô tả, loại đề) không tạo version.",
+            "Học viên bắt đầu lượt làm mới luôn nhận version hiện tại.",
+            "Học viên đang làm dở version cũ vẫn làm tiếp trên version cũ."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trang Các version"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nút **Version** trong trình soạn hoặc **Các version** ở danh sách (`/t/{slug}/dashboard/exams/{id}/versions`). Mỗi version hiện thời điểm lưu, người lưu, số bài làm, số câu; **Xem nội dung** để đọc lại."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Khôi phục version"
+        },
+        {
+          "type": "paragraph",
+          "text": "**Khôi phục version** = lưu lại nội dung của version đó theo đúng quy tắc lưu ở trên:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Version hiện tại chưa có bài làm → nội dung version hiện tại bị ghi đè bằng version được chọn.",
+            "Version hiện tại đã có bài làm → tạo version mới mang nội dung version được chọn.",
+            "Không khôi phục được chính version hiện tại. Đề đã publish thì nội dung khôi phục cũng phải hết lỗi."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "Không có chức năng so sánh khác biệt giữa các version."
+        }
+      ]
+    },
+    {
+      "id": "bai-hoc",
+      "title": "Bài học",
+      "summary": "Tạo bài học từ mẫu bài học, soạn, xem trước, publish, hiển thị, nhân bản, version và quyền trên từng bài.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Menu **Đề thi & Bài học → Bài học** (`/t/{slug}/dashboard/lessons`). Bài học quản lý **tách riêng** đề thi (danh sách, trình soạn, version riêng) nhưng dùng chung trình soạn nội dung. Danh sách tìm theo tên, lọc trạng thái, danh mục, mẫu bài học, người tạo; mỗi dòng hiện số section, số câu hỏi, version hiện tại, người tạo, nhãn **Chỉ qua lớp** và “Bản sao của …” nếu có."
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "Bài học **Công khai trong trung tâm** đã publish hiện ở trang trung tâm cho mọi thành viên học – xem [Học bài học](page:hoc-bai-hoc). Câu Writing/Speaking trong bài tập được chấm ở [Chấm bài](page:cham-bai) (lọc **Bài học**)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tạo bài học"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Bấm Tạo bài học"
+            },
+            {
+              "title": "Chọn Mẫu bài học",
+              "text": "Chỉ mẫu đang dùng (hệ thống hoặc trung tâm), danh mục cũng phải đang dùng. Form cho biết bài học sẽ có những section nào."
+            },
+            {
+              "title": "Nhập Tên bài học (tối đa 200 ký tự) và Mô tả"
+            },
+            {
+              "title": "Chọn Hiển thị",
+              "text": "Mặc định **Chỉ qua lớp** (khác đề thi, mặc định công khai). Xem mục Hiển thị bên dưới."
+            },
+            {
+              "title": "Bấm Tạo và soạn bài học",
+              "text": "Bài học ở trạng thái Nháp, version 1; mỗi **phần** của mẫu sinh một section (tab) trống theo đúng thứ tự. Mở ngay trình soạn."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Soạn nội dung"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Trình soạn giống [Trình soạn đề](page:trinh-soan-de): thanh công cụ, menu `/`, tiêu đề H1–H3, Callout, Khối gập/mở, Furigana, bảng, media, câu hỏi (Question), Part/Subpart và **Explanation** (giải thích).",
+            "Tab section **không có thời lượng**. Thêm section trống hoặc **Thêm section → Từ phần của mẫu bài học**, đổi tên, xoá (còn ít nhất 1), kéo thả để sắp xếp; 1–20 section.",
+            "Section chỉ có lý thuyết (không có câu hỏi) là bình thường, bảng **Kiểm tra** không cảnh báo. Câu hỏi soạn và đánh số như đề thi (từ 1 trong mỗi section) – xem [Dạng câu hỏi & cách chấm](page:dang-cau-hoi).",
+            "**Lưu** (Ctrl+S) lưu mọi section. Phần chưa lưu được giữ làm bản nháp trên trình duyệt; mở lại trang sẽ hỏi khôi phục.",
+            "**Explanation** được tách khỏi nội dung gửi học viên như đề thi; với bài học, học viên sẽ thấy giải thích **sau khi nộp** phần đó."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Xem trước"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nút **Xem trước** (trình soạn và trang Version) mở bài học trong **màn hình học bài** như học viên thấy: mỗi phần là một tab, nội dung liền mạch; bấm **Nộp phần này** để thấy đúng/sai, đáp án đúng và giải thích; thử **Làm lại** và **Xem kết quả lần trước**. Chấm ngay trên trình duyệt, không lưu, không tạo lượt học; câu Speaking không ghi âm được ở đây."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trạng thái, publish, lưu trữ, xoá"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Nháp → Đã publish → Lưu trữ**, lưu trữ rồi **Publish lại** được, không quay về Nháp – như [Vòng đời đề thi](page:vong-doi-de-thi).",
+            "Publish phải lưu hết thay đổi trước; nội dung còn lỗi (vd. câu chưa tick đáp án) thì không publish được và bảng lỗi liệt kê theo section. Bài đã publish/lưu trữ không lưu được nội dung còn lỗi.",
+            "**Xoá bài học** chưa có lượt học: xoá hẳn. Đã có lượt học: ẩn đi (xoá mềm) để giữ kết quả; học viên vẫn xem lại được lượt học cũ.",
+            "Bài học đang nằm trong [giáo trình tham khảo](page:giao-trinh) hoặc [giáo trình lớp](page:giao-trinh-lop) (kể cả mục đã xoá khỏi lớp nhưng còn giữ vì có bài làm) không xoá được, chỉ lưu trữ được.",
+            "Bài **Lưu trữ**, xoá hoặc chuyển **Chỉ qua lớp**: biến khỏi trang trung tâm, lượt học đã có chỉ còn xem lại."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Hiển thị"
+        },
+        {
+          "type": "table",
+          "columns": ["Hiển thị", "Ý nghĩa"],
+          "rows": [
+            [
+              "**Chỉ qua lớp** (mặc định)",
+              "Dùng cho bài giao qua [giáo trình lớp](page:giao-trinh-lop): học viên vào học từ trang lớp – xem [Lớp học của tôi](page:lop-cua-toi)"
+            ],
+            [
+              "**Công khai trong trung tâm**",
+              "Bài đã publish hiện ở trang trung tâm `/t/{slug}` để mọi thành viên học tự do – xem [Học bài học](page:hoc-bai-hoc)"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Đổi lúc nào cũng được trong **Thông tin bài học** (hoặc khi tạo); không tạo version mới. Ai sửa được bài thì đổi được hiển thị."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Nhân bản"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Nút **Nhân bản** ở danh sách: bài **đã publish** của bất kỳ ai, hoặc bài nháp/lưu trữ bạn có quyền sửa → bài **Nháp** mới của bạn, tên “… (bản sao)”, rồi mở trình soạn.",
+            "Bản sao giữ mẫu bài học và hiển thị, version 1 chép nội dung **version hiện tại** (kể cả giải thích); không chép lượt học, lịch sử version.",
+            "Media **dùng chung URL** với bài gốc: xoá file trong Thư viện media làm hỏng cả hai."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Version"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nút **Version** (hoặc biểu tượng lịch sử ở danh sách) mở `/t/{slug}/dashboard/lessons/{id}/versions`: xem nội dung từng version, **Khôi phục version** = lưu lại nội dung version đó. Cơ chế giống [Version đề thi](page:version-de-thi): version mới chỉ được tạo khi lưu mà version hiện tại **đã có lượt học**; chưa có thì lưu ghi đè version hiện tại. Trang Version có cột **Lượt học** của từng version; khôi phục version khi version hiện tại đã có lượt học cũng tạo version mới. Học viên đang học version cũ thì lượt đó **chỉ còn xem lại**; mở bài sẽ học version mới."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Quyền trên bài học"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chủ sở hữu, Quản trị viên: sửa, đổi hiển thị, publish, lưu trữ, xoá, khôi phục version **mọi bài học**.",
+            "Giáo viên: làm các việc trên với **bài do mình tạo**; bài người khác mở ở chế độ **Chỉ xem** (vẫn xem trước, xem version, nhân bản bài đã publish).",
+            "Học viên, Phụ huynh không vào được trang soạn bài học."
+          ]
+        }
+      ]
+    }
+  ]
+}

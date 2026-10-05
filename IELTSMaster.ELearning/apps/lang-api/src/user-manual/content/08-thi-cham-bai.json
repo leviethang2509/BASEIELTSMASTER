@@ -1,0 +1,628 @@
+{
+  "id": "thi-cham-bai",
+  "title": "Học, thi & chấm bài",
+  "pages": [
+    {
+      "id": "lam-bai-thi",
+      "title": "Làm bài thi",
+      "summary": "Chọn đề, bắt đầu lượt làm, làm từng section có tính giờ, ghi âm Speaking, nộp bài.",
+      "roles": ["STUDENT", "PARENT", "TEACHER", "TENANT_ADMIN", "TENANT_OWNER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": [
+            "STUDENT",
+            "PARENT",
+            "TEACHER",
+            "TENANT_ADMIN",
+            "TENANT_OWNER"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "**Mọi thành viên** đang hoạt động của trung tâm đều làm được đề đã publish có hiển thị **Công khai trong trung tâm**, bất kể vai trò. Đề **Chỉ qua lớp** không hiện ở đây."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Chọn đề"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Mở trang trung tâm",
+              "text": "`/t/{slug}` – hiện vai trò của bạn, danh sách đề đã publish (tìm theo tên, lọc danh mục, loại đề) và **Lượt làm gần đây**."
+            },
+            {
+              "title": "Bấm Xem đề",
+              "text": "Trang đề hiện **Cấu trúc đề** (section, thời gian, số câu), tổng thời gian và **Lịch sử lượt làm**."
+            },
+            {
+              "title": "Bấm Bắt đầu làm bài",
+              "text": "Đang có lượt dở thì nút thành **Làm tiếp**. Mỗi đề chỉ có 1 lượt đang làm; không giới hạn tổng số lượt."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Làm từng section"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Màn hình hướng dẫn",
+              "text": "Hiện tên section, thời lượng, số câu và phần hướng dẫn. Đồng hồ **chưa** chạy."
+            },
+            {
+              "title": "Bấm Bắt đầu section",
+              "text": "Đồng hồ đếm ngược theo giờ server. Section phải làm **theo thứ tự**: nộp section trước mới bắt đầu được section sau."
+            },
+            {
+              "title": "Trả lời",
+              "text": "Các Part là tab; lưới số câu cho biết câu đã trả lời. Bấm số câu trong đề để **gắn cờ** câu cần xem lại."
+            },
+            {
+              "title": "Nộp section",
+              "text": "Bấm **Nộp section** (cảnh báo nếu còn câu chưa làm). Nộp rồi không sửa được. Chuyển sang màn hình hướng dẫn của section kế."
+            },
+            {
+              "title": "Kết thúc",
+              "text": "Nộp section cuối, hoặc **Nộp toàn bài** bất kỳ lúc nào (section chưa làm tính là bỏ trống). Sau đó chuyển tới trang kết quả."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lưu câu trả lời và hết giờ"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Câu trả lời tự lưu lên server khoảng **3 giây** sau khi thay đổi và khi chuyển tab Part. Trạng thái: **Đã lưu**, **Chưa lưu**, **Đang lưu…**, **Lưu thất bại, đang thử lại**.",
+            "Tải lại trang, đóng trình duyệt hay đổi máy không mất câu trả lời đã lưu; **đồng hồ vẫn chạy** trong lúc rời đi.",
+            "Hết giờ: trình duyệt tự nộp. Nếu học viên đã rời trang, server tự nộp section bằng câu trả lời đã lưu (kiểm tra mỗi phút và khi có truy cập). Kết quả có nhãn **Hết giờ, tự nộp**.",
+            "Sau hạn cộng 10 giây trễ mạng, server từ chối lưu thêm (“Đã hết giờ làm section này”).",
+            "Nút **Thoát** rời màn hình thi; lượt làm vẫn Đang làm và có thể **Làm tiếp**."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Speaking – ghi âm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Bấm **Ghi âm**, cho phép trình duyệt dùng micro; **Dừng** hoặc tự dừng khi đủ số giây tối đa.",
+            "Bản ghi tự tải lên (“Đã lưu bản ghi lúc …”); **Nghe lại** để kiểm tra; **Ghi lại** thay bản cũ trong thời gian section.",
+            "File tối đa 10MB, định dạng webm (Chrome/Firefox/Edge) hoặc mp4 (Safari), lưu ở kho **riêng tư**: chỉ chủ lượt làm và người chấm nghe được."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "title": "Ghi âm cần HTTPS",
+          "text": "Trình duyệt chỉ cho dùng micro trên HTTPS hoặc localhost. Truy cập qua HTTP sẽ báo “Trình duyệt không cho ghi âm trên trang này”. Xem [Sự cố thường gặp](page:su-co-thuong-gap)."
+        }
+      ]
+    },
+    {
+      "id": "ket-qua-lich-su",
+      "title": "Kết quả & lịch sử",
+      "summary": "Trạng thái lượt làm, trang kết quả và những gì học viên thấy.",
+      "roles": ["STUDENT", "PARENT", "TEACHER", "TENANT_ADMIN", "TENANT_OWNER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": [
+            "STUDENT",
+            "PARENT",
+            "TEACHER",
+            "TENANT_ADMIN",
+            "TENANT_OWNER"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trạng thái lượt làm"
+        },
+        {
+          "type": "table",
+          "columns": ["Trạng thái", "Ý nghĩa"],
+          "rows": [
+            ["**Đang làm**", "Chưa nộp hết section; bấm Làm tiếp"],
+            [
+              "**Chờ chấm**",
+              "Đã nộp hết, còn câu Writing/Speaking chưa chấm đủ; phần tự động đã có kết quả"
+            ],
+            [
+              "**Đã có kết quả**",
+              "Đã nộp và mọi câu đã có kết quả (đề không có câu chấm tay thì có kết quả ngay khi nộp)"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trang kết quả"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mở bằng **Xem kết quả** trong lịch sử (`/t/{slug}/attempts/{id}/result`). Chỉ chủ lượt làm xem được."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Thời điểm bắt đầu, nộp; **Câu chấm tự động đúng** tổng và theo từng section (dạng `đúng/tổng`), nhãn **Hết giờ, tự nộp** nếu có.",
+            "**Phần chấm tay**: từng câu Writing/Speaking với điểm `x/10` và nhận xét khi đã chấm, hoặc **Chờ chấm**; tổng điểm tự luận; tiến độ “Đã chấm n/m câu tự luận”.",
+            "**Không** hiện đáp án đúng, không đánh dấu câu nào sai."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lịch sử"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Trang đề: **Lịch sử lượt làm** của chính mình với đề đó (vẫn xem được khi đề đã lưu trữ).",
+            "Trang trung tâm: **Lượt làm gần đây** trên mọi đề.",
+            "Người quản lý trung tâm xem bài có câu chấm tay qua [Chấm bài](page:cham-bai); với lượt làm **trong lớp** thì xem đủ bài làm và điểm ở trang lớp – [Chuyên cần & bảng điểm](page:chuyen-can-bang-diem). Phụ huynh xem kết quả của con ở [Con của tôi](page:con-cua-toi). Chưa có trang thống kê tỉ lệ đúng theo câu."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hoc-bai-hoc",
+      "title": "Học bài học",
+      "summary": "Mở bài học ở trang trung tâm, học từng phần, nộp bài tập để xem đáp án và giải thích, làm lại, học xong.",
+      "roles": ["STUDENT", "PARENT", "TEACHER", "TENANT_ADMIN", "TENANT_OWNER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": [
+            "STUDENT",
+            "PARENT",
+            "TEACHER",
+            "TENANT_ADMIN",
+            "TENANT_OWNER"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "**Mọi thành viên** đang hoạt động của trung tâm học được bài học đã publish có hiển thị **Công khai trong trung tâm**. Bài **Chỉ qua lớp** không hiện ở đây. Khác đề thi: không có đồng hồ, học các phần theo thứ tự tuỳ ý, nộp bài tập xong thấy ngay **đáp án đúng** và **giải thích**."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Mở bài học"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Mở trang trung tâm",
+              "text": "`/t/{slug}` – mục **Bài học** liệt kê bài đang mở (tìm theo tên, lọc danh mục, mẫu bài học) kèm nhãn **Đang học** / **Đã học xong** của bạn."
+            },
+            {
+              "title": "Bấm vào bài học",
+              "text": "Trang bài học (`/t/{slug}/lessons/{id}`) hiện **Nội dung bài học** (các phần, phần nào là lý thuyết, phần nào có câu hỏi) và **Lượt học của tôi**."
+            },
+            {
+              "title": "Bấm Bắt đầu học (hoặc Học tiếp)",
+              "text": "Mỗi người có **một lượt học** cho mỗi phiên bản bài học; bấm lại luôn mở đúng lượt đó."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Màn hình học bài"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mỗi phần (section) là một tab; nội dung hiển thị liền mạch như tài liệu (furigana, callout, khối gập/mở, media), không có lưới số câu, không đồng hồ.",
+            "Tab có dấu ✓ khi phần lý thuyết đã mở, hoặc phần bài tập đã nộp ít nhất một lần.",
+            "Câu trả lời tự lưu khoảng **2 giây** sau khi thay đổi và khi chuyển tab; trạng thái lưu hiện ở cuối thanh tab.",
+            "Speaking: ghi âm như [Làm bài thi](page:lam-bai-thi) (cần HTTPS); bản ghi lưu ở kho riêng tư, nộp phần thì bản ghi đi cùng bài nộp."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Nộp, xem đáp án, làm lại"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Bấm Nộp phần này",
+              "text": "Chỉ có ở phần có câu hỏi (hỏi lại nếu còn câu chưa làm). Server chấm ngay."
+            },
+            {
+              "title": "Xem kết quả",
+              "text": "Dải kết quả “Đúng x/y câu”, số câu chờ giáo viên chấm, thời điểm và số lần nộp. Số câu tô **xanh** (đúng) / **đỏ** (sai); lựa chọn đúng có nhãn **Đáp án đúng**, ô trống/cặp ghép sai hiện đáp án, câu sắp xếp sai hiện **Thứ tự đúng**; **Giải thích** hiện ngay dưới câu hỏi."
+            },
+            {
+              "title": "Bấm Làm lại (tuỳ chọn)",
+              "text": "Phần đó mở lại với bài làm trống. Kết quả lần trước vẫn xem được bằng **Xem kết quả lần trước** cho tới khi nộp lần mới; nộp lại thì kết quả mới **thay** kết quả cũ (chỉ lưu lần gần nhất + số lần nộp). Không giới hạn số lần."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "title": "Học xong",
+          "text": "Bài học tự chuyển **Đã học xong** khi bạn đã **mở mọi phần** và **nộp mọi phần có câu hỏi** ít nhất một lần (không cần đạt điểm). Làm lại sau đó không làm mất trạng thái này."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Writing/Speaking trong bài học"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Câu Writing/Speaking hiện **Chờ giáo viên chấm** sau khi nộp; khi được chấm, điểm `x/10` và nhận xét hiện ngay dưới câu.",
+            "Nộp lại phần có câu chấm tay thì **điểm cũ bị bỏ**, giáo viên chấm lại lần nộp mới."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Phiên bản bài học"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Người soạn sửa bài đã có lượt học sẽ tạo **phiên bản mới**. Mở bài lúc đó tạo lượt học mới trên phiên bản mới.",
+            "Lượt học của phiên bản cũ nằm trong **Lượt học của tôi** với nhãn **Phiên bản cũ · chỉ xem lại**: xem được bài làm, đáp án, giải thích và điểm, không nộp hay làm lại được.",
+            "Bài bị lưu trữ, xoá hoặc chuyển **Chỉ qua lớp**: không học tiếp được, lượt học đã có vẫn **Xem lại** được."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lop-cua-toi",
+      "title": "Lớp học của tôi",
+      "summary": "Học viên xem lớp mình đang học, giáo trình lớp, làm bài kiểm tra trong lớp, xem điểm và lịch học.",
+      "roles": ["STUDENT", "PARENT", "TEACHER", "TENANT_ADMIN", "TENANT_OWNER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": [
+            "STUDENT",
+            "PARENT",
+            "TEACHER",
+            "TENANT_ADMIN",
+            "TENANT_OWNER"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Khi được xếp vào lớp, trang trung tâm `/t/{slug}` có thêm mục **Lớp của tôi**. Bài học và đề thi giao qua lớp làm ở đây — kể cả bài/đề đặt hiển thị **Chỉ qua lớp** (không thấy ở danh sách tự do). Bài làm trong lớp tính **riêng** với bài luyện tập tự do của cùng một đề."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trang lớp"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Thẻ lớp hiện mã lớp, khoá học, trạng thái lớp, buổi kế tiếp và số mục đã xong.",
+            "Bấm vào lớp để mở trang lớp: giáo viên phụ trách, sĩ số, phòng, **Buổi sắp tới**, **Kết quả bài kiểm tra/bài thi** và **Giáo trình lớp**.",
+            "Mỗi mục hiện nhãn (Bài học · Bài tập · Bài kiểm tra · Bài thi), ghi chú của giáo viên và **Học ở Buổi …** khi giáo viên đã map nội dung vào buổi.",
+            "Chỉ lớp **Đang học** mới vào mục được. Lớp **Sắp mở**, **Đã kết thúc** hay **Đã huỷ**: vẫn xem giáo trình và kết quả cũ, không làm bài được."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Mở một mục"
+        },
+        {
+          "type": "table",
+          "columns": ["Loại mục", "Cách làm"],
+          "rows": [
+            [
+              "Bài học · Bài tập",
+              "Bấm **Vào học** để mở màn hình học bài như [Học bài học](page:hoc-bai-hoc): học và nộp lại bao nhiêu lần cũng được. Deadline của mục chỉ để nhắc."
+            ],
+            [
+              "Bài kiểm tra · Bài thi",
+              "Bấm **Vào làm bài** để mở màn hình thi như [Làm bài thi](page:lam-bai-thi). Mỗi mục chỉ làm **một lần**."
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "title": "Mục chưa mở hoặc đã quá hạn",
+          "text": "Mục có **ngày mở** vẫn hiện trong giáo trình nhưng chưa vào được, kèm nhãn **Chưa tới ngày mở** — nếu cả chương và mục đều đặt ngày mở thì lấy **mốc muộn hơn**. Với bài kiểm tra/bài thi, deadline là **hạn bắt đầu**: bắt đầu trước hạn thì vẫn làm hết giờ. Mục tắt **Nhận bài quá hạn** sẽ khoá sau deadline."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Điểm và đậu/trượt"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Điểm % của một lượt thi = (số câu tự chấm đúng + tổng điểm chấm tay) / (số câu tự chấm + số câu chấm tay × 10) × 100.",
+            "Bạn thấy điểm ngay khi bài đã chấm xong. Bài còn câu tự luận chưa chấm hiện **Chờ chấm** và chưa có điểm.",
+            "Đậu khi điểm % đạt **ngưỡng đậu** của mục (giáo viên đặt, mặc định 50%)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Thi lại"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Giáo viên thêm mục **Thi lại cho: …**; mục gốc và các lần thi lại gộp thành một **nhóm thi**, hiện ở khung **Kết quả bài kiểm tra/bài thi**.",
+            "Kết quả nhóm = **điểm cao nhất** trong các lượt đã chấm xong; đậu nhóm khi có ít nhất một lượt đạt ngưỡng.",
+            "Đã đậu ở lần trước thì lần thi lại hiện **Không bắt buộc (bạn đã đậu lần trước)** — bạn vẫn thi được để cải thiện điểm.",
+            "Chưa đậu (trượt hoặc chưa làm) thì lần thi lại là **bắt buộc**."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "title": "Cho làm lại",
+          "text": "Gặp sự cố khi thi (mất mạng, máy hỏng)? Báo giáo viên của lớp bấm **Cho làm lại** cho lượt đó; lượt cũ vẫn lưu trong lịch sử nhưng không tính điểm, bạn bắt đầu một lượt mới cho cùng mục."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lịch học của tôi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Link **Lịch học của tôi** ở mục Lớp của tôi (hoặc `/t/{slug}/schedule`) mở lịch **tuần / tháng / danh sách** các buổi của mọi lớp bạn đang học: giờ, phòng, giáo viên. Ngày nghỉ của trung tâm tô xám, buổi đã huỷ gạch ngang."
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "title": "Rời lớp",
+          "text": "Khi bị xoá khỏi lớp, lớp không còn trong **Lớp của tôi** và bạn không vào trang lớp được nữa; bài làm cũ vẫn được giữ. Được thêm lại thì kết quả cũ hiện lại như trước."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tổng kết cuối khoá"
+        },
+        {
+          "type": "paragraph",
+          "text": "Khi lớp chuyển sang **Đã kết thúc**, trang lớp có thêm khối **Tổng kết cuối khoá** dành riêng cho bạn:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Tỉ lệ chuyên cần** của bạn kèm thống kê Đúng hạn · Muộn · Chưa nộp và cảnh báo nếu dưới ngưỡng của lớp.",
+            "Từng mục bài kiểm tra/bài thi có hạn nộp kèm nhãn Đúng hạn · Muộn · Chưa nộp · Chưa tới hạn · Không tính.",
+            "**Trung bình theo chương** (tính trên các bài kiểm tra/bài thi đã có điểm).",
+            "**Nhận xét của giáo viên** (nếu giáo viên đã viết)."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "title": "Trong khoá học chưa thấy chuyên cần",
+          "text": "Khi lớp còn **Đang học**, bạn chỉ thấy trạng thái từng mục (đã nộp/chưa nộp, hạn nộp) và điểm từng bài của mình, không thấy tỉ lệ chuyên cần hay nhãn \"muộn\". Lớp **Đã huỷ** không có tổng kết. Cách tính xem [Chuyên cần & bảng điểm](page:chuyen-can-bang-diem#cach-tinh-chuyen-can)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mục mới, mục tới ngày mở, hạn nộp còn 24 giờ, quá hạn chưa nộp, buổi học đổi lịch và nhận xét cuối khoá đều hiện ở chuông [Thông báo](page:thong-bao)."
+        }
+      ]
+    },
+    {
+      "id": "con-cua-toi",
+      "title": "Con của tôi",
+      "summary": "Phụ huynh xem lớp, lịch học, tiến độ và kết quả của con.",
+      "roles": ["PARENT"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["PARENT"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Thành viên có vai trò **Phụ huynh** và đã được gắn với học viên (xem [Thành viên](page:thanh-vien#lien-ket-phu-huynh)) thấy khối **Con của tôi** ở trang trung tâm `/t/{slug}`. Bấm vào một người con để mở trang tổng quan của con đó."
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "Phụ huynh chỉ xem được học viên đã liên kết với mình. Mở học viên khác – kể cả khi biết đường dẫn – hệ thống báo **không tìm thấy**. Chủ sở hữu, Quản trị viên và Giáo viên **không** dùng khu vực này; họ xem học viên ở [Lớp học](page:lop-hoc) và [Chuyên cần & bảng điểm](page:chuyen-can-bang-diem)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trang tổng quan của con"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Lớp của con**: các lớp con còn là học viên, kèm khoá học, trạng thái lớp, tiến độ (số mục đã xong) và buổi kế tiếp.",
+            "**Bài làm ngoài lớp**: các lượt thi và lượt học con tự làm (không thuộc lớp nào), 20 lượt mới nhất, kèm số câu tự chấm đúng và điểm khi đã chấm xong.",
+            "**Lịch học của con**: lịch tuần/tháng/danh sách của các lớp con đang học. Mỗi con có lịch riêng. Phụ huynh không mở được trang chi tiết buổi học."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trang lớp của con"
+        },
+        {
+          "type": "paragraph",
+          "text": "Bấm một lớp để xem đúng những gì con thấy ở [Lớp học của tôi](page:lop-cua-toi), nhưng **chỉ đọc**: không có nút vào học/làm bài và không mở được bài làm của con."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Thông tin lớp, giáo viên, buổi sắp tới.",
+            "Giáo trình lớp theo chương, mỗi mục kèm ngày mở, hạn nộp, ngưỡng đậu, lần thi lại và lý do mục chưa vào được.",
+            "Kết quả từng mục: trạng thái (đang làm / chờ chấm / đã chấm), điểm %, Đậu hoặc Chưa đạt; mục bài học có dấu đã học xong.",
+            "**Nhận xét của giáo viên**: với câu Writing/Speaking đã chấm, hiện tên phần, số câu, điểm và nhận xét."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Phụ huynh **không** xem được đề bài, câu trả lời của con hay đáp án – chỉ tên bài và kết quả."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tổng kết cuối khoá"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tỉ lệ chuyên cần, trung bình theo chương và nhận xét cuối khoá chỉ hiện **khi lớp đã kết thúc**, giống như với học viên. Trong khi lớp đang học, phụ huynh chỉ thấy trạng thái từng mục (đã nộp / chưa nộp / hạn nộp), không thấy nhãn “muộn” và không thấy tỉ lệ. Xem [Chuyên cần & bảng điểm](page:chuyen-can-bang-diem)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Thông báo cho phụ huynh"
+        },
+        {
+          "type": "paragraph",
+          "text": "Phụ huynh nhận ba loại thông báo, mỗi con một thông báo riêng và đều mở trang của đúng con đó: **con quá hạn chưa nộp** (hệ thống quét 15 phút một lần), **bài của con đã có kết quả** (kể cả đề tự chấm hết, có kết quả ngay khi nộp) và **chuyên cần của con dưới ngưỡng** (khi lớp chuyển Đã kết thúc). Xem [Thông báo](page:thong-bao)."
+        }
+      ]
+    },
+    {
+      "id": "cham-bai",
+      "title": "Chấm bài",
+      "summary": "Chấm Writing/Speaking của đề thi và bài học: danh sách bài, chấm từng câu, chấm lại.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Menu **Đề thi & Bài học → Chấm bài** (`/t/{slug}/dashboard/grading`). Chọn **Đề thi** hoặc **Bài học** ở đầu trang. Đề thi: chỉ lượt làm **đã nộp hết** và **có câu chấm tay**. Bài học: lượt học có phần đã nộp chứa câu Writing/Speaking (tính theo **lần nộp gần nhất** của từng phần). Danh sách chỉ hiện bài **bạn được chấm** (xem [Ai chấm bài nào](page:cham-bai#ai-cham-bai-nao)). Tìm theo tên/email học viên, lọc **Chờ chấm / Đã chấm**, đề thi/bài học, **lớp** (hoặc **Bài làm tự do**) và **mục của lớp**. Cột **Lớp · Mục** cho biết bài đến từ mục nào của lớp nào; cột Chấm tay hiện tiến độ `đã chấm/tổng câu`."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Chấm một bài"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Bấm Chấm bài (hoặc Xem bài với bài đã chấm)",
+              "text": "Trang bài hiện học viên, đề, thời điểm nộp, kết quả tự động (chỉ để tham khảo)."
+            },
+            {
+              "title": "Đọc từng câu cần chấm",
+              "text": "Nội dung part (passage), **Đề bài**, **Giải thích (học viên không thấy)** nếu người soạn có viết Explanation cho câu đó, **Bài làm**: bài viết kèm số ký tự/từ, hoặc nút **Tải ghi âm** để nghe. Câu bỏ trống ghi rõ “Học viên bỏ trống câu này.”"
+            },
+            {
+              "title": "Nhập Điểm và Nhận xét",
+              "text": "Điểm 0–10, bước 0,5; nhận xét tuỳ chọn (tối đa 5000 ký tự), học viên sẽ thấy."
+            },
+            {
+              "title": "Lưu",
+              "text": "**Lưu điểm**, **Lưu & câu tiếp**, hoặc **Cho 0 điểm** cho câu bỏ trống."
+            },
+            {
+              "title": "Hoàn tất",
+              "text": "Đủ mọi câu thì lượt làm chuyển **Đã có kết quả** và học viên xem được điểm. Nút **Bài chờ chấm tiếp theo** mở bài kế."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Ai chấm bài nào"
+        },
+        {
+          "type": "paragraph",
+          "text": "Từ req-3, mỗi người chỉ thấy phần việc của mình. Chủ sở hữu và Quản trị viên chấm mọi bài của trung tâm."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Bài làm **trong lớp** (mở từ giáo trình lớp): **giáo viên của lớp** đó chấm.",
+            "Bài làm **tự do** (học viên tự vào làm, ngoài lớp): **người soạn** đề thi/bài học đó chấm.",
+            "Ngoài ra: ai được **chuyển giao chấm** đúng phạm vi tương ứng.",
+            "Không ai chấm bài của **chính mình**; lượt thi đã **Cho làm lại** không còn trong hàng chờ chấm.",
+            "Mở thẳng một bài ngoài phạm vi của mình thì báo lỗi và không chấm được."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Chuyển giao chấm"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nút **Chuyển giao chấm** ở trang chấm một bài: nhờ một Giáo viên khác của trung tâm chấm thay. Người chuyển giao **vẫn chấm được**."
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Chọn phạm vi",
+              "text": "Bài trong lớp: **chỉ bài làm này** hoặc **mọi bài của mục** đó trong lớp. Bài tự do: **chỉ bài làm này** hoặc **mọi bài làm tự do** của đề thi/bài học đó."
+            },
+            {
+              "title": "Chọn giáo viên",
+              "text": "Danh sách Giáo viên đang hoạt động của trung tâm (không cần là giáo viên của lớp). Chọn được nhiều người một lần."
+            },
+            {
+              "title": "Chuyển giao",
+              "text": "Người được chọn thấy ngay các bài đó trong danh sách Chấm bài của họ."
+            },
+            {
+              "title": "Gỡ khi xong",
+              "text": "Mục **Đang chuyển giao** liệt kê người đã giao kèm người giao và thời điểm; bấm **Gỡ** để thu lại quyền chấm."
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chuyển giao được: Chủ sở hữu, Quản trị viên; giáo viên **của lớp** (bài trong lớp); **người soạn** đề thi/bài học (bài tự do).",
+            "Người **được** chuyển giao không chuyển giao tiếp cho người khác.",
+            "Chuyển giao theo đề thi/bài học chỉ mở **bài làm tự do**; bài trong lớp phải giao theo mục hoặc theo từng bài."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Quy tắc"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Không chấm được bài của **chính mình** (403).",
+            "Lượt làm chưa nộp xong chưa chấm được (409).",
+            "Chỉ chấm câu Writing/Speaking; kết quả tự động không sửa được.",
+            "Câu bỏ trống vẫn cần chấm (thường cho 0) thì bài mới hoàn tất.",
+            "Chấm lại được bất kỳ lúc nào: điểm mới thay điểm cũ, hiện “Chấm bởi … · thời điểm”.",
+            "Bài học: người chấm thấy **Giải thích (học viên thấy sau khi nộp)**. Học viên nộp lại phần có câu chấm tay thì điểm cũ bị bỏ, lượt học quay lại **Chờ chấm**; đang mở trang chấm bản cũ thì lưu điểm báo lỗi, tải lại trang để chấm lần nộp mới."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Học viên nộp bài có câu chấm tay sẽ gửi [thông báo](page:thong-bao) “có bài mới cần chấm” cho giáo viên của lớp (bài trong lớp) hoặc người soạn đề/bài học (bài tự do); chuyển giao chấm gửi thông báo cho người được giao. Chấm xong thì học viên nhận thông báo."
+        }
+      ]
+    }
+  ]
+}

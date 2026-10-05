@@ -1,0 +1,59 @@
+# Staging (VPS 2). Workflow "Deploy Staging" tự copy file này lên
+# /opt/lang-simulator/docker-compose.yml. File .env đặt cùng thư mục
+# (mẫu: deploy/staging/.env.example), không đưa lên git. Xem docs/setup/deploy-staging.md.
+name: lang-simulator-staging
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: lang-simulator-staging-db
+    restart: unless-stopped
+    environment:
+      # Postgres tạo user + database lần đầu (volume trống); đổi sau đó không có tác dụng.
+      POSTGRES_USER: ${DB_USERNAME:?Thiếu DB_USERNAME trong .env}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Thiếu DB_PASSWORD trong .env}
+      POSTGRES_DB: ${DB_NAME:?Thiếu DB_NAME trong .env}
+      TZ: Asia/Ho_Chi_Minh
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # Chỉ mở trên 127.0.0.1 của VPS (dùng qua SSH tunnel); Docker bỏ qua ufw
+    # với cổng publish nên không được map ra 0.0.0.0. App nối qua network nội bộ
+    # (db:5432), cổng host chỉ để tunnel nên đổi được khi 5432 đã bị chiếm.
+    ports:
+      - '127.0.0.1:${DB_PUBLISH_PORT:-5432}:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+  app:
+    # Workflow ghi IMAGE_TAG=sha-<commit> vào .env mỗi lần deploy.
+    image: ghcr.io/vunguyenquangit/lang-simulator:${IMAGE_TAG:-staging}
+    container_name: lang-simulator-staging-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Nối Postgres bằng tên service trong network của compose.
+      DB_HOST: db
+      DB_PORT: '5432'
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '${APP_PORT:-3000}:3000'
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+volumes:
+  pgdata:
+    name: lang-simulator-staging-pgdata

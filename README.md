@@ -1,7 +1,6 @@
-# PDCA System Base
-# BASEPROJECT
+# BASEIELTSMASTER
 
-Base system template extracted from the original PDCA workflow project. The repository now keeps only shared platform features: authentication, registration, users, roles, permissions, menus, system groups, audit logs, common layout, file upload/preview, API gateway, and Aspire orchestration.
+Base system template for IELTSMaster: authentication, registration, users, roles, permissions, menus, system groups, audit logs, ELearning, API gateway, and Aspire orchestration.
 
 ## Stack
 
@@ -16,14 +15,14 @@ Base system template extracted from the original PDCA workflow project. The repo
 ## Kept Modules
 
 ```text
-PDCA.ApiGateway/          API gateway and service routing
-PDCA.AppHost/             .NET Aspire orchestration
-PDCA.FileService/         Upload, preview, watermark, and file APIs
-PDCA.ServiceDefaults/     Shared Aspire service defaults
-PDCA.Shared/              Shared DTOs, helpers, and cross-service contracts
-PDCA.SystemService/       Authentication, users, roles, menus, audit logs
-PDCA.SystemService.Tests/ System service tests
-PDCA.Web/                 React frontend
+IELTSMaster.ApiGateway/          API gateway and service routing
+IELTSMaster.AppHost/             .NET Aspire orchestration
+IELTSMaster.FileService/         Upload, preview, watermark, and file APIs
+IELTSMaster.ServiceDefaults/     Shared Aspire service defaults
+IELTSMaster.Shared/              Shared DTOs, helpers, and cross-service contracts
+IELTSMaster.SystemService/       Authentication, users, roles, menus, audit logs
+IELTSMaster.SystemService.Tests/ System service tests
+IELTSMaster.Web/                 React frontend
 ```
 
 ## Removed Domain Modules
@@ -35,9 +34,9 @@ The catalog, workflow, collaboration, and domain-specific frontend modules have 
 ```mermaid
 flowchart LR
     Web["React / Vite Web App"]
-    Gateway["PDCA.ApiGateway"]
-    System["PDCA.SystemService<br/>Auth, RBAC, Menus, Audit"]
-    File["PDCA.FileService<br/>Upload, Preview, Watermark"]
+    Gateway["IELTSMaster.ApiGateway"]
+    System["IELTSMaster.SystemService<br/>Auth, RBAC, Menus, Audit"]
+    File["IELTSMaster.FileService<br/>Upload, Preview, Watermark"]
 
     Web --> Gateway
     Gateway --> System
@@ -56,7 +55,7 @@ SystemService uses SQL Server database `IELTSMASTER`:
 }
 ```
 
-The active provider is `UseSqlServer` in `PDCA.SystemService/Configs/ConfigService.cs`.
+The active provider is `UseSqlServer` in `IELTSMaster.SystemService/Configs/ConfigService.cs`.
 
 SQL Server schema and stored procedures are provided under
 `Database/SqlServer`. Run `01_schema.sql` first, then
@@ -96,8 +95,8 @@ group, and user permission queries.
 ### Restore And Build
 
 ```powershell
-dotnet restore PDCA.sln
-dotnet build PDCA.sln -v minimal
+dotnet restore IELTSMaster.sln
+dotnet build IELTSMaster.sln -v minimal
 ```
 
 ### Initialize SQL Server
@@ -116,13 +115,13 @@ Default seeded account:
 ### Run With Aspire
 
 ```powershell
-dotnet run --project PDCA.AppHost\PDCA.AppHost.csproj
+dotnet run --project IELTSMaster.AppHost\IELTSMaster.AppHost.csproj
 ```
 
 ### Frontend Only
 
 ```powershell
-Push-Location PDCA.Web
+Push-Location IELTSMaster.Web
 npm install
 npm run dev
 Pop-Location
@@ -131,11 +130,11 @@ Pop-Location
 ## Testing
 
 ```powershell
-dotnet test PDCA.SystemService.Tests\PDCA.SystemService.Tests.csproj
+dotnet test IELTSMaster.SystemService.Tests\IELTSMaster.SystemService.Tests.csproj
 ```
 
 ```powershell
-Push-Location PDCA.Web
+Push-Location IELTSMaster.Web
 npm test
 Pop-Location
 ```

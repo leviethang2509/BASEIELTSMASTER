@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option csharp_namespace = "IELTSMaster.AuthService.Protos";
+
+package auth;
+
+service AuthProto {
+  rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
+  rpc GetUserTenantContext (GetUserTenantContextRequest) returns (GetUserTenantContextResponse);
+}
+
+message ValidateTokenRequest {
+  string token = 1;
+  string target_tenant_id = 2;
+}
+
+message ValidateTokenResponse {
+  bool is_valid = 1;
+  string user_id = 2;
+  string email = 3;
+  string full_name = 4;
+  string system_role = 5;
+  string tenant_id = 6;
+  string tenant_slug = 7;
+  string tenant_name = 8;
+  repeated string roles = 9;
+  bool can_bypass_elearning_auth = 10;
+  string elearning_role = 11;
+  string error_message = 12;
+}
+
+message GetUserTenantContextRequest {
+  string user_id = 1;
+  string tenant_id = 2;
+}
+
+message GetUserTenantContextResponse {
+  bool is_member = 1;
+  string membership_status = 2;
+  repeated string roles = 3;
+  bool can_access_elearning = 4;
+}

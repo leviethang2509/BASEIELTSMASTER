@@ -1,0 +1,33 @@
+packages:
+  - apps/*
+  - packages/*
+
+# pnpm 11 chặn build script mặc định; chỉ cho phép package cần thiết.
+allowBuilds:
+  # preinstall chỉ echo 'no-op'
+  '@google/genai': false
+  # postinstall chỉ in banner opencollective
+  '@nestjs/core': false
+  # đã có binary dựng sẵn theo nền tảng, script chỉ để build từ source
+  '@parcel/watcher': false
+  esbuild: true
+  # postinstall chỉ in cảnh báo phiên bản cho package phụ thuộc
+  protobufjs: false
+  # resolver của Jest: tải binary native nếu thiếu (vd. build Docker linux)
+  unrs-resolver: true
+
+# Phiên bản dùng chung, khai báo trong package.json bằng `catalog:`.
+catalog:
+  '@eslint/js': ^10.0.1
+  '@types/jest': ^30.0.0
+  '@types/node': ^24.13.4
+  eslint: ^10.10.0
+  eslint-config-prettier: ^10.1.8
+  globals: ^17.12.0
+  jest: ^30.5.1
+  prettier: ^3.9.6
+  ts-jest: ^29.4.12
+  tsup: ^8.5.1
+  turbo: ^2.10.12
+  typescript: ^5.9.3
+  typescript-eslint: ^8.70.0

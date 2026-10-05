@@ -1,0 +1,925 @@
+{
+  "id": "dao-tao",
+  "title": "Đào tạo",
+  "pages": [
+    {
+      "id": "khoa-hoc",
+      "title": "Khoá học",
+      "summary": "Tạo, sửa, lưu trữ, xoá khoá học, gắn giáo trình tham khảo và xem các lớp của khoá học.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Menu **Đào tạo → Khoá học** (`/t/{slug}/dashboard/courses`). Khoá học mô tả một chương trình của trung tâm (vd. Tiếng Nhật N5); [lớp học](page:lop-hoc) được tạo từ khoá học. Danh sách có cột **Lớp** (số lớp của khoá học). Khoá học chỉ dùng nội bộ, không hiện cho học viên hay khách."
+        },
+        {
+          "type": "table",
+          "columns": ["Thao tác", "Chủ sở hữu / Quản trị viên", "Giáo viên"],
+          "rows": [
+            ["Xem danh sách, chi tiết khoá học", "✔", "✔"],
+            ["Tạo, sửa, lưu trữ, xoá khoá học", "✔", "✘"],
+            ["Gắn / bỏ gắn giáo trình tham khảo", "✔", "✘"],
+            ["Tạo lớp từ khoá học (tab **Lớp**)", "✔", "✘"]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Thông tin khoá học"
+        },
+        {
+          "type": "table",
+          "columns": ["Trường", "Quy tắc"],
+          "rows": [
+            [
+              "Mã khoá học",
+              "Bắt buộc, chữ in hoa không dấu, số và dấu `-` hoặc `_` ở giữa (vd. `N5-2026`), tự đổi sang in hoa; không trùng trong trung tâm"
+            ],
+            ["Tên khoá học", "Bắt buộc, tối đa 200 ký tự"],
+            ["Mô tả", "Tuỳ chọn"],
+            [
+              "Danh mục",
+              "Tuỳ chọn; danh mục hệ thống hoặc của trung tâm, đang dùng. Danh mục đang có khoá học không xoá được"
+            ],
+            [
+              "Ảnh bìa",
+              "Tuỳ chọn; **Chọn ảnh** để upload vào [Thư viện media](page:thu-vien-media) hoặc dán URL"
+            ],
+            ["Trình độ", "Tuỳ chọn, chữ tự do (vd. N5, A2)"],
+            [
+              "Số buổi dự kiến",
+              "Tuỳ chọn, 1–500; lớp tạo từ khoá học sẽ lấy làm số buổi mặc định"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lưu trữ và xoá"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Lưu trữ**: khoá học vẫn còn, không tạo lớp mới được từ khoá học; lớp đang có vẫn học bình thường. Bấm **Dùng lại** để chuyển về Đang dùng.",
+            "**Xoá khoá học**: xoá hẳn; các giáo trình đang gắn chỉ bị **bỏ gắn**, vẫn còn trong thư viện Giáo trình.",
+            "Khoá học **đã có lớp** chỉ lưu trữ được, không xoá được: nút **Xoá khoá học** bị khoá kèm gợi ý; gọi API thì nhận lỗi “Khoá học đã có lớp học, chỉ lưu trữ được, không xoá được”."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Giáo trình tham khảo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Trang khoá học có tab **Thông tin**, **Giáo trình tham khảo**, **Lớp** và **Lịch**. Tab Giáo trình tham khảo liệt kê các [giáo trình](page:giao-trinh) đang gắn (bấm tên để mở). Chủ sở hữu/Quản trị viên chọn giáo trình trong ô **Chọn giáo trình để gắn** rồi bấm **Gắn giáo trình**; nút **Bỏ gắn** chỉ gỡ liên kết, không xoá giáo trình."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Một khoá học gắn nhiều giáo trình, một giáo trình gắn được vào nhiều khoá học.",
+            "Giáo trình tham khảo giúp giáo viên biết khoá học có những nội dung nào. Khi [tạo lớp](page:lop-hoc#tao-lop) chọn 1 giáo trình đang gắn để **sao chép** sang [giáo trình lớp](page:giao-trinh-lop); sửa, bỏ gắn hay xoá giáo trình tham khảo sau đó không ảnh hưởng lớp đã tạo."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lớp của khoá học"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tab **Lớp** liệt kê các lớp mở từ khoá học (bấm để mở trang lớp). Chủ sở hữu/Quản trị viên bấm **Tạo lớp** để tạo lớp với khoá học đã chọn sẵn; khoá học **Lưu trữ** không tạo lớp mới được. Xem [Lớp học](page:lop-hoc)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lịch của khoá học"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tab **Lịch** gộp buổi học của mọi lớp (chưa huỷ) thuộc khoá học, mỗi lớp một màu, xem theo **Tuần** / **Tháng** / **Danh sách**. Chủ sở hữu/Quản trị viên thấy mọi lớp; Giáo viên chỉ thấy lớp mình phụ trách và buổi mình được xếp dạy thế. Cách đọc lịch: [Lịch](page:lich)."
+        }
+      ]
+    },
+    {
+      "id": "giao-trinh",
+      "title": "Giáo trình",
+      "summary": "Thư viện giáo trình tham khảo: chương, mục bài học/đề thi, nhãn, ghi chú, nhân bản và quyền.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Menu **Đào tạo → Giáo trình** (`/t/{slug}/dashboard/curricula`). Giáo trình là thư viện độc lập của trung tâm: chia **chương** (1 cấp), mỗi chương gồm các **mục** là [bài học](page:bai-hoc) hoặc đề thi đã publish. Danh sách tìm theo tên, lọc theo khoá học đang gắn và người tạo; mỗi dòng hiện khoá học đang gắn (bấm mã để mở), số chương, số mục."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tạo giáo trình"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Bấm Tạo giáo trình",
+              "text": "Nhập tên (tối đa 200 ký tự) và mô tả, bấm **Tạo giáo trình**; trang giáo trình mở ra."
+            },
+            {
+              "title": "Thêm chương",
+              "text": "Bấm **Thêm chương**, đổi tên chương ngay trong ô tên (vd. “Chương 1: Bài 1–2”)."
+            },
+            {
+              "title": "Thêm mục",
+              "text": "Bấm **Thêm mục** ở chương (hoặc ở **Chưa xếp chương**), chọn tab **Bài học** hoặc **Đề thi**, tìm theo tên và bấm **Thêm**; thêm được nhiều mục liên tiếp rồi bấm **Xong**."
+            },
+            {
+              "title": "Sắp xếp, đặt nhãn, ghi chú",
+              "text": "Kéo tay cầm để sắp xếp chương và mục (kéo mục sang chương khác được), hoặc dùng nút **Lên/Xuống** và ô **Chương**. Chọn nhãn; bấm mũi tên để sửa **Tên hiển thị** và **Ghi chú cho giáo viên**."
+            },
+            {
+              "title": "Bấm Lưu giáo trình",
+              "text": "Lưu cả danh sách chương + mục một lần. Rời trang khi còn thay đổi chưa lưu sẽ được hỏi lại."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Quy tắc mục"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chỉ thêm được bài học/đề thi **đã publish** (kể cả hiển thị **Chỉ qua lớp**). Mỗi bài học/đề thi chỉ có **một lần** trong một giáo trình.",
+            "**Nhãn** chỉ để hiển thị và lọc: mục bài học là **Bài học** hoặc **Bài tập**; mục đề thi là **Bài kiểm tra** hoặc **Bài thi**.",
+            "**Tên hiển thị** để trống thì dùng tên bài học/đề thi; khi có tên riêng, dòng mục hiện thêm “Gốc: …”.",
+            "Mục không thuộc chương nào nằm ở **Chưa xếp chương**, hiện ở đầu giáo trình. **Xoá chương** chuyển các mục của chương về Chưa xếp chương.",
+            "Giới hạn: tối đa 100 chương và 300 mục mỗi giáo trình.",
+            "Bài học/đề thi **đang nằm trong giáo trình** (giáo trình tham khảo hoặc [giáo trình lớp](page:giao-trinh-lop), kể cả mục đã xoá nhưng còn giữ vì có bài làm) không xoá được, chỉ **lưu trữ** được. Mục có bài/đề đã lưu trữ vẫn giữ nguyên, hiện nhãn **Đã lưu trữ** để cân nhắc thay bài khác."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Hai người cùng sửa một giáo trình: người lưu sau nhận lỗi “Giáo trình vừa được người khác lưu”. Hãy tải lại trang để xem bản mới nhất rồi sửa lại."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Nhân bản và xoá"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Nút **Nhân bản** (danh sách hoặc trang giáo trình): mọi giáo trình → giáo trình mới của bạn, tên “… (bản sao)”, chép chương và mục (kể cả mục có bài/đề đã lưu trữ), **không** gắn vào khoá học nào.",
+            "**Xoá giáo trình**: chương và mục bị xoá theo. Giáo trình đang gắn khoá học không xoá được – hãy **Bỏ gắn** ở trang [Khoá học](page:khoa-hoc) trước.",
+            "Lớp đã chép giáo trình giữ **bản sao độc lập** ([Giáo trình lớp](page:giao-trinh-lop)): sửa hay xoá giáo trình tham khảo không ảnh hưởng lớp, và ngược lại."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Quyền trên giáo trình"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chủ sở hữu, Quản trị viên: sửa thông tin, chương + mục, xoá **mọi giáo trình**.",
+            "Giáo viên: tạo giáo trình; sửa, xoá **giáo trình do mình tạo**; giáo trình người khác mở ở chế độ **Chỉ xem** (vẫn nhân bản được).",
+            "Gắn/bỏ gắn giáo trình vào khoá học: chỉ Chủ sở hữu, Quản trị viên.",
+            "Học viên, Phụ huynh không vào được trang giáo trình."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lop-hoc",
+      "title": "Lớp học",
+      "summary": "Tạo lớp từ khoá học, trạng thái lớp, giáo viên & học viên, xoá lớp và nhật ký thay đổi.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Menu **Đào tạo → Lớp học** (`/t/{slug}/dashboard/classes`). Lớp học được mở từ một [khoá học](page:khoa-hoc), có giáo viên, học viên và [giáo trình lớp](page:giao-trinh-lop) riêng. Trang lớp (`/t/{slug}/dashboard/classes/{id}`) có các tab **Thông tin** · **Thời khoá biểu** · **Giáo viên & Học viên** · **Giáo trình** · **Tiến độ & Chuyên cần** · **Bảng điểm** · **Nhật ký thay đổi**."
+        },
+        {
+          "type": "table",
+          "columns": ["Thao tác", "Chủ sở hữu / Quản trị viên", "Giáo viên"],
+          "rows": [
+            [
+              "Xem danh sách lớp, trang lớp, nhật ký thay đổi",
+              "mọi lớp",
+              "lớp mình là giáo viên của lớp"
+            ],
+            [
+              "Tạo lớp, **Sửa thông tin**, đổi trạng thái, **Xoá lớp**",
+              "✔",
+              "✘"
+            ],
+            [
+              "Sửa lịch lặp ([Thời khoá biểu](page:thoi-khoa-bieu)): ngày bắt đầu, số buổi, buổi trong tuần, áp dụng ngày nghỉ",
+              "✔",
+              "✘ (chỉ xem)"
+            ],
+            ["Thêm/bỏ giáo viên, thêm/xoá học viên", "✔", "✘ (chỉ xem)"],
+            [
+              "Sửa [giáo trình lớp](page:giao-trinh-lop)",
+              "mọi lớp",
+              "lớp mình là giáo viên của lớp"
+            ],
+            [
+              "Huỷ/khôi phục buổi, thêm buổi bù, sửa buổi (phòng, giờ, giáo viên dạy thế), chọn nội dung buổi",
+              "mọi lớp",
+              "lớp mình là giáo viên của lớp"
+            ],
+            [
+              "Xem [chuyên cần & bảng điểm](page:chuyen-can-bang-diem), xuất Excel",
+              "mọi lớp",
+              "lớp mình là giáo viên của lớp"
+            ],
+            [
+              "Viết **Nhận xét cuối khoá** cho học viên",
+              "mọi lớp",
+              "lớp mình là giáo viên của lớp"
+            ],
+            [
+              "Sửa **Tham số chuyên cần của lớp** (hệ số k, ngưỡng cảnh báo)",
+              "✔",
+              "✘ (chỉ xem)"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Học viên, Phụ huynh không vào được dashboard lớp học. Học viên xem lớp của mình ở trang trung tâm – xem [Lớp học của tôi](page:lop-cua-toi)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Danh sách lớp"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tìm theo tên hoặc mã lớp, lọc theo trạng thái và khoá học.",
+            "Cột **Lớp học** (tên, mã · khoá học), **Bắt đầu** (ngày bắt đầu + số buổi), **Giáo viên** (hoặc cảnh báo **Chưa có giáo viên**), **Học viên** (số học viên, hoặc số/sĩ số tối đa), **Trạng thái**.",
+            "Chủ sở hữu/Quản trị viên thấy mọi lớp; Giáo viên chỉ thấy các lớp mình được thêm làm giáo viên."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tạo lớp"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Bấm Tạo lớp",
+              "text": "Ở danh sách lớp, hoặc ở tab **Lớp** của trang khoá học (khoá học đã chọn sẵn)."
+            },
+            {
+              "title": "Chọn khoá học",
+              "text": "Chỉ chọn khoá học **Đang dùng**. Không đổi khoá học sau khi tạo lớp."
+            },
+            {
+              "title": "Chọn giáo trình tham khảo (tuỳ chọn)",
+              "text": "Chọn 1 giáo trình đang gắn với khoá học: chương và mục (nhãn, tên hiển thị, ghi chú, thứ tự; kể cả mục có bài/đề đã lưu trữ) được **chép** sang giáo trình lớp. Sau đó sửa bên nào cũng không ảnh hưởng bên kia."
+            },
+            {
+              "title": "Nhập thông tin và bấm Tạo lớp",
+              "text": "Các trường ở bảng dưới; trang lớp mở ra."
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "columns": ["Trường", "Quy tắc"],
+          "rows": [
+            [
+              "Mã lớp",
+              "Bắt buộc, tối đa 32 ký tự, chữ in hoa không dấu, số và dấu `-` hoặc `_` ở giữa (vd. `N5-2026-01`), tự đổi sang in hoa; không trùng trong trung tâm"
+            ],
+            ["Tên lớp", "Bắt buộc, tối đa 200 ký tự"],
+            ["Mô tả", "Tuỳ chọn"],
+            [
+              "Ngày bắt đầu",
+              "Bắt đầu (ngày); buổi 1 là buổi trong tuần đầu tiên từ ngày này. Sau khi tạo, sửa ở tab **Thời khoá biểu**"
+            ],
+            [
+              "Số buổi",
+              "1–500; bỏ trống = số buổi dự kiến của khoá học; bắt buộc nếu khoá học chưa có số buổi dự kiến. Sau khi tạo, sửa ở tab **Thời khoá biểu**"
+            ],
+            ["Sĩ số tối đa", "Tuỳ chọn, 1–1000; bỏ trống = không giới hạn"],
+            ["Phòng học / link online", "Tuỳ chọn"],
+            [
+              "Ngày kết thúc",
+              "Không nhập: tự tính = ngày của buổi cuối; hiện “Tính khi có thời khoá biểu” cho tới khi nhập lịch lặp"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "**Sửa thông tin** (Chủ sở hữu/Quản trị viên) sửa mã, tên, mô tả, sĩ số tối đa, phòng học/link – kể cả khi lớp đã kết thúc hoặc đã huỷ. Khoá học không đổi được; ngày bắt đầu và số buổi sửa ở tab [Thời khoá biểu](page:thoi-khoa-bieu) (có xem trước các buổi bị dời)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trạng thái lớp"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lớp mới ở trạng thái **Sắp mở**. Chủ sở hữu/Quản trị viên đổi trạng thái bằng các nút ở đầu trang lớp, có hộp thoại xác nhận."
+        },
+        {
+          "type": "table",
+          "columns": ["Từ", "Sang", "Nút"],
+          "rows": [
+            ["Sắp mở", "Đang học", "**Bắt đầu học**"],
+            ["Sắp mở", "Đã huỷ", "**Huỷ lớp**"],
+            ["Đang học", "Sắp mở", "**Chuyển về \"Sắp mở\"**"],
+            ["Đang học", "Đã kết thúc", "**Kết thúc lớp**"],
+            ["Đang học", "Đã huỷ", "**Huỷ lớp**"],
+            ["Đã kết thúc", "Đang học", "**Mở lại lớp**"]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Không chuyển thẳng **Sắp mở → Đã kết thúc**. **Đã huỷ** là trạng thái cuối, không mở lại được.",
+            "Chuyển sang **Đã kết thúc** hoặc **Đã huỷ**: mọi lượt thi đang làm dở trong lớp bị **chốt ngay** (câu đã trả lời được chấm, phần chưa làm tính 0); hộp thoại xác nhận báo số lượt. Mở lại lớp không mở lại các lượt này.",
+            "Lớp đã kết thúc/đã huỷ: giáo trình lớp và danh sách giáo viên/học viên chỉ xem (không thêm/bỏ người, không lưu giáo trình); vẫn **Sửa thông tin** và đổi trạng thái được.",
+            "Lớp đã kết thúc/đã huỷ không bị dời lịch khi ngày nghỉ thay đổi, và không thao tác được trên buổi học. **Mở lại lớp** thì thời khoá biểu được tính lại ngay theo ngày nghỉ hiện tại."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Xoá lớp"
+        },
+        {
+          "type": "paragraph",
+          "text": "**Xoá lớp** (Chủ sở hữu/Quản trị viên) chỉ được khi **chưa có bài làm** của học viên trong lớp; khi đó giáo trình lớp, danh sách giáo viên/học viên và nhật ký bị xoá theo. Lớp đã có bài làm: nút bị khoá kèm gợi ý – hãy dùng **Huỷ lớp**."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Giáo viên & Học viên"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chủ sở hữu/Quản trị viên bấm **Thêm giáo viên** / **Thêm học viên**: tìm theo họ tên hoặc email, chọn nhiều người rồi bấm Thêm. Chỉ hiện thành viên **đang hoạt động** có đúng vai trò (Giáo viên / Học viên); người đã có trong lớp hiện **Đã trong lớp**.",
+            "Mọi giáo viên của lớp có quyền như nhau: xem lớp, sửa giáo trình lớp. Lớp được phép chưa có giáo viên (hiện cảnh báo). **Bỏ khỏi lớp** gỡ giáo viên khỏi lớp.",
+            "**Sĩ số tối đa**: thêm vượt sĩ số bị chặn kèm thông báo (vd. “Lớp đã đủ sĩ số (2/2)”, “Lớp chỉ còn N chỗ…”). Giảm sĩ số tối đa xuống dưới số học viên hiện có vẫn được, lớp hiện cảnh báo vượt sĩ số.",
+            "**Xoá khỏi lớp** (học viên) là xoá mềm: bài làm và kết quả trong lớp vẫn giữ, học viên chuyển xuống mục **Học viên đã rời lớp**; thêm lại thì khôi phục.",
+            "Học viên đang học lớp khác chưa kết thúc của cùng khoá học hiện dòng cảnh báo “Đang học lớp khác cùng khoá: …” (chỉ cảnh báo, không chặn).",
+            "Giáo viên của lớp xem được tab này nhưng không thay đổi được.",
+            "Trong hộp thêm giáo viên/học viên, người đang chọn có buổi **trùng giờ** ở lớp khác hiện cảnh báo đỏ (buổi nào trùng với lớp nào). Chỉ cảnh báo, vẫn thêm được. Xem [Trùng lịch](page:thoi-khoa-bieu#trung-lich)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Nhật ký thay đổi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tab **Nhật ký thay đổi** (giáo viên của lớp, Chủ sở hữu/Quản trị viên) ghi ai, lúc nào, làm gì: tạo lớp (và giáo trình đã chép), sửa thông tin (các trường đổi), đổi trạng thái (kèm số lượt thi bị chốt), thêm/bỏ giáo viên và học viên, mỗi lần lưu giáo trình lớp (mục thêm/xoá/ẩn/khôi phục, trường đổi của từng mục, chương thêm/xoá/sửa, sắp xếp lại); sửa thời khoá biểu (trường đổi, số buổi dời/thêm/xoá, ngày kết thúc cũ → mới), lịch tự dời vì thêm/sửa/xoá ngày nghỉ của trung tâm; huỷ/khôi phục buổi (kèm lý do), thêm/xoá buổi bù, sửa buổi (trường đổi), sửa nội dung buổi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Thêm giáo viên hoặc học viên vào lớp sẽ gửi [thông báo](page:thong-bao) cho người được thêm."
+        }
+      ]
+    },
+    {
+      "id": "thoi-khoa-bieu",
+      "title": "Thời khoá biểu & buổi học",
+      "summary": "Lịch lặp theo số buổi, ngày nghỉ dời buổi, huỷ buổi và buổi bù, dạy thế, nội dung buổi, trùng lịch.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tab **Thời khoá biểu** của trang lớp. Lớp có **tổng số buổi** cố định; buổi thứ N (**Buổi N**) rơi vào ô lịch thứ N theo các buổi trong tuần, bỏ qua [ngày nghỉ của trung tâm](page:cai-dat-trung-tam). Ngày kết thúc lớp = ngày của buổi cuối, tự tính. Múi giờ cố định giờ Việt Nam."
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Thao tác",
+            "Chủ sở hữu / Quản trị viên",
+            "Giáo viên của lớp"
+          ],
+          "rows": [
+            [
+              "Xem thời khoá biểu, danh sách/lịch buổi, chi tiết buổi",
+              "✔",
+              "✔"
+            ],
+            [
+              "Sửa lịch lặp: ngày bắt đầu, tổng số buổi, buổi trong tuần, **Áp dụng ngày nghỉ của trung tâm**",
+              "✔",
+              "✘"
+            ],
+            ["Huỷ / khôi phục buổi, thêm / xoá buổi bù", "✔", "✔"],
+            [
+              "Sửa buổi: phòng/link, ghi chú, giờ học, giáo viên của buổi (dạy thế)",
+              "✔",
+              "✔"
+            ],
+            ["Chọn nội dung buổi (chương/mục giáo trình lớp)", "✔", "✔"]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Lớp **Đã kết thúc**/**Đã huỷ**: thời khoá biểu và buổi học chỉ xem."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lịch lặp"
+        },
+        {
+          "type": "paragraph",
+          "text": "Bấm **Sửa lịch lặp** (Chủ sở hữu/Quản trị viên):"
+        },
+        {
+          "type": "table",
+          "columns": ["Trường", "Quy tắc"],
+          "rows": [
+            ["Ngày bắt đầu", "Buổi 1 là ô đầu tiên từ ngày này"],
+            [
+              "Tổng số buổi",
+              "1–500, mặc định là số buổi của lớp lúc tạo; không nhỏ hơn số buổi đã diễn ra"
+            ],
+            [
+              "Áp dụng ngày nghỉ của trung tâm",
+              "Mặc định bật. Tắt cho lớp vẫn học ngày lễ (lớp online, cấp tốc): ngày nghỉ không ảnh hưởng lớp"
+            ],
+            [
+              "Các buổi trong tuần",
+              "1–14 dòng: thứ, giờ bắt đầu – giờ kết thúc (vd. Thứ 2 18:00–19:30, Thứ 4 19:00–20:30). Hai buổi cùng một ngày không được chồng giờ; không lặp cách tuần"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Nhập lịch và bấm Xem trước & lưu",
+              "text": "Hệ thống tính lại các buổi và mở hộp **Xác nhận thay đổi thời khoá biểu**: số buổi thêm, buổi đổi ngày giờ (ngày cũ → ngày mới), buổi cuối bị xoá khi giảm số buổi (kèm số nội dung đã map sẽ bị bỏ), ngày kết thúc cũ → mới."
+            },
+            {
+              "title": "Bấm Lưu",
+              "text": "Buổi được tạo/dời/xoá theo đúng bản xem trước; nhật ký lớp ghi lại."
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Buổi **đã diễn ra** (giờ bắt đầu đã qua) giữ nguyên; chỉ các buổi sau đó được xếp lại vào các ô còn trống kể từ bây giờ.",
+            "Đổi ngày thì buổi lấy giờ của ô mới (vd. dời từ Thứ 4 19:00 sang Thứ 2 thì theo giờ Thứ 2). Nội dung, ghi chú, phòng/link, giáo viên **đi theo buổi**.",
+            "Giảm số buổi xoá các buổi cuối (và nội dung đã map của chúng); tăng thì thêm buổi cuối.",
+            "**Buổi bù** không bao giờ bị dời."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Ngày nghỉ dời buổi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Thêm ngày nghỉ ở **Cài đặt** thì các buổi chưa diễn ra rơi vào ngày nghỉ được đẩy sang ô kế tiếp, mọi buổi sau lùi theo, ngày kết thúc lùi. Xoá/thu hẹp ngày nghỉ thì lịch kéo về như chưa từng có ngày nghỉ. Ví dụ lớp Thứ 2 + Thứ 4, 10 buổi, bắt đầu Thứ 2 05/01:"
+        },
+        {
+          "type": "table",
+          "columns": ["Buổi", "Không có ngày nghỉ", "Nghỉ Thứ 4 07/01"],
+          "rows": [
+            ["1", "Thứ 2 05/01", "Thứ 2 05/01"],
+            ["2", "Thứ 4 07/01", "Thứ 2 12/01"],
+            ["3", "Thứ 2 12/01", "Thứ 4 14/01"],
+            ["…", "…", "mỗi buổi lùi 1 ô"],
+            ["10", "Thứ 4 04/02", "Thứ 2 09/02 (ngày kết thúc lùi)"]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Ngày nghỉ hiện trên lịch màu xám kèm tên. Buổi đã diễn ra, buổi bù, lớp đã kết thúc/huỷ và lớp tắt **Áp dụng ngày nghỉ** không bị dời."
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "title": "Deadline không tự dời",
+          "text": "Deadline và ngày mở của mục giáo trình lớp là mốc cố định, **không** dời theo buổi. Khi lịch dời, giáo viên tự kiểm tra lại deadline/ngày mở ở tab Giáo trình."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Danh sách buổi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Phần **Buổi học** liệt kê mọi buổi theo thời gian (nút **Lịch** để xem dạng lịch tuần/tháng/danh sách): số buổi hoặc **Buổi bù** (“Bù cho Buổi N”), ngày giờ (**Giờ sửa tay** nếu đã đổi), giáo viên (**Giáo viên riêng của buổi** nếu xếp dạy thế), phòng/link, nội dung. Nhãn **Đã huỷ**, **Trùng lịch** (đỏ), **Đã dời – kiểm tra lại**. Bấm vào buổi để mở trang chi tiết buổi (`/t/{slug}/dashboard/sessions/{id}`)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Huỷ buổi và buổi bù"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Huỷ buổi** (buổi chưa diễn ra): nhập lý do (tuỳ chọn). Buổi **giữ số** (vd. “Buổi 5 – Đã huỷ”), các buổi sau **không** dời, tổng số buổi không đổi. Nội dung đã map giữ nguyên kèm cảnh báo “chuyển nội dung sang buổi khác”.",
+            "**Khôi phục buổi**: chỉ khi buổi chưa diễn ra.",
+            "Buổi đã huỷ vẫn chiếm ô lịch: khi ngày nghỉ làm dời lịch, buổi huỷ cũng dời như buổi thường.",
+            "Dạy bù: bấm **Thêm buổi bù** ở tab Thời khoá biểu: ngày, giờ bắt đầu/kết thúc (sau thời điểm hiện tại, tối đa 12 giờ), **Bù cho** (buổi đã huỷ hiện đầu danh sách, tuỳ chọn), phòng/link, ghi chú. Buổi bù có ngày cố định, không đánh số, không bị dời, map nội dung được như buổi thường.",
+            "**Xoá buổi bù**: chỉ khi chưa diễn ra. Buổi thường không xoá được, chỉ huỷ."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Sửa buổi & dạy thế"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ở trang chi tiết buổi bấm **Sửa buổi**:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Phòng/link**, **Ghi chú**: sửa được mọi lúc (kể cả buổi đã diễn ra). Bỏ trống phòng = theo phòng/link của lớp.",
+            "**Giờ học** (buổi chưa diễn ra): buổi thường chỉ đổi giờ trong cùng ngày (đổi ngày thì sửa lịch lặp, hoặc huỷ buổi và thêm buổi bù); buổi bù đổi được cả ngày.",
+            "**Giáo viên của buổi** (buổi chưa diễn ra): **Mọi giáo viên của lớp** (mặc định) hoặc **Chọn giáo viên (dạy thế)** – chọn thành viên có vai trò Giáo viên, kể cả người không thuộc lớp; danh sách sửa tự do (bỏ người chính, thêm người dạy thế).",
+            "Giáo viên dạy thế thấy buổi trong **Lịch dạy của tôi** và chỉ xem được **chi tiết buổi** đó (lớp, giờ, phòng, học viên, nội dung), không vào được trang lớp."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "title": "Buổi bị dời",
+          "text": "Buổi có giáo viên dạy thế hoặc giờ sửa tay mà bị dời sang ngày khác (do ngày nghỉ, sửa lịch lặp): giờ sửa tay bị bỏ (theo giờ ô mới), giáo viên dạy thế giữ nguyên, buổi hiện cảnh báo **Đã dời – kiểm tra lại**. Bấm **Đã kiểm tra** ở trang buổi, hoặc lưu lại giáo viên/giờ của buổi, để tắt cảnh báo."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Nội dung buổi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nút **Chọn nội dung** ở trang buổi: tick cả chương (**Cả chương**) hoặc từng mục của [giáo trình lớp](page:giao-trinh-lop) học ở buổi này. Chỉ để tham khảo; một mục có thể học ở nhiều buổi, một buổi có nhiều mục. Mục bị xoá/ẩn khỏi giáo trình lớp thì tự bỏ khỏi nội dung buổi."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Trùng lịch"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Buổi (chưa huỷ) của lớp khác (chưa huỷ) **chồng giờ** và có **chung giáo viên** (kể cả giáo viên dạy thế) hoặc **chung học viên** (đang học) → nhãn **Trùng lịch** đỏ ở danh sách buổi, viền đỏ trên lịch, danh sách buổi trùng ở trang chi tiết buổi.",
+            "Chỉ cảnh báo, không chặn. Cũng hiện khi thêm giáo viên/học viên vào lớp. Không kiểm trùng phòng (phòng là chữ tự do)."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dời lịch gửi **một** [thông báo](page:thong-bao) gộp cho học viên và giáo viên của lớp; huỷ buổi, thêm buổi bù và xếp giáo viên dạy thế cũng gửi thông báo."
+        }
+      ]
+    },
+    {
+      "id": "giao-trinh-lop",
+      "title": "Giáo trình lớp",
+      "summary": "Giáo trình riêng của lớp: ngày mở, deadline, ngưỡng đậu, lần thi lại, nhập từ giáo trình, xoá và khôi phục mục.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tab **Giáo trình** của trang [lớp học](page:lop-hoc). Giáo viên của lớp và Chủ sở hữu/Quản trị viên sửa được; lớp **Đã kết thúc**/**Đã huỷ** thì chỉ xem. Giáo trình lớp là **bản riêng** của lớp: chép từ giáo trình tham khảo lúc tạo lớp (hoặc nhập sau), sửa không ảnh hưởng [giáo trình tham khảo](page:giao-trinh) và ngược lại."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Sửa giáo trình lớp"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Trình sửa giống [giáo trình tham khảo](page:giao-trinh): chương, kéo thả, **Lên/Xuống**, ô **Chương**, nhãn, tên hiển thị, ghi chú.",
+            "**Thêm mục**: mọi bài học/đề thi **đã publish** của trung tâm (không giới hạn trong giáo trình của khoá học). Mỗi bài học/đề thi chỉ có một lần, **trừ** mục đề thi đánh dấu **Thi lại cho** (xem bên dưới).",
+            "Bấm **Lưu giáo trình lớp** để ghi lại; rời trang khi còn thay đổi chưa lưu sẽ được hỏi lại.",
+            "Giới hạn: tối đa 100 chương và 300 mục."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Ngày mở, deadline & ghi chú"
+        },
+        {
+          "type": "paragraph",
+          "text": "Bấm mũi tên ở dòng mục để mở **Ngày mở, deadline & ghi chú**. Giờ tính theo giờ Việt Nam (+07:00). Chương có thêm ô **Mở chương lúc**."
+        },
+        {
+          "type": "table",
+          "columns": ["Trường", "Ý nghĩa"],
+          "rows": [
+            [
+              "Ngày mở",
+              "Trước lúc này học viên thấy mục nhưng chưa vào được; bỏ trống = mở ngay. Chương cũng có **Mở chương lúc** — đặt cả hai thì mốc **muộn hơn** có hiệu lực"
+            ],
+            [
+              "Deadline",
+              "Bài học: chỉ để nhắc. Đề thi: hạn **bắt đầu** làm; bắt đầu trước hạn thì được làm hết giờ"
+            ],
+            [
+              "Nhận bài quá hạn",
+              "Chỉ đề thi, mặc định bật; tắt thì sau deadline học viên không bắt đầu được nữa"
+            ],
+            ["Ngưỡng đậu (%)", "Chỉ đề thi, mặc định 50"],
+            [
+              "Thi lại cho",
+              "Chỉ đề thi: biến mục thành lần thi lại của một mục đề thi đứng trước"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lần thi lại"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Nhóm thi** = mục gốc + các lần thi lại của nó. Kết quả nhóm = **điểm cao nhất** trong các lượt đã chấm xong; đậu nhóm khi có ít nhất một lượt đạt ngưỡng của mục đó. Học viên đã đậu ở lần trước thấy lần sau là **không bắt buộc** nhưng vẫn thi được (xem [Lớp học của tôi](page:lop-cua-toi)).",
+            "Nút **Thêm lần thi lại (cùng đề)** ở mục đề thi gốc chèn một lần thi lại ngay sau nó. Lần thi lại được dùng lại cùng đề với mục gốc (giao diện cảnh báo học viên đã làm đề này).",
+            "Lần thi lại phải là đề thi, đứng **sau** mục gốc theo thứ tự giáo trình (Chưa xếp chương trước, rồi các chương theo thứ tự); mục gốc phải là đề thi và không phải lần thi lại.",
+            "Không bỏ được mục gốc khi còn lần thi lại gắn vào – hãy bỏ hoặc đổi **Thi lại cho** của các lần thi lại trước."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Bài làm & Cho làm lại"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mục đề thi đã có học viên làm có thêm nút **Bài làm**: danh sách lượt thi của từng học viên kèm trạng thái (Đang làm · Chờ chấm · Đã chấm), điểm % và Đậu/Chưa đạt.",
+            "Mỗi mục đề thi học viên chỉ làm **một lần**. Khi học viên gặp sự cố, bấm **Cho làm lại** ở dòng của họ: lượt cũ bị đánh dấu **Đã cho làm lại** (giữ lịch sử, không tính điểm) và học viên bắt đầu được một lượt mới.",
+            "Lượt đang làm dở bị **chốt ngay** (chấm như hết giờ) trước khi đánh dấu.",
+            "Mỗi lần cho làm lại đều ghi vào **Nhật ký thay đổi** của lớp. Lớp **Đã kết thúc**/**Đã huỷ** thì không cho làm lại được.",
+            "Bấm tên học viên trong hộp **Bài làm** để mở [Bài làm của học viên](page:giao-trinh-lop#bai-lam-cua-hoc-vien)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Bài làm của học viên"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ở tab **Giáo viên & Học viên**, nút **Bài làm** trên dòng mỗi học viên mở trang bài làm chi tiết của riêng học viên đó trong lớp."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Liệt kê mọi mục của giáo trình lớp theo chương: mục đề thi kèm các lượt (kể cả lượt **Đã cho làm lại**), mục bài học kèm trạng thái học và số câu đúng.",
+            "Bấm **Xem bài làm** để mở bài: nội dung đề/bài, **câu trả lời học viên đã nộp**, đúng/sai từng câu, đáp án đúng, giải thích và điểm chấm tay. Chỉ xem, không sửa điểm ở đây (chấm điểm ở [Chấm bài](page:cham-bai)).",
+            "Mục đã bỏ khỏi giáo trình vẫn hiện nếu học viên còn bài làm ở đó; học viên đã rời lớp vẫn xem lại được bài cũ.",
+            "Chỉ **giáo viên của lớp** và Chủ sở hữu/Quản trị viên mở được trang này."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Nhập từ giáo trình"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nút **Nhập từ giáo trình**: chọn một giáo trình tham khảo bất kỳ (giáo trình gắn với khoá học của lớp đứng đầu) → chương và mục được gộp vào bản đang sửa. Mục có bài/đề đã có trong lớp hoặc chưa publish bị bỏ qua; chương trùng tên dùng lại chương sẵn có. Chưa ghi gì cho tới khi bấm **Lưu giáo trình lớp**."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Xoá mục và khôi phục"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mục chưa có học viên nào làm: bị xoá hẳn khi lưu.",
+            "Mục đã có học viên làm: hỏi lại “Đã có N học viên làm mục này…”; khi lưu mục bị **ẩn** với học viên (bài làm vẫn giữ, không tính vào thống kê) và nằm trong **Mục đã xoá (N)** – bấm **Khôi phục** để hiện lại. Thêm lại cùng bài/đề cũng khôi phục mục đó.",
+            "Bài học/đề thi nằm trong giáo trình lớp (kể cả mục đã ẩn) không xoá được, chỉ lưu trữ được."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Hai người cùng sửa giáo trình lớp: người lưu sau nhận lỗi “Giáo trình lớp vừa được người khác lưu. Hãy tải lại…”. Tải lại trang để xem bản mới nhất rồi sửa lại."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lưu giáo trình lớp gửi [thông báo](page:thong-bao) cho học viên (một thông báo gộp cho các mục mới đã mở, thông báo riêng cho lần thi lại) và cho các giáo viên khác của lớp. Mục hẹn ngày mở chỉ báo khi tới ngày; mục có hạn nộp được nhắc trước 24 giờ và khi quá hạn."
+        }
+      ]
+    },
+    {
+      "id": "chuyen-can-bang-diem",
+      "title": "Chuyên cần & bảng điểm",
+      "summary": "Tab Tiến độ & Chuyên cần và tab Bảng điểm của lớp: tỉ lệ chuyên cần, điểm từng mục, nhận xét cuối khoá và xuất Excel.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Trang lớp (`/t/{slug}/dashboard/classes/{id}`) có hai tab theo dõi: **Tiến độ & Chuyên cần** và **Bảng điểm**. Chủ sở hữu/Quản trị viên xem mọi lớp, Giáo viên xem lớp mình phụ trách. Học viên **chỉ** thấy phần của mình sau khi lớp **Đã kết thúc** – xem [Lớp học của tôi](page:lop-cua-toi#tong-ket-cuoi-khoa)."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Cách tính chuyên cần"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chỉ mục **đề thi có hạn nộp** được tính. Mục bài học, mục đề thi không đặt hạn nộp và mục đã bỏ khỏi giáo trình lớp không vào bảng.",
+            "Đúng hạn tính **1** điểm, muộn tính **k** (hệ số nộp muộn), quá hạn chưa nộp tính **0**. Tỉ lệ chuyên cần = tổng điểm / số mục được tính.",
+            "Đúng hạn hay muộn xét theo **lúc bắt đầu** lượt thi, vì hạn nộp của đề thi là hạn **bắt đầu** làm bài: vào thi trước hạn rồi làm hết giờ vẫn là đúng hạn.",
+            "\"Đã nộp\" là đủ – không cần giáo viên chấm xong.",
+            "Không tính vào mẫu số: mục **chưa tới hạn** mà chưa nộp, lượt **đang làm dở**, và **lần thi lại không bắt buộc** (học viên đã đậu ở lần trước).",
+            "Lượt đã **Cho làm lại** không được tính; nếu học viên chưa làm lượt mới thì mục coi như chưa nộp."
+          ]
+        },
+        {
+          "type": "table",
+          "columns": ["Nhãn trong ô", "Ý nghĩa", "Điểm"],
+          "rows": [
+            ["Đúng hạn", "Bắt đầu lượt trước hạn và đã nộp", "1"],
+            ["Muộn", "Bắt đầu lượt sau hạn và đã nộp", "k"],
+            ["Chưa nộp", "Đã quá hạn mà chưa nộp", "0"],
+            ["Đang làm", "Lượt còn dở (sẽ được chốt khi hết giờ)", "chưa tính"],
+            ["Chưa tới hạn", "Còn hạn, chưa nộp", "chưa tính"],
+            [
+              "Không tính",
+              "Lần thi lại không bắt buộc hoặc mục đã bỏ khỏi giáo trình",
+              "không tính"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tham số chuyên cần của lớp"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Ô **Hệ số nộp muộn (k)** và **Ngưỡng cảnh báo (%)** ở đầu tab: bỏ trống = dùng [cài đặt trung tâm](page:cai-dat-trung-tam#tham-so-chuyen-can) (giá trị của trung tâm hiện ngay dưới ô).",
+            "Chỉ Chủ sở hữu/Quản trị viên sửa và bấm **Lưu tham số**; Giáo viên chỉ xem. Mỗi lần lưu ghi vào **Nhật ký thay đổi** của lớp.",
+            "Học viên có tỉ lệ dưới ngưỡng hiện số đỏ, phía trên bảng có cảnh báo số học viên dưới ngưỡng."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Bảng chuyên cần"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mỗi dòng là một học viên, mỗi cột là một mục đề thi có hạn nộp (kèm hạn nộp và \"Nhận bài quá hạn\"); lần thi lại ghi thêm **Lần 2**, **Lần 3**…",
+            "Cột cuối là **Tỉ lệ chuyên cần** kèm số mục được tính và thống kê Đúng hạn · Muộn · Chưa nộp.",
+            "Bấm tên học viên để mở [Bài làm của học viên](page:giao-trinh-lop#bai-lam-cua-hoc-vien).",
+            "Học viên đã rời lớp bị ẩn; bật **Hiện học viên đã rời lớp** để xem. Thành viên đã ngừng trong trung tâm vẫn được tính, có nhãn **Đã ngừng**."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Bảng điểm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mỗi dòng là một học viên; cột theo thứ tự giáo trình lớp (mục chưa xếp chương trước, rồi từng chương).",
+            "Mục **đề thi**: nhóm thi (mục gốc + các lần thi lại) gộp **một cột**, hiện **điểm cao nhất** trong các lượt đã chấm kèm **Đậu**/**Trượt**; các lần trong nhóm hiện bên dưới. Còn lượt chờ chấm thì ghi **Còn lượt chờ chấm** (điểm có thể tăng).",
+            "Mục **bài học**: **% câu tự chấm** của lần nộp gần nhất kèm **Đã học xong** / **Đang học** / **Chưa học** (câu chấm tay của bài học không tính vào %).",
+            "Cột **TB <tên chương>**: trung bình điểm các nhóm thi **đã có điểm** trong chương; bài học không tính.",
+            "Ô chọn chương lọc cột theo một chương; không có điểm tổng kết toàn khoá."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Nhận xét cuối khoá"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Cột cuối bảng điểm: mỗi học viên **một** nhận xét cho cả lớp, lưu người sửa cuối và thời điểm.",
+            "Bấm biểu tượng nhận xét ở dòng học viên để viết/sửa; để trống rồi lưu là **xoá** nhận xét. Mỗi lần lưu ghi vào **Nhật ký thay đổi**.",
+            "Viết được khi lớp **Đang học** hoặc **Đã kết thúc** (lớp Sắp mở, Đã huỷ thì không).",
+            "Học viên chỉ thấy nhận xét khi lớp **Đã kết thúc**."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Xuất Excel"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nút **Xuất Excel** ở cả hai tab tải một file `.xlsx` gồm 2 sheet: **Chuyên cần** (nhãn từng mục, thống kê, tỉ lệ) và **Bảng điểm** (điểm từng cột, trung bình chương, cột **Nhận xét cuối khoá**). File đặt tên theo mã lớp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Khi lớp chuyển sang **Đã kết thúc**, học viên đã có nhận xét cuối khoá nhận [thông báo](page:thong-bao); sửa nhận xét sau đó cũng báo lại."
+        }
+      ]
+    },
+    {
+      "id": "lich",
+      "title": "Lịch",
+      "summary": "Lịch dạy của tôi, lịch trung tâm, lịch khoá học; xem theo tuần, tháng, danh sách.",
+      "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER", "TENANT_ADMIN", "TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Menu **Đào tạo → Lịch** (`/t/{slug}/dashboard/schedule`)."
+        },
+        {
+          "type": "table",
+          "columns": ["Lịch", "Nội dung", "Ai xem"],
+          "rows": [
+            [
+              "**Lịch dạy của tôi**",
+              "Buổi của các lớp mình là giáo viên (trừ buổi đã xếp giáo viên khác) và buổi mình được xếp dạy thế (nhãn **Dạy thế**)",
+              "Chủ sở hữu, Quản trị viên, Giáo viên"
+            ],
+            [
+              "**Lịch trung tâm**",
+              "Mọi buổi của các lớp chưa huỷ; lọc **Mọi khoá học** / **Mọi giáo viên**",
+              "Chủ sở hữu, Quản trị viên"
+            ],
+            [
+              "Tab **Lịch** của [khoá học](page:khoa-hoc)",
+              "Buổi của các lớp thuộc khoá học",
+              "Chủ sở hữu, Quản trị viên: mọi lớp; Giáo viên: lớp mình phụ trách"
+            ],
+            [
+              "Tab **Thời khoá biểu** của lớp (nút **Lịch**)",
+              "Buổi của một lớp",
+              "Người xem được lớp"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Cách đọc lịch"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chọn **Tuần** / **Tháng** / **Danh sách**; nút ‹ › chuyển tuần/tháng, **Hôm nay** về hiện tại. Mặc định mở tuần hiện tại. Giờ luôn theo giờ Việt Nam.",
+            "Mỗi lớp một màu (chú thích màu ở dưới lịch). Buổi đã huỷ bị gạch ngang, mờ. Buổi **trùng lịch** viền đỏ. Ngày nghỉ của trung tâm tô xám kèm tên.",
+            "Xem tháng: mỗi ngày hiện tối đa 3 buổi, bấm “+N buổi” để mở tuần đó.",
+            "Bấm vào buổi để mở trang chi tiết buổi (giáo viên dạy thế cũng mở được buổi mình dạy)."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Học viên có **Lịch học của tôi** ở trang trung tâm (`/t/{slug}/schedule`) – xem [Lớp học của tôi](page:lop-cua-toi). Phụ huynh xem lịch học của từng con ở [Con của tôi](page:con-cua-toi)."
+        }
+      ]
+    }
+  ]
+}

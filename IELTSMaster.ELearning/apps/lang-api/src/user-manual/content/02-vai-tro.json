@@ -1,0 +1,470 @@
+{
+  "id": "huong-dan-theo-vai-tro",
+  "title": "Hướng dẫn theo vai trò",
+  "pages": [
+    {
+      "id": "system-owner",
+      "title": "System Owner",
+      "summary": "Quyền cao nhất của hệ thống và các việc chỉ System Owner làm được.",
+      "roles": ["SYSTEM_OWNER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["SYSTEM_OWNER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "System Owner có mọi quyền của [System Admin](page:system-admin) và thêm quyền trên các tài khoản quản trị hệ thống."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Việc chỉ System Owner làm được"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Sửa thông tin, khoá/mở khoá, reset mật khẩu tài khoản **System Admin** và **System Owner** khác.",
+            "Đổi vai trò hệ thống của tài khoản (nâng Người dùng thành System Admin/Owner, hạ quyền) bằng **Đổi vai trò hệ thống** trong [Người dùng](page:admin-nguoi-dung).",
+            "Tạo thêm System Owner: tạo tài khoản (luôn là Người dùng) rồi đổi vai trò."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Ràng buộc an toàn"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Hệ thống luôn cần ít nhất **một System Owner đang hoạt động**: không hạ quyền hay khoá được Owner cuối cùng.",
+            "Không tự khoá/mở khoá được tài khoản của chính mình.",
+            "System Owner đầu tiên được tạo bằng lệnh seed trên máy dev (xem [Deploy & môi trường](page:deploy-moi-truong))."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Công việc thường ngày"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Duyệt trung tâm chờ duyệt – xem [Quản lý trung tâm](page:admin-trung-tam).",
+            "Hỗ trợ người dùng quên mật khẩu (chưa có quên mật khẩu tự phục vụ): reset mật khẩu và gửi mật khẩu tạm qua kênh an toàn.",
+            "Duy trì danh mục, loại đề & mẫu bài học dùng chung – xem [Danh mục, loại đề & mẫu bài học hệ thống](page:admin-danh-muc-loai-de).",
+            "Cập nhật tài liệu này khi hệ thống thay đổi."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "system-admin",
+      "title": "System Admin",
+      "summary": "Vận hành hằng ngày: người dùng, trung tâm, gói dịch vụ, danh mục hệ thống.",
+      "roles": ["SYSTEM_ADMIN"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["SYSTEM_ADMIN", "SYSTEM_OWNER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Sau khi đăng nhập, System Admin (không là thành viên trung tâm nào) được đưa thẳng tới dashboard `/admin`. Menu gồm **Tổng quan**, **Quản lý** (Người dùng, Trung tâm, Gói dịch vụ), **Đề thi & Bài học** (Danh mục, Loại đề, Mẫu bài học) và **Tài liệu nội bộ**."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Được làm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Xem thống kê người dùng/trung tâm – [Tổng quan](page:admin-tong-quan).",
+            "Tạo, sửa, khoá/mở khoá, reset mật khẩu **Người dùng** – [Người dùng](page:admin-nguoi-dung).",
+            "Duyệt, từ chối, tạm khoá, mở khoá trung tâm, đổi gói – [Trung tâm](page:admin-trung-tam).",
+            "Tạo, sửa, ngừng áp dụng, xoá gói dịch vụ – [Gói dịch vụ](page:admin-goi-dich-vu).",
+            "Quản lý danh mục, loại đề & mẫu bài học hệ thống – [Danh mục, loại đề & mẫu bài học hệ thống](page:admin-danh-muc-loai-de)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Không được làm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Sửa, khoá, reset mật khẩu tài khoản System Admin/System Owner (chỉ xem; giao diện hiện “Chỉ System Owner thao tác được tài khoản quản trị”).",
+            "Đổi vai trò hệ thống của bất kỳ ai.",
+            "Xem nội dung bên trong trung tâm (thành viên, đề, bài làm) nếu không phải thành viên trung tâm đó. Trang quản trị chỉ có thông tin cơ bản của trung tâm."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "registered-user",
+      "title": "Người dùng",
+      "summary": "Người dùng thông thường: tài khoản cá nhân, đăng ký trung tâm, tham gia trung tâm.",
+      "roles": ["REGISTERED_USER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["REGISTERED_USER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Mọi tài khoản mới (tự đăng ký, do System Admin tạo hoặc do trung tâm tạo) đều là **Người dùng**. Quyền trong trung tâm đến từ vai trò trung tâm, không từ vai trò hệ thống."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Được làm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Đăng ký tài khoản, đăng nhập, đăng xuất – [Đăng ký & đăng nhập](page:dang-ky-dang-nhap).",
+            "Cập nhật hồ sơ, đổi mật khẩu – [Hồ sơ & mật khẩu](page:ho-so-mat-khau).",
+            "Xem các trung tâm mình tham gia tại `/me` – [Không gian của tôi](page:khong-gian-cua-toi).",
+            "Đăng ký trung tâm nếu **đủ 18 tuổi** – [Đăng ký trung tâm](page:dang-ky-trung-tam)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tham gia trung tâm"
+        },
+        {
+          "type": "paragraph",
+          "text": "Chưa có chức năng tự xin tham gia trung tâm. Người dùng cần nhờ Chủ sở hữu/Quản trị viên của trung tâm thêm theo email (tài khoản đã có) hoặc tạo tài khoản mới cho họ. Người dưới 18 tuổi vẫn tự đăng ký tài khoản và tham gia trung tâm bình thường."
+        }
+      ]
+    },
+    {
+      "id": "tenant-owner",
+      "title": "Chủ sở hữu trung tâm",
+      "summary": "Tenant Owner: người đăng ký và có toàn quyền trong trung tâm.",
+      "roles": ["TENANT_OWNER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_OWNER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Chủ sở hữu là người gửi đăng ký trung tâm. Membership Chủ sở hữu được tạo ngay khi gửi đăng ký và tính vào giới hạn gói. Mỗi trung tâm có **đúng một** Chủ sở hữu; chưa có chức năng chuyển quyền sở hữu."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Bắt đầu"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Đăng ký trung tâm và chờ duyệt",
+              "text": "Xem [Đăng ký trung tâm](page:dang-ky-trung-tam). Bị từ chối thì sửa và gửi lại."
+            },
+            {
+              "title": "Vào dashboard",
+              "text": "Sau khi được duyệt: từ `/me` bấm **Vào dashboard**, hoặc mở `/t/{slug}/dashboard`."
+            },
+            {
+              "title": "Thêm thành viên",
+              "text": "Thêm giáo viên, học viên, phụ huynh; phân vai trò. Xem [Thành viên](page:thanh-vien)."
+            },
+            {
+              "title": "Chuẩn bị loại đề (nếu cần)",
+              "text": "Dùng loại đề hệ thống có sẵn hoặc tạo loại đề riêng. Xem [Danh mục, loại đề & mẫu bài học của trung tâm](page:danh-muc-loai-de-trung-tam)."
+            },
+            {
+              "title": "Soạn đề, bài học hoặc giao cho giáo viên",
+              "text": "Xem [Vòng đời đề thi](page:vong-doi-de-thi) và [Bài học](page:bai-hoc)."
+            },
+            {
+              "title": "Tạo khoá học và giáo trình",
+              "text": "Tạo khoá học, gom bài học + đề thi thành giáo trình theo chương rồi gắn vào khoá học. Xem [Khoá học](page:khoa-hoc) và [Giáo trình](page:giao-trinh)."
+            },
+            {
+              "title": "Mở lớp học",
+              "text": "Tạo lớp từ khoá học (chép giáo trình tham khảo), thêm giáo viên và học viên, bấm **Bắt đầu học**. Xem [Lớp học](page:lop-hoc)."
+            },
+            {
+              "title": "Xếp thời khoá biểu",
+              "text": "Nhập ngày nghỉ của trung tâm ở **Cài đặt**, rồi ở tab **Thời khoá biểu** của lớp nhập ngày bắt đầu, số buổi, các buổi trong tuần. Xem [Thời khoá biểu & buổi học](page:thoi-khoa-bieu) và [Cài đặt trung tâm](page:cai-dat-trung-tam)."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Quyền"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mọi quyền của [Quản trị viên](page:tenant-admin), cộng với thao tác trên chính membership Chủ sở hữu (thêm vai trò khác cho mình, vd. Giáo viên).",
+            "Vai trò **Chủ sở hữu** cố định: không gỡ được, không tự ngừng kích hoạt hay xoá khỏi trung tâm.",
+            "Thấy lý do khi trung tâm bị tạm khoá (tại `/me`)."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tenant-admin",
+      "title": "Quản trị viên trung tâm",
+      "summary": "Tenant Admin: quản lý thành viên, danh mục/loại đề/mẫu bài học và mọi đề của trung tâm.",
+      "roles": ["TENANT_ADMIN"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TENANT_ADMIN", "TENANT_OWNER"]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Được làm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Dashboard trung tâm đầy đủ số liệu – [Dashboard trung tâm](page:dashboard-trung-tam).",
+            "Thêm thành viên, phân vai trò (kể cả Quản trị viên khác), ngừng kích hoạt, xoá khỏi trung tâm, gắn phụ huynh – [Thành viên](page:thanh-vien).",
+            "Tạo, sửa, xoá danh mục, loại đề & mẫu bài học riêng của trung tâm – [Danh mục, loại đề & mẫu bài học của trung tâm](page:danh-muc-loai-de-trung-tam).",
+            "Tạo đề; sửa, đổi hiển thị, publish, lưu trữ, xoá, khôi phục version, nhân bản **mọi đề** (kể cả đề giáo viên tạo).",
+            "Tương tự với **mọi bài học** – [Bài học](page:bai-hoc).",
+            "Tạo, sửa, lưu trữ, xoá khoá học; gắn/bỏ gắn giáo trình tham khảo – [Khoá học](page:khoa-hoc).",
+            "Sửa, xoá **mọi giáo trình** – [Giáo trình](page:giao-trinh).",
+            "Tạo lớp, sửa thông tin, đổi trạng thái, xoá lớp; thêm/bỏ giáo viên và học viên; sửa giáo trình của **mọi lớp** – [Lớp học](page:lop-hoc), [Giáo trình lớp](page:giao-trinh-lop).",
+            "Sửa thời khoá biểu (lịch lặp) của lớp; huỷ/khôi phục buổi, buổi bù, sửa buổi, xếp dạy thế, nội dung buổi của **mọi lớp** – [Thời khoá biểu & buổi học](page:thoi-khoa-bieu).",
+            "Xem **Lịch trung tâm**, lịch khoá học, lịch dạy của mình – [Lịch](page:lich).",
+            "Cài đặt trung tâm: ngày nghỉ, tham số chuyên cần – [Cài đặt trung tâm](page:cai-dat-trung-tam).",
+            "Upload/xoá media – [Thư viện media](page:thu-vien-media).",
+            "Chấm bài – [Chấm bài](page:cham-bai).",
+            "Làm bài thi như mọi thành viên."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Không được làm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Đổi vai trò, trạng thái hay xoá thành viên **Chủ sở hữu** (“Chỉ chủ sở hữu thao tác được trên tài khoản chủ sở hữu”).",
+            "Cấp vai trò Chủ sở hữu cho ai.",
+            "Sửa/xoá danh mục, loại đề & mẫu bài học của hệ thống (chỉ xem và dùng).",
+            "Chấm bài của chính mình."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "teacher",
+      "title": "Giáo viên",
+      "summary": "Teacher: soạn đề, publish đề của mình, upload media, dạy lớp được phân công và chấm bài trong phạm vi của mình.",
+      "roles": ["TEACHER"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["TEACHER"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Giáo viên vào dashboard trung tâm với menu **Tổng quan** (số liệu rút gọn), nhóm **Đề thi & Bài học**: Danh mục, Loại đề, Mẫu bài học, Đề thi, Bài học, Thư viện media, Chấm bài và nhóm **Đào tạo**: Khoá học, Giáo trình, Lớp học, Lịch."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Được làm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Xem danh mục, loại đề & mẫu bài học (hệ thống và trung tâm) – chỉ xem.",
+            "Xem mọi đề của trung tâm (đề người khác mở ở chế độ **Chỉ xem**, vẫn xem trước và xem version được).",
+            "Tạo đề mới; sửa nội dung, thông tin, hiển thị, publish, lưu trữ, xoá, khôi phục version **đề do mình tạo**; nhân bản đề đã publish của người khác thành đề nháp của mình – [Vòng đời đề thi](page:vong-doi-de-thi).",
+            "Tương tự với bài học: xem mọi bài, tạo bài, sửa/publish/xoá **bài do mình tạo**, nhân bản bài đã publish của người khác – [Bài học](page:bai-hoc).",
+            "Xem khoá học (chỉ xem) – [Khoá học](page:khoa-hoc).",
+            "Xem, nhân bản mọi giáo trình; tạo giáo trình, sửa/xoá **giáo trình do mình tạo** – [Giáo trình](page:giao-trinh).",
+            "Xem các **lớp mình được thêm làm giáo viên** (thông tin, thời khoá biểu, giáo viên & học viên, nhật ký thay đổi) và sửa giáo trình của các lớp đó – [Lớp học](page:lop-hoc), [Giáo trình lớp](page:giao-trinh-lop).",
+            "Ở lớp mình phụ trách: huỷ/khôi phục buổi, thêm/xoá buổi bù, sửa phòng/giờ/giáo viên của buổi (xếp dạy thế), chọn nội dung buổi – [Thời khoá biểu & buổi học](page:thoi-khoa-bieu).",
+            "Xem **Lịch dạy của tôi** (kể cả buổi được xếp dạy thế ở lớp khác), lịch khoá học của lớp mình và chi tiết buổi mình dạy thế – [Lịch](page:lich).",
+            "Upload/xoá media của trung tâm – [Thư viện media](page:thu-vien-media).",
+            "Chấm Writing/Speaking của **bài làm trong lớp mình phụ trách**, **bài làm tự do của đề/bài học do mình soạn** và bài được **chuyển giao chấm**; không chấm bài của chính mình – [Chấm bài](page:cham-bai).",
+            "Chuyển giao chấm các phạm vi đó cho Giáo viên khác của trung tâm (người được giao không giao tiếp).",
+            "Làm bài thi như mọi thành viên.",
+            "Xem bài làm của học viên trên từng mục đề thi của lớp mình và bấm **Cho làm lại** khi học viên gặp sự cố; mở **Bài làm** của từng học viên để xem đáp án và đúng/sai từng câu – [Giáo trình lớp](page:giao-trinh-lop).",
+            "Xem **Tiến độ & Chuyên cần** và **Bảng điểm** của lớp mình phụ trách, viết **nhận xét cuối khoá** cho học viên và xuất Excel – [Chuyên cần & bảng điểm](page:chuyen-can-bang-diem)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Không được làm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Quản lý thành viên.",
+            "Tạo/sửa/xoá danh mục, loại đề & mẫu bài học (cần nhờ Chủ sở hữu/Quản trị viên nếu chưa có loại đề phù hợp).",
+            "Sửa đề, bài học, giáo trình do người khác tạo.",
+            "Tạo/sửa khoá học, gắn giáo trình vào khoá học.",
+            "Tạo lớp, sửa thông tin/trạng thái lớp, thêm/bỏ giáo viên và học viên; xem lớp mình không phụ trách.",
+            "Sửa lịch lặp, ngày bắt đầu, số buổi của lớp; xem lịch trung tâm; vào **Cài đặt** trung tâm.",
+            "Chấm bài của lớp mình không phụ trách hoặc của đề/bài học người khác soạn, trừ khi được chuyển giao.",
+            "Sửa **tham số chuyên cần của lớp** (hệ số nộp muộn, ngưỡng cảnh báo) – chỉ xem."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "text": "Giáo viên muốn tự thử đề như học viên: làm bài từ trang trung tâm `/t/{slug}`. Bài đó không tự chấm được (phải nhờ người chấm khác), và có bài làm khiến lần lưu đề sau tạo version mới."
+        },
+        {
+          "type": "paragraph",
+          "text": "Chuông **Thông báo** trên header báo: được phân công dạy lớp, được xếp dạy thế, có bài mới cần chấm, được chuyển giao chấm, giáo trình lớp bị người khác sửa, lớp dời lịch. Xem [Thông báo](page:thong-bao)."
+        }
+      ]
+    },
+    {
+      "id": "student",
+      "title": "Học viên",
+      "summary": "Student: học bài học, làm đề đã publish và xem kết quả của mình.",
+      "roles": ["STUDENT"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["STUDENT"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Học viên không vào dashboard trung tâm (mở `/t/{slug}/dashboard` sẽ thấy “Bạn không có quyền vào dashboard”). Mọi việc diễn ra ở trang trung tâm `/t/{slug}`."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Hành trình của học viên"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Nhận tài khoản",
+              "text": "Trung tâm thêm theo email hoặc tạo tài khoản. Tài khoản do trung tâm tạo phải đổi mật khẩu tạm ở lần đăng nhập đầu."
+            },
+            {
+              "title": "Đăng nhập",
+              "text": "Chỉ thuộc 1 trung tâm thì vào thẳng `/t/{slug}`; nhiều trung tâm thì chọn ở `/me`."
+            },
+            {
+              "title": "Học bài học",
+              "text": "Mục **Bài học** ở trang trung tâm: học từng phần, nộp bài tập để xem đáp án và giải thích. Xem [Học bài học](page:hoc-bai-hoc)."
+            },
+            {
+              "title": "Chọn đề",
+              "text": "Danh sách đề đã publish, lọc theo danh mục/loại đề, tìm theo tên."
+            },
+            {
+              "title": "Làm bài",
+              "text": "Xem [Làm bài thi](page:lam-bai-thi)."
+            },
+            {
+              "title": "Xem kết quả",
+              "text": "Xem [Kết quả & lịch sử](page:ket-qua-lich-su)."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lớp học"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Được trung tâm xếp vào lớp thì trang `/t/{slug}` có thêm **Lớp của tôi**: giáo trình lớp, bài học và bài kiểm tra được giao, buổi sắp tới.",
+            "Bài/đề giao qua lớp làm ở trang lớp, kể cả bài đặt **Chỉ qua lớp**; mỗi bài kiểm tra/bài thi chỉ làm **một lần**.",
+            "**Lịch học của tôi** (`/t/{slug}/schedule`) hiện buổi của mọi lớp bạn đang học.",
+            "Chi tiết ở [Lớp học của tôi](page:lop-cua-toi).",
+            "Lớp **Đã kết thúc**: trang lớp có thêm **Tổng kết cuối khoá** (tỉ lệ chuyên cần, trung bình theo chương, nhận xét của giáo viên) – [Tổng kết cuối khoá](page:lop-cua-toi#tong-ket-cuoi-khoa)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Lưu ý"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Không giới hạn số lượt làm mỗi đề, nhưng mỗi đề chỉ có **1 lượt đang làm** tại một thời điểm.",
+            "Kết quả không hiện đáp án đúng hay đánh dấu câu sai; chỉ có số câu đúng theo section và điểm/nhận xét phần chấm tay.",
+            "Speaking cần trình duyệt cho dùng micro (HTTPS hoặc localhost).",
+            "Học viên được xếp vào [lớp học](page:lop-hoc) thì trang trung tâm có thêm **Lớp của tôi** – xem [Lớp học của tôi](page:lop-cua-toi).",
+            "Trong lúc lớp đang học, bạn **không** thấy tỉ lệ chuyên cần hay nhãn \"muộn\" — chỉ thấy trạng thái và điểm từng bài của mình."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Chuông **Thông báo** trên header báo: được thêm vào lớp, mục mới được giao hoặc tới ngày mở, sắp hết hạn và quá hạn, bài đã chấm xong, buổi học huỷ/dời/bù, nhận xét cuối khoá. Xem [Thông báo](page:thong-bao)."
+        }
+      ]
+    },
+    {
+      "id": "parent",
+      "title": "Phụ huynh",
+      "summary": "Parent: liên kết với học viên, xem lớp – lịch – kết quả của con.",
+      "roles": ["PARENT"],
+      "blocks": [
+        {
+          "type": "roles",
+          "roles": ["PARENT"]
+        },
+        {
+          "type": "paragraph",
+          "text": "Phụ huynh là thành viên trung tâm có vai trò **Phụ huynh**, được Chủ sở hữu/Quản trị viên gắn với một hoặc nhiều học viên (thường là học viên dưới 18 tuổi, nhưng không bắt buộc) kèm quan hệ như “Mẹ”, “Bố”."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Làm được gì"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Vào trang trung tâm `/t/{slug}`, mục **Con của tôi**: xem lớp, lịch học, giáo trình lớp và kết quả của từng con – xem [Con của tôi](page:con-cua-toi).",
+            "Nhận thông báo về con: con quá hạn chưa nộp, bài của con đã có kết quả, chuyên cần của con dưới ngưỡng – xem [Thông báo](page:thong-bao).",
+            "Xem và làm đề, học bài học **công khai trong trung tâm** như mọi thành viên (tài khoản của chính mình)."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Không làm được gì"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Không vào dashboard trung tâm.",
+            "Không xem nội dung bài học/đề thi và **không xem đáp án** của con.",
+            "Không làm bài thay con, không sửa gì trong lớp, không nhắn tin cho giáo viên.",
+            "Không xem học viên chưa được gắn với mình (hệ thống trả “không tìm thấy”)."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "Liên kết phụ huynh ↔ học viên chỉ được tạo và gỡ ở trang [Thành viên](page:thanh-vien#lien-ket-phu-huynh). Bỏ vai trò Học viên hoặc Phụ huynh thì liên kết tương ứng bị gỡ, và Phụ huynh mất quyền xem ngay."
+        },
+        {
+          "type": "paragraph",
+          "text": "Khi trung tâm vượt giới hạn gói, Học viên/Phụ huynh lâu không vào trung tâm là nhóm được gợi ý ngừng kích hoạt trước."
+        }
+      ]
+    }
+  ]
+}

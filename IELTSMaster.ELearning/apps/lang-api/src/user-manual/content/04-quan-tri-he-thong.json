@@ -1,0 +1,367 @@
+{
+  "id": "quan-tri-he-thong",
+  "title": "Quản trị hệ thống",
+  "pages": [
+    {
+      "id": "admin-tong-quan",
+      "title": "Tổng quan hệ thống",
+      "summary": "Trang /admin: số liệu người dùng và trung tâm.",
+      "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"],
+      "blocks": [
+        { "type": "roles", "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"] },
+        {
+          "type": "paragraph",
+          "text": "Trang **Tổng quan** (`/admin`) gồm các thẻ số liệu, bấm thẻ để mở danh sách đã lọc sẵn:"
+        },
+        {
+          "type": "table",
+          "columns": ["Thẻ", "Ý nghĩa", "Bấm để mở"],
+          "rows": [
+            ["Người dùng", "Tổng số tài khoản", "Người dùng"],
+            [
+              "Người dùng mới (7 ngày)",
+              "Tài khoản tạo trong 7 ngày gần nhất",
+              "—"
+            ],
+            [
+              "Tài khoản bị khoá",
+              "Số tài khoản trạng thái Đã khoá",
+              "Người dùng, lọc Đã khoá"
+            ],
+            ["Trung tâm", "Tổng số trung tâm", "Trung tâm, tab Tất cả"],
+            [
+              "Trung tâm chờ duyệt",
+              "Đăng ký cần xử lý",
+              "Trung tâm, tab Chờ duyệt"
+            ],
+            [
+              "Trung tâm đang hoạt động",
+              "Trung tâm đang dùng được",
+              "Trung tâm, tab Đang hoạt động"
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "text": "Nên kiểm tra thẻ **Trung tâm chờ duyệt** hằng ngày: Chủ sở hữu không vào được trung tâm cho tới khi được duyệt."
+        }
+      ]
+    },
+    {
+      "id": "admin-nguoi-dung",
+      "title": "Quản lý người dùng",
+      "summary": "Tạo, sửa, khoá tài khoản, reset mật khẩu và đổi vai trò hệ thống.",
+      "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"],
+      "blocks": [
+        { "type": "roles", "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"] },
+        {
+          "type": "paragraph",
+          "text": "Menu **Quản lý → Người dùng** (`/admin/users`). Danh sách có tìm theo họ tên/email, lọc **vai trò** và **trạng thái**, phân trang; cột Đăng nhập cuối, Ngày tạo."
+        },
+        { "type": "heading", "level": 2, "text": "Tạo người dùng" },
+        {
+          "type": "steps",
+          "items": [
+            { "title": "Bấm Tạo người dùng" },
+            {
+              "title": "Nhập thông tin",
+              "text": "Email, họ tên, ngày sinh (bắt buộc); giới tính, số điện thoại, địa chỉ (tuỳ chọn); **Mật khẩu tạm** – để trống thì hệ thống sinh."
+            },
+            {
+              "title": "Gửi mật khẩu cho người dùng",
+              "text": "Hộp thoại hiện mật khẩu **một lần duy nhất** kèm nút **Sao chép**. Gửi qua kênh an toàn."
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tài khoản mới luôn là **Người dùng** và phải đổi mật khẩu ở lần đăng nhập đầu.",
+            "Muốn tạo System Admin/Owner: tạo tài khoản rồi System Owner **Đổi vai trò hệ thống**.",
+            "Email đã có tài khoản → lỗi 409, không tạo trùng."
+          ]
+        },
+        { "type": "heading", "level": 2, "text": "Thao tác trên tài khoản" },
+        {
+          "type": "table",
+          "columns": ["Thao tác", "Tác dụng", "Ai làm được"],
+          "rows": [
+            [
+              "Sửa người dùng",
+              "Sửa email, họ tên, ngày sinh, giới tính, SĐT, địa chỉ",
+              "Owner: mọi tài khoản; Admin: chỉ Người dùng"
+            ],
+            [
+              "Reset mật khẩu",
+              "Sinh mật khẩu tạm (hiện 1 lần), đăng xuất mọi thiết bị, bắt đổi mật khẩu ở lần đăng nhập sau",
+              "Owner: mọi tài khoản; Admin: chỉ Người dùng"
+            ],
+            [
+              "Khoá tài khoản",
+              "Đăng xuất ngay, không đăng nhập được cho tới khi mở khoá",
+              "Như trên; không tự khoá mình"
+            ],
+            ["Mở khoá tài khoản", "Cho đăng nhập lại", "Như trên"],
+            [
+              "Đổi vai trò hệ thống",
+              "Chuyển giữa Người dùng / System Admin / System Owner",
+              "Chỉ System Owner"
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Không hạ quyền hay khoá được System Owner đang hoạt động cuối cùng. Req-1 không có chức năng xoá tài khoản; muốn chặn truy cập thì **khoá**."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Tình huống hỗ trợ thường gặp"
+        },
+        {
+          "type": "table",
+          "columns": ["Người dùng báo", "Xử lý"],
+          "rows": [
+            [
+              "Quên mật khẩu",
+              "Reset mật khẩu, gửi mật khẩu tạm qua kênh an toàn"
+            ],
+            [
+              "Không đăng nhập được, báo tài khoản bị khoá",
+              "Kiểm tra lý do rồi Mở khoá tài khoản"
+            ],
+            [
+              "Muốn đổi email",
+              "Sửa người dùng (email mới chưa được tài khoản khác dùng)"
+            ],
+            [
+              "Nghi bị lộ mật khẩu",
+              "Reset mật khẩu (thu hồi mọi phiên) hoặc khoá tạm thời"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "admin-trung-tam",
+      "title": "Quản lý trung tâm",
+      "summary": "Duyệt, từ chối, tạm khoá, mở khoá trung tâm, đổi gói dịch vụ và bật Trợ lý AI.",
+      "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"],
+      "blocks": [
+        { "type": "roles", "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"] },
+        {
+          "type": "paragraph",
+          "text": "Menu **Quản lý → Trung tâm** (`/admin/tenants`). Các tab theo trạng thái, tìm theo tên, đường dẫn hoặc chủ trung tâm. Cột **Thành viên** hiện số thành viên so với gói, nhãn **Vượt giới hạn** khi vượt. Bấm **Chi tiết** để xem thông tin liên hệ, lý do, lần xử lý gần nhất và thao tác."
+        },
+        { "type": "heading", "level": 2, "text": "Vòng đời trạng thái" },
+        {
+          "type": "table",
+          "columns": ["Từ", "Thao tác", "Sang", "Ghi chú"],
+          "rows": [
+            [
+              "Chờ duyệt",
+              "**Duyệt**",
+              "Đang hoạt động",
+              "Chủ trung tâm vào dashboard ngay"
+            ],
+            [
+              "Chờ duyệt",
+              "**Từ chối** (nhập lý do)",
+              "Bị từ chối",
+              "Chủ trung tâm thấy lý do, sửa và gửi lại"
+            ],
+            [
+              "Bị từ chối",
+              "Chủ trung tâm **Sửa và gửi lại**",
+              "Chờ duyệt",
+              "Do Chủ sở hữu thực hiện ở `/me`"
+            ],
+            [
+              "Đang hoạt động",
+              "**Tạm khoá** (nhập lý do)",
+              "Tạm khoá",
+              "Mọi thành viên không vào được trung tâm"
+            ],
+            ["Tạm khoá", "**Mở khoá**", "Đang hoạt động", "Xoá lý do tạm khoá"]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "Nếu hai quản trị viên xử lý cùng lúc, người sau nhận “Trạng thái trung tâm vừa thay đổi, vui lòng tải lại trang” (409) – tải lại để thấy trạng thái mới."
+        },
+        { "type": "heading", "level": 2, "text": "Kiểm tra trước khi duyệt" },
+        {
+          "type": "list",
+          "items": [
+            "Tên, giới thiệu, thông tin liên hệ hợp lý, không mạo danh tổ chức khác.",
+            "Đường dẫn phù hợp (sau khi duyệt, đường dẫn là URL chính thức của trung tâm).",
+            "Gói dịch vụ đã chọn phù hợp quy mô.",
+            "Từ chối thì ghi lý do cụ thể để chủ trung tâm sửa được."
+          ]
+        },
+        { "type": "heading", "level": 2, "text": "Đổi gói" },
+        {
+          "type": "list",
+          "items": [
+            "Bấm **Đổi gói** trong chi tiết, chỉ chọn được gói **đang áp dụng**.",
+            "Có hiệu lực ngay, kể cả khi hạ xuống gói nhỏ hơn số thành viên hiện có: không ai bị ngừng kích hoạt, nhưng trung tâm bị chặn thêm/kích hoạt lại thành viên và dashboard trung tâm hiện cảnh báo kèm gợi ý ngừng kích hoạt. Xem [Thành viên](page:thanh-vien#vuot-gioi-han-goi)."
+          ]
+        },
+        { "type": "heading", "level": 2, "text": "Trợ lý AI" },
+        {
+          "type": "paragraph",
+          "text": "Khối **Trợ lý AI** trong **Chi tiết** trung tâm quyết định trung tâm có dùng được nút **Định dạng bằng AI** trong trình soạn đề hay không ([Trình soạn đề](page:trinh-soan-de#dinh-dang-bang-ai)). Đổi là lưu ngay."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Công tắc **Bật trợ lý AI**: mặc định tắt. Tắt thì người soạn đề của trung tâm không thấy nút.",
+            "**Hạn mức mỗi tháng**: 100 lượt / tháng, 1.000 lượt / tháng hoặc **Không giới hạn** (mặc định). Một lần bấm **Định dạng** = 1 lượt; lượt tính lại từ đầu mỗi tháng theo giờ Việt Nam.",
+            "Dòng **Đã dùng … lượt tháng này** đếm cả lượt đang chạy. Hạ hạn mức xuống thấp hơn số đã dùng thì trung tâm hết lượt ngay tới tháng sau.",
+            "Bật nhưng máy chủ chưa cấu hình kết nối AI thì nút trong trình soạn đề bị mờ (“Chưa cấu hình AI”) – xem [Deploy & môi trường](page:deploy-moi-truong#bien-moi-truong)."
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "Trang quản trị chỉ có thông tin cơ bản của trung tâm. System Owner/Admin không xem được thành viên, đề thi hay bài làm bên trong trừ khi chính họ là thành viên trung tâm đó."
+        }
+      ]
+    },
+    {
+      "id": "admin-goi-dich-vu",
+      "title": "Gói dịch vụ",
+      "summary": "Tạo, sửa, ngừng áp dụng và xoá gói dịch vụ.",
+      "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"],
+      "blocks": [
+        { "type": "roles", "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"] },
+        {
+          "type": "paragraph",
+          "text": "Menu **Quản lý → Gói dịch vụ** (`/admin/plans`). Gói giới hạn số thành viên **đang hoạt động** của trung tâm (gồm cả Chủ sở hữu, giáo viên, học viên, phụ huynh). Các gói đang áp dụng hiện ở trang chủ và form đăng ký trung tâm."
+        },
+        {
+          "type": "table",
+          "columns": ["Trường", "Quy tắc"],
+          "rows": [
+            [
+              "Mã gói",
+              "Chữ thường không dấu, số, `-` hoặc `_`; duy nhất; **không đổi được** sau khi tạo"
+            ],
+            ["Tên gói", "Tối đa 100 ký tự"],
+            ["Thành viên tối đa", "Số nguyên > 0"],
+            [
+              "Giá (VNĐ)",
+              "Tuỳ chọn, tối đa 2 chữ số thập phân; để trống hiện “Liên hệ”. Chưa có thanh toán"
+            ],
+            ["Mô tả, Thứ tự", "Thứ tự sắp xếp khi hiển thị"],
+            [
+              "Đang áp dụng",
+              "Tắt = ngừng áp dụng: không chọn được khi đăng ký hay đổi gói; trung tâm đang dùng giữ nguyên"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Cột **Trung tâm** cho biết số trung tâm đang dùng gói.",
+            "**Xoá gói** chỉ được khi chưa trung tâm nào dùng (kể cả trung tâm đã xoá); ngược lại chỉ ngừng áp dụng.",
+            "Sửa **Thành viên tối đa** có hiệu lực ngay với mọi trung tâm dùng gói (tương tự hạ gói nếu giảm)."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "admin-danh-muc-loai-de",
+      "title": "Danh mục, loại đề & mẫu bài học hệ thống",
+      "summary": "Danh mục, loại đề và mẫu bài học dùng chung cho mọi trung tâm.",
+      "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"],
+      "blocks": [
+        { "type": "roles", "roles": ["SYSTEM_OWNER", "SYSTEM_ADMIN"] },
+        {
+          "type": "paragraph",
+          "text": "Menu **Đề thi & Bài học → Danh mục** (`/admin/categories`), **Loại đề** (`/admin/exam-blueprints`) và **Mẫu bài học** (`/admin/lesson-blueprints`). Danh mục dùng chung cho loại đề và mẫu bài học. Mục phạm vi **Hệ thống** hiện ở mọi trung tâm, trung tâm chỉ xem và dùng, không sửa được. Dữ liệu seed sẵn: Tiếng Anh (TOEIC, IELTS), Tiếng Nhật (JLPT N2)."
+        },
+        { "type": "heading", "level": 2, "text": "Danh mục" },
+        {
+          "type": "table",
+          "columns": ["Trường", "Quy tắc"],
+          "rows": [
+            [
+              "Mã",
+              "Chữ in hoa không dấu, số, `-` hoặc `_` (tự đổi sang in hoa), tối đa 32 ký tự; không trùng trong phạm vi hệ thống"
+            ],
+            ["Tên", "Tối đa 100 ký tự"],
+            ["Mô tả", "Tối đa 2000 ký tự"],
+            [
+              "Biểu tượng, Màu",
+              "Chọn từ bộ có sẵn, hiển thị trên danh sách đề"
+            ],
+            ["Thứ tự", "Sắp xếp hiển thị"],
+            [
+              "Trạng thái",
+              "**Ngừng dùng**: không chọn được khi tạo loại đề, mẫu bài học mới; mục đã có giữ nguyên"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Cột **Loại đề**, **Mẫu bài học** và **Khoá học** đếm số mục thuộc danh mục (khoá học của mọi trung tâm).",
+            "Chỉ **xoá** được danh mục chưa có loại đề, mẫu bài học hay khoá học nào (kể cả của trung tâm thuộc danh mục hệ thống); ngược lại chỉ ngừng dùng."
+          ]
+        },
+        { "type": "heading", "level": 2, "text": "Loại đề" },
+        {
+          "type": "steps",
+          "items": [
+            { "title": "Bấm Tạo loại đề" },
+            { "title": "Chọn Danh mục (đang dùng), nhập Mã, Tên, Mô tả" },
+            {
+              "title": "Thêm module",
+              "text": "Mỗi module có Tên, Mã (không trùng trong loại đề), **Thời lượng tham khảo** (5–180 phút, bội số 5), Mô tả. Kéo thả hoặc dùng mũi tên để sắp xếp. Cần 1–20 module."
+            },
+            { "title": "Lưu" }
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Khi trung tâm tạo đề từ loại đề, mỗi module sinh một section với thời lượng mặc định bằng thời lượng tham khảo. Section là **bản sao độc lập**: sửa/xoá module sau đó không ảnh hưởng đề đã tạo.",
+            "Cột **Số đề** đếm đề thi của mọi trung tâm dùng loại đề này.",
+            "Chỉ **xoá** được loại đề chưa có đề thi; ngược lại chỉ ngừng dùng (không chọn được khi tạo đề mới)."
+          ]
+        },
+        { "type": "heading", "level": 2, "text": "Mẫu bài học" },
+        {
+          "type": "paragraph",
+          "text": "Mẫu bài học là khuôn cho bài học (vd. **Minna no Nihongo – 1 bài** gồm Từ vựng, Ngữ pháp, Hội thoại, Luyện tập, Bài tập). Giống loại đề nhưng các **phần** không có thời lượng."
+        },
+        {
+          "type": "steps",
+          "items": [
+            { "title": "Bấm Tạo mẫu bài học" },
+            { "title": "Chọn Danh mục (đang dùng), nhập Mã, Tên, Mô tả" },
+            {
+              "title": "Thêm phần",
+              "text": "Mỗi phần có Tên, Mã (không trùng trong mẫu), Mô tả. Kéo thả hoặc dùng mũi tên để sắp xếp. Cần 1–20 phần."
+            },
+            { "title": "Lưu" }
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mã mẫu không trùng trong phạm vi hệ thống (được trùng mã loại đề).",
+            "Mẫu **ngừng dùng** không chọn được khi tạo bài học mới.",
+            "Khi tạo bài học từ mẫu, mỗi phần sinh một section; sửa/xoá phần sau đó không ảnh hưởng bài học đã tạo.",
+            "Cột **Số bài học** đếm bài học của mọi trung tâm dùng mẫu (trang của trung tâm chỉ đếm bài học của trung tâm).",
+            "Chỉ **xoá** được mẫu chưa có bài học; ngược lại chỉ ngừng dùng."
+          ]
+        }
+      ]
+    }
+  ]
+}
